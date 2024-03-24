@@ -7,15 +7,24 @@ module.exports = {
       center: true,
       padding: '2rem',
       screens: {
-        '2xl': '1400px'
+        '2xl': '1400px',
+        '3xl': '1086px'
       }
     },
     extend: {
       maxWidth: {
         '9xl': '96rem'
       },
-      backgroundImage:{
-          avt1: 'url("@assets/images/avt1")'
+      minWidth: {
+        '10xl': '1086px'
+      },
+      width:{
+        'max':'1048px',
+        'intro':'488px',
+        'post':'677px'
+      },
+      backgroundImage: {
+        avt1: 'url("@assets/images/avt1")'
       },
       fontSize: {
         '4xl': '2.5rem'
@@ -27,6 +36,9 @@ module.exports = {
         primary: 'var(--font-primary)'
       },
       colors: {
+        buttonColor:'#e4e6eb',
+        secondaryBg: '#eaf4fe',
+        secondaryColor: '#65676b',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
