@@ -11,7 +11,7 @@ interface HeaderProps {
 
 export default function Header({ className, hasSearch = false }: HeaderProps) {
   return (
-    <header className={`flex h-20 items-center justify-between ${className}`}>
+    <header className={`flex h-20  items-center justify-between ${className}`}>
       <Link to="/">
         <Logo />
       </Link>

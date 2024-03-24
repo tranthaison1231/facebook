@@ -7,11 +7,17 @@ import { UsersService } from "./users.services";
 export const router = new Hono();
 
 router
+  .get("/", auth, async (c) => {
+    const q =  c.req.query('q');
+    const users = await UsersService.getAll(q);
+    return c.json({
+      data: users,
+      status: 200,
+    });
+  })
   .get("/me", auth, async (c) => {
     const user = c.get("user");
-
-    delete user.password
-
+    delete user.password;
     return c.json({
       data: user,
       status: 200,
@@ -24,6 +30,14 @@ router
 
     return c.json({
       data: updatedMe,
+      status: 200,
+    });
+  })
+  .get("/:userId", async (c) => {
+    const userId = c.req.param("userId");
+    const user = await UsersService.getBy(userId);
+    return c.json({
+      data: user,
       status: 200,
     });
   });

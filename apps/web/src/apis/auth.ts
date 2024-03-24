@@ -45,3 +45,6 @@ export const resetPassword = async (token: string, password: string) => {
   )
   return res.data
 }
+
+
+

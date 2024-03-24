@@ -29,7 +29,7 @@ model User {
   password String
   Room     Room[]
   Review   Review[]
-
+  
   @@map("users")
 }
 

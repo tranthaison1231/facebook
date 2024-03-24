@@ -69,7 +69,7 @@ export default function Component() {
               We’ll call or text you to confirm your number. Standard message and data rates apply.{' '}
               <span className="text-foreground underline">Privacy Policy </span>
             </p>
-            <Button className="w-full" size="lg" type="submit" loading={isLoading}>
+            <Button className="w-full text-white" size="lg" type="submit" loading={isLoading}>
               Continue
             </Button>
           </form>

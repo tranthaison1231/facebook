@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import FaceBookIcon from '@/assets/images/facebook-logo.png'
 import { Input } from '@/components/ui/input'
@@ -28,40 +28,59 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import UserProfile from './UserProfile'
+import { useQuery } from '@tanstack/react-query'
+import { getMe } from '@/apis/auth'
+import { useRef } from 'react'
 
 const FEATURES = [
   {
     icon: <CircleFadingPlus />,
     content: 'Meta Site Business',
-    arrow: <MoveUpRight />
+    arrow: <MoveUpRight />,
+    path: '/'
   },
   {
     icon: <Settings />,
     content: 'Cài đặt và quyền riêng tư',
-    arrow: <MoveUpRight />
+    arrow: <MoveUpRight />,
+    path: '/'
   },
   {
     icon: <HelpCircle />,
     content: 'Trợ giúp và hỗ trợ',
-    arrow: <MoveUpRight />
+    arrow: <MoveUpRight />,
+    path: '/'
   },
   {
     icon: <Moon />,
-    content: 'Màn hình trợ năng'
+    content: 'Màn hình trợ năng',
+    path: '/'
   },
   {
     icon: <Lightbulb />,
-    content: 'Đóng góp ý kiến'
-  },
- 
+    content: 'Đóng góp ý kiến',
+    path: '/'
+  }
 ]
 
 export default function Header() {
+  const navigate = useNavigate()
   const currentPath = useLocation().pathname
+  const { data: meQuery } = useQuery({
+    queryKey: ['me'],
+    queryFn: getMe
+  })
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const onSearch = (e:React.KeyboardEvent<HTMLInputElement>)=>{
+    if(e.key === 'Enter'){
+      navigate(`search/people?q=${inputRef.current?.value}`)
+    }
+  }
 
   return (
-    <div className=" flex flex-row justify-between border px-4 py-4 ">
-      {/* SEARCH */}
+    <div className=" fixed top-0 z-10 flex w-full flex-row justify-between border bg-white px-4 py-4 shadow-md ">
+      
       <div>
         <div className=" flex max-h-10 space-x-3">
           <Link to={'/'}>
@@ -69,20 +88,18 @@ export default function Header() {
           </Link>
           <div className="flex min-w-60 items-center justify-center space-x-1 rounded-full border bg-secondary-foreground p-2 px-2">
             <Search />
-            {/* <input type="text" placeholder="Search..." className=" bg-transparent border-none" /> */}
-            <Input placeholder="Search..." className=" border-none bg-transparent " />
+          
+            <Input placeholder="Search..." className=" border-none bg-transparent " onKeyDown={onSearch} ref={inputRef} />
           </div>
         </div>
       </div>
-      {/* FEATURES */}
       <div className="">
         <ul className=" flex flex-row">
           {ICON_FEATURES.map(item => (
-            <Link to={`/admin${item.path}`} key={item.title}>
+            <Link to={`${item.path}`} key={item.title} className={clsx('', {})}>
               <li
                 className={clsx('flex cursor-pointer gap-4 rounded-sm px-6 py-2 hover:text-primary', {
-                  'bg-primary': currentPath === `/admin${item.path}`,
-                  'text-white': currentPath === `/admin${item.path}`
+                  'text-primary': currentPath === `${item.path}`
                 })}
               >
                 {item.icon}
@@ -91,7 +108,6 @@ export default function Header() {
           ))}
         </ul>
       </div>
-      {/* MESSAGE */}
 
       <ul className=" flex flex-row space-x-3">
         <li className="relative  flex h-10 w-10 cursor-pointer items-center justify-center gap-4 rounded-full bg-secondary-foreground ">
@@ -106,6 +122,7 @@ export default function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
         </li>
+
         <li className="relative  flex h-10 w-10 cursor-pointer items-center justify-center gap-4 rounded-full bg-secondary-foreground">
           <DropdownMenu>
             <DropdownMenuTrigger className=" rounded-full">{ICON_MESSAGE[1].icon}</DropdownMenuTrigger>
@@ -118,6 +135,7 @@ export default function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
         </li>
+
         <li className="relative  flex h-10 w-10 cursor-pointer items-center justify-center gap-4 rounded-full bg-secondary-foreground">
           <DropdownMenu>
             <DropdownMenuTrigger className=" rounded-full">{ICON_MESSAGE[2].icon}</DropdownMenuTrigger>
@@ -130,25 +148,29 @@ export default function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
         </li>
+
         <li className="relative flex h-10 w-10 cursor-pointer flex-col items-center justify-center gap-4 rounded-full bg-secondary-foreground">
           <DropdownMenu>
             <DropdownMenuTrigger className="rounded-full">
-              <UsersRound />
+              {meQuery?.data?.avatar ? (
+                <img src={`${meQuery?.data?.avatar}`} alt="avatar" className="h-10 w-10 rounded-full" />
+              ) : (
+                <UsersRound />
+              )}
             </DropdownMenuTrigger>
             <DropdownMenuContent className=" w-96 p-4 hover:bg-white ">
               <div className="flex flex-col items-start justify-start space-y-2 rounded-lg p-4 font-semibold text-black shadow-lg shadow-gray-300 ">
-                <div className="flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200">
-                  <img
-                    src="https://scontent.fsgn5-2.fna.fbcdn.net/v/t39.30808-6/287783869_177078658070053_1098275628170852232_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=yNLnD9u7IvgAX9gQM2-&_nc_ht=scontent.fsgn5-2.fna&oh=00_AfCHorn9LJlvI50gfVMtt7QWivhneDRLI08u6O16sq-a2A&oe=65E8A65B"
-                    alt="avatar"
-                    className="h-9 w-9 rounded-full"
-                  />
-                  <p className="text-lg">Huỳnh Chi Trung</p>
-                </div>
+                <Link
+                  to={`/profile/`}
+                  className="flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200"
+                >
+                  <img src={`${meQuery?.data?.avatar}`} alt="avatar" className="h-9 w-9 rounded-full" />
+                  <p className="text-lg">{meQuery?.data?.fullName}</p>
+                </Link>
                 <hr className=" h-3/4 w-full bg-secondary-foreground" />
                 <div className="flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200">
                   <img
-                    src="https://scontent.fsgn5-9.fna.fbcdn.net/v/t39.30808-6/277512443_108003738529215_6408271429858838125_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=gUaY9_QY9QgAX9BJb9X&_nc_ht=scontent.fsgn5-9.fna&oh=00_AfBIDIrAh1C5vXsMR9i8cvzqHJ1GdFa7g6svGggj6T_GHQ&oe=65E9B54C"
+                    src="https://scontent.fsgn5-2.fna.fbcdn.net/v/t39.30808-6/287783869_177078658070053_1098275628170852232_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_ohc=FexHRjMt5YwAX_2Foh4&_nc_ht=scontent.fsgn5-2.fna&oh=00_AfDo0hiA4XwHCRH8gA45Fugs6dx7LC9Qjpl25P59c9TrkA&oe=65F08F5B"
                     alt="avatar"
                     className="h-9 w-9 rounded-full"
                   />
@@ -162,16 +184,15 @@ export default function Header() {
               </div>
               <ul className=" mt-4 font-semibold text-black">
                 {FEATURES.map(item => (
-                  
                   <li className=" flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200">
                     {item.icon}
                     <p>{item.content}</p>
-                    {item.arrow }
+                    {item.arrow}
                   </li>
                 ))}
                 <li className=" flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200">
-                  <LogOut/>
-                  <UserProfile/>
+                  <LogOut />
+                  <UserProfile />
                 </li>
               </ul>
             </DropdownMenuContent>
