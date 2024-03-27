@@ -12,6 +12,8 @@ export type Path =
   | `/profile/profileHeader`
   | `/reset-password`
   | `/search/people`
+  | `/search/photos`
+  | `/search/posts`
 
 export type Params = {
   '/:id': { id: string }
