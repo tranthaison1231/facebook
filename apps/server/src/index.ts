@@ -7,6 +7,7 @@ import { router as categories } from "./modules/categories/categories.controller
 import { router as rooms } from "./modules/rooms/rooms.controller";
 import { router as users } from "./modules/users/users.controller";
 import { router as reviews } from "./modules/reviews/reviews.controller";
+import { router as posts } from "./modules/post/posts.controller";
 import { errorFilter } from "./lib/error-filter";
 
 const app = new Hono().basePath("/api");
@@ -28,6 +29,7 @@ app.route("/categories", categories);
 app.route("/reviews", reviews);
 app.route("/rooms", rooms);
 app.route("/users", users);
+app.route("/posts", posts);
 
 app.notFound((c) => {
   return c.json(

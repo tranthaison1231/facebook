@@ -4,6 +4,15 @@ interface SignUp {
   email: string
   password: string
 }
+export interface User {
+  id: string
+  fullName: string
+  avatar: string
+  school: string
+  address: string
+  workAt: string
+}
+
 
 export const signIn = async ({ email, password }: SignUp) => {
   const res = await request.post('/sign-in', {

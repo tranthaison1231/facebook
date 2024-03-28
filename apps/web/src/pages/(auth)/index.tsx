@@ -1,7 +1,8 @@
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import Avatar from '@/assets/images/avt1.jpg'
+
 import Background from '@/assets/images/bg.jpg'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   FileImage,
   Forward,
@@ -9,21 +10,23 @@ import {
   MessageCircle,
   MoreHorizontal,
   MoveDown,
-  Search,
   Share,
   SmilePlus,
   Video,
   X
 } from 'lucide-react'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '@/components/ui/dropdown-menu'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useState } from 'react'
+
 import Sidebar from './_components/Sidebar'
 import Love from '@/assets/images/love.png'
 import Love2 from '@/assets/images/love2.png'
 import Like from '@/assets/images/like.png'
+
+import CreatePost from './_components/CreatePost'
+
 const IMAGES = [
   {
     name: 'Huynh Chi Trung',
@@ -51,57 +54,7 @@ const IMAGES = [
     bg: Background
   }
 ]
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const posts = [
-  {
-    id: 1,
-    hidden: false,
-    content: 'hello',
-    author: 'Dai hoc dung hoc dai',
-    avatar: Avatar,
-    image: Avatar
-  },
-  {
-    id: 2,
-    hidden: false,
-    content: 'hello',
-    author: 'Dai hoc dung hoc dai',
-    avatar: Avatar,
-    image: Avatar
-  },
-  {
-    id: 3,
-    hidden: false,
-    content: 'hello',
-    author: 'Dai hoc dung hoc dai',
-    avatar: Avatar,
-    image: Avatar
-  },
-  {
-    id: 4,
-    hidden: false,
-    content: 'hello',
-    author: 'Dai hoc dung hoc dai',
-    avatar: Avatar,
-    image: Avatar
-  },
-  {
-    id: 5,
-    hidden: false,
-    content: 'hello',
-    author: 'Dai hoc dung hoc dai',
-    avatar: Avatar,
-    image: Avatar
-  },
-  {
-    id: 3,
-    hidden: false,
-    content: 'hello',
-    author: 'Dai hoc dung hoc dai',
-    avatar: Avatar,
-    image: Avatar
-  }
-]
+
 const Extrafunction = [
   {
     icon: <MoveDown />,
@@ -124,15 +77,13 @@ const Extrafunction = [
     detail: 'Them vao danh sach luu'
   }
 ]
+
 export default function Dashboard() {
   const [hidden, setHidden] = useState(true)
-
-
 
   return (
     <div className="flex">
       <Sidebar />
-
       <div className="flex w-full justify-center">
         <div className=" w-full bg-[#f0f2f5] pt-24 ">
           <div className="mx-auto flex h-full w-[590px] flex-col items-center ">
@@ -140,11 +91,9 @@ export default function Dashboard() {
               <CarouselContent>
                 {IMAGES.map(item => (
                   <CarouselItem className="relative inline-block h-64 basis-1/4 items-center rounded-lg ">
-                    {/* BACKGROUND */}
                     <div className="h-64 rounded-lg">
                       <img src={`${item.bg}`} alt=" avt" className="h-full w-full rounded-lg" />
                     </div>
-                    {/* AVATAR */}
                     <div className="absolute top-0 h-12 w-12 overflow-hidden rounded-full ">
                       <img src={`${item.avt}`} alt=" avt" className=" rounded-full object-contain" />
                     </div>
@@ -157,7 +106,6 @@ export default function Dashboard() {
               <CarouselPrevious />
               <CarouselNext />
             </Carousel>
-
             <div className=" w-[520px] ">
               <div className="mt-10 w-full rounded-lg bg-white p-5">
                 <div className=" flex flex-col ">
@@ -165,15 +113,7 @@ export default function Dashboard() {
                     <Link to={'/'} className="h-10 w-10 overflow-hidden rounded-full">
                       <img className=" w-full rounded-full  object-contain" src={`${IMAGES[0].avt}`} alt="" />
                     </Link>
-                    <div className="flex w-full items-center justify-center space-x-1 rounded-full border bg-secondary-foreground p-2">
-                      <Search />
-
-                      <Input
-                        placeholder="Search..."
-                        className=" w-full border-none bg-transparent"
-                
-                      />
-                    </div>
+                    <CreatePost />
                   </div>
 
                   <hr className=" color-[#f0f2f5] mt-3 h-2 w-full" />
