@@ -29,7 +29,7 @@ request.interceptors.response.use(
   error => {
     if (error.response.status === 401) {
       removeToken()
-      window.location.href = '/'
+      window.location.href = '/login'
     }
     return Promise.reject(error)
   }

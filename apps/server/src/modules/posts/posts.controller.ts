@@ -1,24 +1,31 @@
 import { Hono } from "hono";
 import { auth } from "@/middlewares/auth";
 import { zValidator } from "@hono/zod-validator";
-import { ReviewsService } from "../reviews/reviews.service";
-import { BadRequestException } from "@/lib/exceptions";
+import { updatePostDto } from "./dtos/update-post.dto";
+import { PostsService } from "./posts.service";
 export const router = new Hono();
 
 router
-  .post(
-    "/",
-    auth,
-    async (c) => {
-      const user = c.get("user");
-      const roomId = c.req.param("roomId");
-      const data = await c.req.json();
-      const review = await ReviewsService.create(roomId, user.id, data);
-
-      return c.json({
-        data: review,
-        status: 201,
-      });
-    },
-  )
- 
+  .get("/", auth, async (c) => {
+    const posts = await PostsService.getAll();
+    return c.json({
+      data: posts,
+      status: 200,
+    });
+  })
+  .post("/", async (c) => {
+    const data = await c.req.json();
+    const post = await PostsService.create(data);
+    return c.json({
+      data: post,
+      status: 201,
+    });
+  })
+  .get("/:id", auth, async (c) => {
+    const id = c.req.param('id')
+    const post = await PostsService.getPost(id) 
+    return c.json({
+      data: post,
+      status: 200,
+    });
+  })
