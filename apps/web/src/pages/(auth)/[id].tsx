@@ -405,7 +405,7 @@ export default function ID() {
                 <div className=" flex space-x-1">
                   <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger className=" flex items-center space-x-1 rounded-sm bg-buttonColor p-2 text-sm text-black">
-                      <Settings2 className="  w-4 h-4" />
+                      <Settings2 className=" w-4 h-4" />
                       <p className=" font-semibold">Bộ lọc</p>
                     </DialogTrigger>
                     <DialogContent>
