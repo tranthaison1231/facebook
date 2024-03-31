@@ -51,10 +51,10 @@ export default function CreatePost() {
   }
   
   return (
-    <Dialog open={isOpen}>
+    <Dialog >
       <DialogTrigger asChild>
         <div className=" flex w-full cursor-pointer items-center rounded-full border-none bg-gray-200 p-4 hover:bg-gray-300">
-          {me?.fullName} ơi ,bạn đang nghĩ gì thế?
+          {me?.firstname} ơi ,bạn đang nghĩ gì thế?
         </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-auto">
@@ -66,7 +66,7 @@ export default function CreatePost() {
           <div className="flex gap-2 p-4">
             <img className="h-10 w-10" src={me?.avatar} alt="" />
             <div>
-              <p className="text-base font-bold">{me?.fullName}</p>
+              <p className="text-base font-bold">{me?.firstname} {me?.lastname}</p>
               <div className="flex items-center gap-1 rounded-sm bg-gray-200 p-1 text-sm font-medium px-2 py-1">
                 <Lock className="h-4 w-4 " />
                 Chỉ mình tôi
@@ -74,8 +74,7 @@ export default function CreatePost() {
               </div>
             </div>
           </div>
-          {/* onSubmit={handleSubmit(onSubmit)} */}
-            <Textarea className="border-none outline-none w-[500px] h-36 p-4 text-2xl" onChange={(e:any)=>setValue(e.target.value)} placeholder={`${me?.fullName} ơi, Bạn đang nghĩ gì thế?`} />
+          <Textarea className="border-none outline-none w-[500px] h-36 p-4 text-2xl" onChange={(e:any)=>setValue(e.target.value)} placeholder={`${me?.firstname} ${me?.lastname} ơi, Bạn đang nghĩ gì thế?`} />
           
           <div className="flex px-4">
             <img src="https://www.facebook.com/images/composer/SATP_Aa_square-2x.png" height={38} width={38} alt="Cỡ chữ" />

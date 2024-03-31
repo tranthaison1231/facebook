@@ -21,12 +21,17 @@ model Category {
 
 model User {
   id       String   @id @default(cuid())
+  firstname String
+  lastname String 
   email    String   @unique
-  fullName String?
   age      Int?
   avatar   String?
   phone    String?
   password String
+  day Int
+  month Int 
+  year Int 
+  gender String
   Room     Room[]
   Review   Review[]
   Post     Post[]
