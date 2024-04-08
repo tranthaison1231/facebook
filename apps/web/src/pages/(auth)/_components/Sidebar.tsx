@@ -61,9 +61,7 @@ export default function Sidebar() {
   })
 
   return (
-    <div
-      className={`fixed  flex min-h-screen min-w-96 flex-col justify-start border-none bg-white text-[#050505]  shadow-2xl `}
-    >
+    <div className={`fixed  flex min-h-screen min-w-72 flex-col  border-none bg-white text-[#050505]  shadow-2xl `}>
       <ul className={clsx('space-y-2 border-r p-4')}>
         <Link to={`/${meQuery?.data?.id}`} key="Huynh Chi Trung">
           <li className={clsx('flex cursor-pointer gap-4 rounded-sm px-6 py-2 font-bold')}>
@@ -75,7 +73,7 @@ export default function Sidebar() {
           </li>
         </Link>
         {SIDE_BAR.map(item => (
-          <Link to={`${item.path}`} key={item.title} >
+          <Link to={`${item.path}`} key={item.title}>
             <li className={clsx('flex cursor-pointer gap-4 rounded-sm px-6 py-2 font-bold')}>
               {item.icon}
               <span>{item.title}</span>

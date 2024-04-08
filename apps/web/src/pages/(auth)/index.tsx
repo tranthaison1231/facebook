@@ -26,6 +26,7 @@ import Love2 from '@/assets/images/love2.png'
 import Like from '@/assets/images/like.png'
 
 import CreatePost from './_components/CreatePost'
+import FriendList from './_components/FriendList'
 
 const IMAGES = [
   {
@@ -237,6 +238,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+      <FriendList />
     </div>
   )
 }
