@@ -12,7 +12,9 @@ export interface User {
   address: string
   workAt: string
 }
-
+interface UpdateMe {
+  fullName: string , age : number , avatar: string , phone: number
+}
 
 export const signIn = async ({ email, password }: SignUp) => {
   const res = await request.post('/sign-in', {
@@ -39,7 +41,7 @@ export const forgotPassword = async ({ email }: { email: string }) => {
 
 export const getMe = async () => {
   const res = await request.get('/users/me')
-  return res.data
+  return res.data.data
 }
 
 export const resetPassword = async (token: string, password: string) => {
@@ -55,5 +57,15 @@ export const resetPassword = async (token: string, password: string) => {
   return res.data
 }
 
-
-
+export const getUser = async ( id : string) => {
+  const res = await request.get(`/users/${id}`)
+  return res.data
+}
+export const updateMe = async ({fullName , age  , avatar , phone} : UpdateMe ) => {
+  return request.put(
+    "/users/me",
+    {
+       fullName , age  , avatar , phone
+    },
+  );
+}

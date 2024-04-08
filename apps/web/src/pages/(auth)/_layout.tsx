@@ -13,7 +13,7 @@ export default function Component() {
   if (!accessToken) return <Navigate to="/login" />
   return (
     <div className="w-full">
-      <Header />
+      <Header user={meQuery} />
       <div className=" pt-16">
         <Outlet context={{ me: meQuery?.data }} />
       </div>
