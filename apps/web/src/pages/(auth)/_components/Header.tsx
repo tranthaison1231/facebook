@@ -30,6 +30,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { useRef } from 'react'
 import UserProfile from './UserProfile'
+import Notification from './Notification'
 
 interface Props {
   user: User
@@ -143,12 +144,8 @@ export default function Header({ user }: Props) {
         <li className="relative  flex h-10 w-10 cursor-pointer items-center justify-center gap-4 rounded-full bg-secondary-foreground">
           <DropdownMenu>
             <DropdownMenuTrigger className=" rounded-full">{ICON_MESSAGE[2].icon}</DropdownMenuTrigger>
-            <DropdownMenuContent className="w-90 hover:bg-white">
-              <DropdownMenuLabel>MESSENGER</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <p>HELLO</p>
-              </DropdownMenuItem>
+            <DropdownMenuContent className=" hover:bg-white">
+              <Notification />
             </DropdownMenuContent>
           </DropdownMenu>
         </li>
