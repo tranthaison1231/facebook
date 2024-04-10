@@ -8,8 +8,15 @@ async function main() {
       email: "son.tran@enouvo.com",
     },
   });
-
+  const dete = await prisma.user.findMany({
+    where:{
+      email:"nhat.nguyen@enouvo.com"
+    }
+  });
   console.log(data);
+  console.log(
+    dete
+  )
 }
 
 main()
