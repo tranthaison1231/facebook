@@ -4,7 +4,7 @@ export interface Post {
   id: string
 }
 
-export const fetchPostsByUserId = async (userId: string): Promise<Post[]> => {
+export const fetchPostsByUserId = async (userId: string) => {
   const res = await request.get(`/users/${userId}/posts`)
   return res.data
 }
