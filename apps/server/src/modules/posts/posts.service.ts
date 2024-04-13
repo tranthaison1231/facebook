@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { Post, Prisma } from "@prisma/client";
 export class PostsService {
     static async getAll() {
-      const data = await db.post.findMany;
+      const data = await db.post.findMany();
         return data;
       }
     static async getPost(id:string) {

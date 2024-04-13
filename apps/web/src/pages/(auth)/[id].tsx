@@ -192,7 +192,7 @@ export default function ID() {
             </div>
 
             <div className=" mt-4">
-              <p className=" text-3xl font-bold">{meQuery?.data?.fullName}</p>
+              <p className=" text-3xl font-bold">{meQuery?.data?.firstname}</p>
               <p className=" font-semibold text-secondaryColor">393 ban be</p>
               <ul className=" flex">
                 {images.map(item => (

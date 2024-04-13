@@ -71,7 +71,7 @@ export default function Sidebar() {
               <img src={meQuery?.data?.avatar} alt="avatar" className="h-full w-full object-cover" />
             </div>
 
-            <p>{meQuery?.data?.fullName}</p>
+            <p>{meQuery?.data?.firstname} {meQuery?.data?.lastname}</p>
           </li>
         </Link>
         {SIDE_BAR.map(item => (

@@ -21,17 +21,15 @@ model Category {
 
 model User {
   id       String   @id @default(cuid())
-  firstname String
-  lastname String 
+  firstName String?
+  lastName String?
   email    String   @unique
   age      Int?
   avatar   String?
   phone    String?
   password String
-  day Int
-  month Int 
-  year Int 
-  gender String
+  birthday DateTime?
+  gender String?
   Room     Room[]
   Review   Review[]
   Post     Post[]
@@ -80,7 +78,7 @@ model Post {
   id        String   @id @default(cuid())
   user      User?    @relation(fields: [userId], references: [id])
   userId    String?
-  content   String
+  content   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   published Boolean  @default(false)

@@ -165,7 +165,7 @@ export default function Header() {
                   className="flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200"
                 >
                   <img src={`${meQuery?.data?.avatar}`} alt="avatar" className="h-9 w-9 rounded-full" />
-                  <p className="text-lg">{meQuery?.data?.fullName}</p>
+                  <p className="text-lg">{meQuery?.data?.firstname} {meQuery?.data?.lastname}</p>
                 </Link>
                 <hr className=" h-3/4 w-full bg-secondary-foreground" />
                 <div className="flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200">

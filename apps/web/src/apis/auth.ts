@@ -11,8 +11,8 @@ interface SignUp {
   gender: string
 }
 export interface User {
-  lastname: string
-  firstname: string
+  lastName: string
+  firstName: string
   id: string
   fullName: string
   avatar: string
@@ -51,6 +51,10 @@ export const forgotPassword = async ({ email }: { email: string }) => {
 export const getMe = async () => {
   const res = await request.get('/users/me')
   return res.data
+}
+
+export const getAll = async ()=>{
+   const res = await request.get('')
 }
 
 export const resetPassword = async (token: string, password: string) => {

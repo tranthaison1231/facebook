@@ -25,7 +25,9 @@ import Love from '@/assets/images/love.png'
 import Love2 from '@/assets/images/love2.png'
 import Like from '@/assets/images/like.png'
 
-import CreatePost from './_components/CreatePost'
+// import CreatePost from './_components/CreatePost'
+import { useQuery } from '@tanstack/react-query'
+// import { getAll } from '@/apis/post'
 
 const IMAGES = [
   {
@@ -67,7 +69,7 @@ const Extrafunction = [
     detail: 'Them vao danh sach luu'
   },
   {
-    icon: <MoveDown />,
+    icon: <MoveDown />,     
     name: 'Luu bai viet',
     detail: 'Them vao danh sach luu'
   },
@@ -78,8 +80,13 @@ const Extrafunction = [
   }
 ]
 
+
 export default function Dashboard() {
-  const [hidden, setHidden] = useState(true)
+  const [hidden, setHidden] = useState(true);
+  const { data : meQuery } = useQuery({
+    queryKey: [],
+    queryFn: getAll
+  })
 
   return (
     <div className="flex">
@@ -113,7 +120,7 @@ export default function Dashboard() {
                     <Link to={'/'} className="h-10 w-10 overflow-hidden rounded-full">
                       <img className=" w-full rounded-full  object-contain" src={`${IMAGES[0].avt}`} alt="" />
                     </Link>
-                    <CreatePost />
+                    {/* <CreatePost /> */}
                   </div>
 
                   <hr className=" color-[#f0f2f5] mt-3 h-2 w-full" />
@@ -136,6 +143,7 @@ export default function Dashboard() {
               </div>
 
               {hidden ? (
+
                 <article className="mt-3 min-h-screen w-full rounded-lg bg-white">
                   <div className=" flex items-center justify-between p-3">
                     <div className="flex space-x-2">
@@ -240,3 +248,7 @@ export default function Dashboard() {
     </div>
   )
 }
+function getAll(context: { queryKey: never[]; signal: AbortSignal; meta: Record<string, unknown> | undefined }): unknown {
+  throw new Error('Function not implemented.')
+}
+

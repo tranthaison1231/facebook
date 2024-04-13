@@ -3,13 +3,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
-import * as z from 'zod';
 import { signUp } from '@/apis/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { loginSchema } from '@/utils/schema';
-import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@radix-ui/react-dialog';
-import { DialogHeader } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger, DialogHeader } from '@/components/ui/dialog';
 import { ShieldQuestion } from 'lucide-react';
 import { InputDay } from './InputDay';
 import { InputMonth } from './InputMonth';
@@ -46,7 +44,7 @@ export default function Signup() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] p-4">
         <DialogHeader>
-          <DialogTitle className='text-[#1c1e21] text-4xl font-bold'>Đăng Ký</DialogTitle>
+          <DialogTitle className='text-[#1c1e21] text-3xl font-bold'>Đăng Ký</DialogTitle>
           <DialogDescription>
             Nhanh chóng và dễ dàng.
           </DialogDescription>
@@ -55,12 +53,12 @@ export default function Signup() {
         <div className="grid grid-flow-row gap-3">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex gap-4">
-              <Input className="px-3 py-4 bg-[#F5F6F7] rounded-[5px]" {...register('firstname')} placeholder="Họ" />
-              <Input className="px-3 py-4 bg-[#F5F6F7] rounded-[5px]" {...register('lastname')} placeholder="Tên" />
+              <Input className="px-1 py-2 mb-3 bg-[#F5F6F7] rounded-[5px]" {...register('firstname')} placeholder="Họ" />
+              <Input className="px-1 py-2 mb-3 bg-[#F5F6F7] rounded-[5px]" {...register('lastname')} placeholder="Tên" />
             </div>
-            <Input className="px-3 py-4 bg-[#F5F6F7] rounded-[5px]" {...register('email')} placeholder="Số di động hoặc email" />
+            <Input className="px-1 py-2 mb-3 bg-[#F5F6F7] rounded-[5px]" {...register('email')} placeholder="Số di động hoặc email" />
             {/* {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>} */}
-            <Input className="px-3 py-4 bg-[#F5F6F7] rounded-[5px]" {...register('password')} placeholder="Mật khẩu mới" type="password" />
+            <Input className="px-1 py-2 mb-3 bg-[#F5F6F7] rounded-[5px]" {...register('password')} placeholder="Mật khẩu mới" type="password" />
             {/* {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>} */}
             <div className="flex items-center">
               <p className='text-sm text-[#828697]'>Ngày sinh</p>
@@ -75,7 +73,7 @@ export default function Signup() {
               <p className='text-sm text-[#828697]'>Giới tính</p>
               <ShieldQuestion className='w-3 h-3 '/>
             </div>
-            <div className="grid grid-flow-col gap-5">
+            <div className="grid grid-flow-col gap-2">
               <div className="flex justify-center items-center gap-8 border border-gray-300 rounded-[5px] p-2">
                 <p>Nữ</p>
                 <Input type='checkbox' className='w-3 h-3' {...register('gender')} value="female" />

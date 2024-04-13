@@ -18,12 +18,12 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://airbnb-clone-nu-rouge.vercel.app",
+      "https://airbnb-clone-nu-rouge.vercel.app", 
     ],
     credentials: true,
   }),
 );
-
+// Không hiểu 2 cục use này làm cái gì
 app.route("/", auth);
 app.route("/categories", categories);
 app.route("/reviews", reviews);
