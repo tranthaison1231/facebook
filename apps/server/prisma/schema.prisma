@@ -71,13 +71,26 @@ model Review {
   @@map("reviews")
 }
 
+enum PublishType {
+  PUBLIC
+  FRIENDS
+  FRIENDS_EXCEPT
+  ONLY_ME
+  SPECIFIC_FRIENDS
+  CUSTOM
+}
+
 model Post {
-  id        String   @id @default(cuid())
-  user      User?    @relation(fields: [userId], references: [id])
-  userId    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  published Boolean  @default(false)
+  id       String   @id @default(cuid())
+  user     User?    @relation(fields: [userId], references: [id])
+  userId   String?
+  content  String?
+  location String?
+  media    String[]
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  publishType PublishType @default(PUBLIC)
 
   @@index([userId])
   @@map("posts")

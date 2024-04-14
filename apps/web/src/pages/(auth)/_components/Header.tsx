@@ -77,7 +77,6 @@ export default function Header({ user }: Props) {
       navigate(`search/people?q=${inputRef.current?.value}`)
     }
   }
-  console.log(user, 'sss')
 
   return (
     <div className=" fixed top-0 z-10 flex w-full flex-row justify-between border bg-white px-4 py-4 shadow-md ">

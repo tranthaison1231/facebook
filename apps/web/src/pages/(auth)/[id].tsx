@@ -1,4 +1,5 @@
 import { getUser } from '@/apis/auth'
+import { fetchPostsByUserId } from '@/apis/posts'
 import { useParams } from '@/router'
 import { useQuery } from '@tanstack/react-query'
 import { Pencil, Plus, Camera, Settings, Settings2, Text, Grid2X2 } from 'lucide-react'
@@ -9,6 +10,13 @@ export default function Component() {
     queryKey: ['user', id],
     queryFn: () => getUser(id)
   })
+
+  const { data: postsQuery } = useQuery({
+    queryKey: ['users', id, 'posts'],
+    queryFn: () => fetchPostsByUserId(id)
+  })
+
+  console.log(postsQuery?.data)
   return (
     <div>
       <div className="px-52">

@@ -63,7 +63,7 @@ export default function Sidebar() {
   return (
     <div className={`fixed  flex min-h-screen min-w-72 flex-col  border-none bg-white text-[#050505]  shadow-2xl `}>
       <ul className={clsx('space-y-2 border-r p-4')}>
-        <Link to={`/${meQuery?.data?.id}`} key="Huynh Chi Trung">
+        <Link to={`/${meQuery?.data?.id}`}>
           <li className={clsx('flex cursor-pointer gap-4 rounded-sm px-6 py-2 font-bold')}>
             <div className=" h-8 w-8 overflow-hidden rounded-full">
               <img src={meQuery?.data?.avatar} alt="avatar" className="h-full w-full object-cover" />
