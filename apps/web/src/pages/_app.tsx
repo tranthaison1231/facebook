@@ -18,7 +18,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster richColors position="top-right" closeButton duration={5000} />
-      <div className="font-primary">
+      <div className="bg-slate-100 h-screen font-primary">
         <Outlet />
       </div>
     </QueryClientProvider>

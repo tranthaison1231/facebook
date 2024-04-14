@@ -20,16 +20,18 @@ model Category {
 }
 
 model User {
-  id       String   @id @default(cuid())
-  email    String   @unique
-  fullName String?
-  age      Int?
-  avatar   String?
-  phone    String?
-  password String
-  Room     Room[]
-  Review   Review[]
-  Post     Post[]
+  id          String        @id @default(cuid())
+  email       String        @unique
+  fullName    String?
+  age         Int?
+  avatar      String?
+  phone       String?
+  password    String
+  Room        Room[]
+  Review      Review[]
+  Post        Post[]
+  Groups      Group[]
+  GroupMember GroupMember[]
 
   @@map("users")
 }
@@ -94,4 +96,38 @@ model Post {
 
   @@index([userId])
   @@map("posts")
+}
+
+enum RoleOnGroup {
+  ADMIN
+  MOD
+  MEMBER
+}
+
+enum TypeOfGroup {
+  PUBLIC
+  PRIVATE
+}
+
+model Group {
+  id     String        @id @default(cuid())
+  name   String
+  userId String
+  type   TypeOfGroup
+  users  GroupMember[]
+  User   User          @relation(fields: [userId], references: [id])
+
+  @@map("groups")
+  @@index([userId])
+}
+
+model GroupMember {
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+  group   Group  @relation(fields: [groupId], references: [id])
+  groupId String
+
+  @@id([userId, groupId])
+  @@map("group_members")
+  @@index([groupId])
 }

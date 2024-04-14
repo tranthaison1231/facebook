@@ -15,6 +15,8 @@ export default function Component() {
     queryKey: ['users', id, 'posts'],
     queryFn: () => fetchPostsByUserId(id)
   })
+
+  console.log(postsQuery)
   return (
     <div>
       <div className="px-52">
