@@ -1,557 +1,382 @@
-import { Link } from 'react-router-dom'
-
-import img1 from '@/assets/images/avt1.jpg'
-import img2 from '@/assets/images/avt2.jpg'
-import img3 from '@/assets/images/avt3.jpg'
-import img4 from '@/assets/images/avt4.jpg'
-import img5 from '@/assets/images/bg-header.png'
-import img6 from '@/assets/images/facebook-logo.png'
-import img7 from '@/assets/images/avt4.jpg'
-import { useQuery } from '@tanstack/react-query'
-import { getMe } from '@/apis/auth'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
-import {
-  ArrowDown,
-  ArrowUp,
-  Camera,
-  Cylinder,
-  Eye,
-  FileImage,
-  Heart,
-  MessageCircleX,
-  Pencil,
-  Plus,
-  Search,
-  Settings2,
-  SmilePlus,
-  UserPlus,
-  Video
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { useState } from 'react'
-import clsx from 'clsx'
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
-import avatar from '@/assets/images/avt1.jpg'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { useLocation } from 'react-router-dom'
+import { getUser } from '@/apis/auth'
+import { fetchPostsByUserId } from '@/apis/posts'
 import { useParams } from '@/router'
-import { Input } from '@/components/ui/input'
+import { useQuery } from '@tanstack/react-query'
+import { Pencil, Plus, Camera, Settings, Settings2, Text, Grid2X2 } from 'lucide-react'
 
-import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog'
-
-const images = [img1, img2, img3, img4, img5, img6]
-const navBar = [
-  {
-    title: 'Bai viet',
-    path: '/posts'
-  },
-  {
-    title: 'Gioi thieu',
-    path: '/intro'
-  },
-  {
-    title: 'Ban be',
-    path: '/friends'
-  },
-  {
-    title: 'Anh',
-    path: '/images'
-  },
-  {
-    title: 'Video',
-    path: '/video'
-  }
-]
-export default function ID() {
-  const { data: meQuery } = useQuery({
-    queryKey: ['me'],
-    queryFn: getMe
-  })
-  const [open, setOpen] = useState(false)
+export default function Component() {
   const { id } = useParams('/:id')
-  const currentPath = useLocation().pathname
-  const [isClicked, setClicked] = useState(false)
-  const [listOfFriends, setListFriends] = useState([
-    {
-      id: 1,
-      avatar: avatar,
-      name: 'Trần Thanh Trà',
-      common: '',
-      isConfirmed: false,
-      isRemoved: false
-    },
-    {
-      id: 2,
-      avatar: img1,
-      name: 'Khởi Nguyên',
-      common: '',
-      isConfirmed: false,
-      isRemoved: false
-    },
-    {
-      id: 3,
-      avatar: img2,
-      name: 'Bao Nguyễn',
-      common: '',
-      isConfirmed: false,
-      isRemoved: false
-    },
-    {
-      id: 4,
-      avatar: img3,
-      name: 'Phú Cường',
-      common: '',
-      isConfirmed: false,
-      isRemoved: false
-    },
-    {
-      id: 5,
-      avatar: img4,
-      name: 'Nguyễn Shuna',
-      common: '',
-      isConfirmed: false,
-      isRemoved: false
-    },
-    {
-      id: 6,
-      avatar: img5,
-      name: 'Tran Anh De',
-      common: '',
-      isConfirmed: false,
-      isRemoved: false
-    },
-    {
-      id: 7,
-      avatar: img6,
-      name: 'Cuong NGuyen',
-      common: '',
-      isConfirmed: false,
-      isRemoved: false
-    },
-    {
-      id: 8,
-      avatar: img7,
-      name: 'Viettle',
-      common: '',
-      isConfirmed: false,
-      isRemoved: false
-    },
-    {
-      id: 9,
-      avatar: img2,
-      name: 'Tung Lam',
-      common: '',
-      isConfirmed: false,
-      isRemoved: false
-    }
-  ])
-  const handleRemoveItem = (id: number) => {
-    console.log('REMOVE')
-    setListFriends(prevItems =>
-      prevItems.map(item => (item.id === id ? { ...item, isisRemoved: !item.isRemoved } : item))
-    )
-  }
-  const handleConfirmItem = (id: number) => {
-    console.log('CONFIRM')
-    setListFriends(prevItems =>
-      prevItems.map(item => (item.id === id ? { ...item, isConfirmed: !item.isConfirmed } : item))
-    )
-  }
+  const { data: userQuery } = useQuery({
+    queryKey: ['user', id],
+    queryFn: () => getUser(id)
+  })
 
+  const { data: postsQuery } = useQuery({
+    queryKey: ['users', id, 'posts'],
+    queryFn: () => fetchPostsByUserId(id)
+  })
+
+  console.log(postsQuery?.data)
   return (
-    <div className=" mx-auto flex flex-col items-center justify-center">
-      <div className="border-b-1 mx-auto flex w-max flex-col border-secondaryColor">
-        <div className=" relative w-full">
-          <div className="relative overflow-hidden rounded-xl border after:absolute after:inset-0 after:shadow-[1px_-47px_43px_-15px_rgba(37,31,31,0.75)_inset] after:content-[''] ">
-            <img src={`${meQuery?.data?.avatar}`} alt="" className=" h-96 w-full object-cover " />
+    <div>
+      <div className="px-52">
+        <div className="relative">
+          <img className="h-full max-h-96 w-full rounded-b-md object-cover " src={userQuery?.data?.background} alt="" />
+          <button className="absolute bottom-4 right-6 flex gap-2 rounded border-none bg-white px-3 py-2 font-medium hover:bg-gray-200">
+            {' '}
+            <Camera />
+            Chỉnh sửa ảnh bìa
+          </button>
+        </div>
+        <div className="-mt-8 px-6">
+          <div className="flex items-end  gap-4">
+            <div className="relative h-44 min-w-44">
+              <img
+                className="absolute h-44 w-44  rounded-full border-4 border-white "
+                src={userQuery?.data?.avatar}
+                alt=""
+              />
+              <div className=" absolute bottom-0 right-5  w-10 rounded-full bg-gray-300 p-2">
+                <Camera />
+              </div>
+            </div>
+            <div className="flex w-full items-end justify-between gap-4 pb-4">
+              <div className="flex flex-col gap-1">
+                <h2 className="text-3xl font-bold">{userQuery?.data?.fullName}</h2>
+                <p className="font-medium text-gray-500">626 bạn bè</p>
+                <div>
+                  <img className="h-10 w-10 rounded-full border-2 border-white" src={userQuery?.data?.avatar} alt="" />
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <button className="flex gap-1 rounded bg-blue-700 p-2 text-white">
+                  {' '}
+                  <Plus /> Thêm vào tin
+                </button>
+                <button className="flex gap-1 rounded bg-gray-300 p-2">
+                  {' '}
+                  <Pencil /> Chỉnh sửa trang cá nhân
+                </button>
+              </div>
+            </div>
           </div>
-          <div className=" absolute bottom-10 right-5 z-20">
-            <DropdownMenu>
-              <DropdownMenuTrigger className=" flex items-center rounded-md bg-white p-2 font-bold">
-                <Camera className=" mr-1 h-4 w-4 font-semibold" />
-                <p>Chỉnh sửa ảnh bìa</p>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className=" flex w-96">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          <div className="mt-4 h-px w-full bg-gray-300"></div>
         </div>
 
-        {/* HEADER */}
-        <div className=" relative flex items-center justify-between px-9 ">
-          <div className=" -mt-10 flex items-center space-x-4 ">
-            <div className=" overflow-hidden rounded-full border hover:opacity-50">
-              <img src={`${meQuery?.data?.avatar}`} alt="" className=" h-40 w-40 rounded-full" />
-            </div>
-
-            <div className=" mt-4">
-              <p className=" text-3xl font-bold">{meQuery?.data?.firstname}</p>
-              <p className=" font-semibold text-secondaryColor">393 ban be</p>
-              <ul className=" flex">
-                {images.map(item => (
-                  <li className=" -ml-1 overflow-hidden">
-                    <img src={`${item}`} alt="" className=" h-8 w-8 rounded-full" />
-                  </li>
-                ))}
-              </ul>
-            </div>
+        <div className="flex items-center justify-between px-6">
+          <div className="mt-2">
+            <ul className="flex flex-wrap border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
+              <li>
+                <a
+                  href="#"
+                  aria-current="page"
+                  className="active bg-white-300 inline-block  border-b-2 border-blue-500 p-4 text-base text-blue-600 dark:bg-gray-800 dark:text-blue-500"
+                >
+                  Bài viết
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="inline-block  rounded p-4 text-base hover:bg-gray-300 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+                >
+                  Giới thiệu
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="inline-block rounded p-4 text-base hover:bg-gray-300 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+                >
+                  Bạn bè
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="inline-block rounded p-4 text-base hover:bg-gray-300 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+                >
+                  Ảnh
+                </a>
+              </li>
+              <li>
+                <a className="inline-block rounded p-4 text-base hover:bg-gray-300 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300">
+                  Video
+                </a>
+              </li>
+              <li>
+                <a className="inline-block rounded p-4 text-base hover:bg-gray-300 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300">
+                  Checkin
+                </a>
+              </li>
+              <li>
+                <a className="inline-block rounded p-4 text-base hover:bg-gray-300 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300">
+                  Xem thêm
+                </a>
+              </li>
+            </ul>
           </div>
-          <div className=" flex flex-col items-end space-y-2">
-            <div className=" flex space-x-3">
-              <Button className="px-4 py-0 text-white ">
-                <Plus className=" mr-1 h-4 w-4" />
-                Thêm vào tin
-              </Button>
-              <Button className="bg-primary-foreground px-4 py-0 text-black">
-                <Pencil className=" mr-1  h-4 w-4" />
-                Chỉnh sửa trang cá nhân
-              </Button>
-            </div>
-            <Button
-              className=" h-9 w-12 bg-primary-foreground px-4 py-0 text-black"
-              onClick={() => setClicked(!isClicked)}
+          <div className="cursor-pointer rounded bg-gray-200 px-3 py-2 hover:bg-gray-300">
+            <svg
+              viewBox="0 0 24 24"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="x19dipnz x1lliihq x1k90msu x2h7rmj x1qfuztq"
             >
-              {isClicked ? <ArrowUp /> : <ArrowDown />}
-            </Button>
-          </div>
-        </div>
-        <div
-          className={clsx('w-full px-9', {
-            hidden: isClicked == false
-          })}
-        >
-          <div className=" flex justify-between">
-            <p className=" text-lg font-semibold">Những người bạn có thể biết</p>
-            <Link to="/friends" className=" text-primary hover:underline">
-              Xem tat ca
-            </Link>
-          </div>
-          <Carousel>
-            <CarouselContent className=" flex space-x-3">
-              {listOfFriends.map(item => (
-                <CarouselItem
-                  key={item.id}
-                  className={clsx(
-                    'relative mb-3 inline-block max-w-40 basis-1/6 items-center rounded-md pb-3 pl-0 shadow-2xl ',
-                    {
-                      hidden: item.isRemoved
-                    }
-                  )}
-                >
-                  <MessageCircleX
-                    className=" absolute right-3 top-1 text-secondaryColor hover:cursor-pointer "
-                    onClick={() => handleRemoveItem(item.id)}
-                  />
-                  {/* BACKGROUND */}
-                  <div className=" h-36 w-full overflow-hidden rounded-t-lg">
-                    <img src={`${item.avatar}`} alt=" avt" className="h-full w-full object-cover" />
-                  </div>
-
-                  <div className="flex flex-col space-y-2 px-3">
-                    <p className=" w-full text-nowrap text-center text-black">{item.name}</p>
-
-                    {/* AVATAR */}
-                    {item.isConfirmed ? (
-                      ''
-                    ) : (
-                      <div className=" flex justify-center space-x-1">
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <div className="h-6 w-6 overflow-hidden rounded-full ">
-                                <img
-                                  src={`${item.avatar}`}
-                                  alt=" avt"
-                                  className=" h-full w-full  rounded-full object-cover"
-                                />
-                              </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>HIIIIII</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                        <p className=" text-secondaryColor">14 ban chung</p>
-                      </div>
-                    )}
-
-                    {item.isConfirmed ? (
-                      <p className="block text-nowrap text-center font-light text-black">Đã gửi lời mời</p>
-                    ) : (
-                      ''
-                    )}
-                    <Button
-                      className={clsx('h-9 bg-secondaryBg text-primary ', {
-                        ' bg-primary-foreground text-secondaryColor': item.isConfirmed
-                      })}
-                      onClick={() => handleConfirmItem(item.id)}
-                    >
-                      <UserPlus className=" mr-1  text-inherit" />
-
-                      <p
-                        className={clsx('text-nowrap font-semibold text-inherit', {
-                          ' text-black': item.isConfirmed
-                        })}
-                      >
-                        {item.isConfirmed ? 'Đã hủy' : 'Thêm bạn bè'}
-                      </p>
-                    </Button>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-        </div>
-        <hr className=" mx-9 h-1/2 bg-secondaryColor" />
-        {/* NAV BAR */}
-
-        <div className=" flex items-center justify-between">
-          <ul className=" flex ">
-            {navBar.map(item => (
-              <Link to={`/${id}/${item.path}`} key={item.title}>
-                <li
-                  className={clsx('flex cursor-pointer gap-4 rounded-sm px-6 py-2 font-semibold text-secondaryColor', {
-                    'bg-primary': currentPath === `/${item.path}`,
-                    'text-white': currentPath === `/${item.path}`
-                  })}
-                >
-                  {item.title}
-                </li>
-              </Link>
-            ))}
-          </ul>
-          <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger className=" flex h-9 w-9 items-center justify-center rounded-sm border-none bg-slate-200">
-                <Cylinder />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="flex w-[342px] flex-col items-start ">
-                <DropdownMenuItem className=" flex w-full items-start space-x-1">
-                  <Eye />
-                  <p>Chế độ xem</p>
-                </DropdownMenuItem>
-                <DropdownMenuItem className=" flex w-full items-start space-x-1">
-                  <Eye />
-                  <p>Chế độ xem</p>
-                </DropdownMenuItem>
-                <DropdownMenuItem className=" flex w-full items-start space-x-1">
-                  <Eye />
-                  <p>Chế độ xem</p>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              <circle cx="12" cy="12" r="2.5"></circle>
+              <circle cx="19.5" cy="12" r="2.5"></circle>
+              <circle cx="4.5" cy="12" r="2.5"></circle>
+            </svg>
           </div>
         </div>
       </div>
-
-      <div className=" h-screen w-full bg-[#f0f2f5]">
-        <div className="mx-auto mt-5 flex w-max space-x-4">
-          {/* INTRO */}
-          <div className=" w-intro rounded-lg border-red-500 bg-white">
-            <div className=" flex w-full flex-col space-y-5 p-4 text-sm shadow-sm">
-              <p className=" text-lg font-bold">Giới thiệu</p>
-              <Button className=" h-8 w-full bg-buttonColor text-black">Thêm tiểu sử</Button>
-              <div className=" flex space-x-1">
-                <Heart className=" text-secondaryColor" />
-                <p>Độc thân</p>
+      <div className="  h-full w-full  bg-gray-200 px-52 pt-4 ">
+        <div className="flex gap-4 px-6">
+          <div className="max-w-80 ">
+            <div className=" w-full rounded bg-white p-4">
+              <h3 className="text-xl font-bold">Giới thiệu</h3>
+              <button className="my-4 w-full items-center rounded bg-gray-200 py-1 font-medium hover:bg-gray-300">
+                Thêm tiểu sử
+              </button>
+              <div>
+                <div className="flex items-center gap-2">
+                  <img
+                    className="opacity-40"
+                    src="https://static.xx.fbcdn.net/rsrc.php/v3/yp/r/Q9Qu4uLgzdm.png"
+                    alt=""
+                  />
+                  <p>
+                    Làm việc tại <i className=" font-medium not-italic ">{userQuery?.data?.workAt}</i>
+                  </p>
+                </div>
+                <div className="my-3 flex items-center gap-2">
+                  <img
+                    className="opacity-40"
+                    src="https://static.xx.fbcdn.net/rsrc.php/v3/yS/r/jV4o8nAgIEh.png"
+                    alt=""
+                  />
+                  <p>
+                    Từng học tại <i className=" font-medium not-italic ">{userQuery?.data?.school}</i>
+                  </p>
+                </div>
+                <div className="my-3 flex items-center gap-2">
+                  <img
+                    className="opacity-40"
+                    src="https://static.xx.fbcdn.net/rsrc.php/v3/y5/r/VMZOiSIJIwn.png"
+                    alt=""
+                  />
+                  <p>
+                    Sống tại <i className=" font-medium not-italic ">{userQuery?.data?.address}</i>
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  {' '}
+                  <img
+                    className="opacity-40"
+                    src="https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/S0aTxIHuoYO.png"
+                    alt=""
+                  />
+                  <p>Độc thân</p>
+                </div>
               </div>
-              <Button className=" mt- h-8 w-full bg-buttonColor text-black">Chỉnh sửa chi tiết</Button>
-              <Button className=" mt- h-8 w-full bg-buttonColor text-black">Chi tiết đáng chú ý</Button>
+              <button className="my-4 w-full items-center rounded bg-gray-200 py-1 font-medium hover:bg-gray-300">
+                Chỉnh sửa liên kết
+              </button>
+              <button className=" w-full items-center rounded bg-gray-200 py-1 font-medium hover:bg-gray-300">
+                Thêm nội dung đáng chú ý{' '}
+              </button>
+            </div>
+            <div className=" mt-4 w-full rounded bg-white p-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-bold">Ảnh</h3>
+                <p className="rounded p-2 text-blue-500 hover:bg-gray-200">Xem tất cả ảnh</p>
+              </div>
+              <div className="mt-2 grid grid-cols-3 gap-1 rounded-sm">
+                <img
+                  className="h-full  min-h-28 w-full max-w-36 rounded-tl-md"
+                  src="https://scontent.fdad1-4.fna.fbcdn.net/v/t31.18172-8/22050991_1955936507979322_7297608177679054681_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=bbgMtlKJwi0AX9iLOi2&_nc_ht=scontent.fdad1-4.fna&oh=00_AfCjnrKjVRH3wEg5-OI1GcJIWLrC6yeIZik_tKdnmFmwPQ&oe=6614EBF1"
+                  alt=""
+                />
+                <img
+                  className="h-full min-h-28 w-full max-w-36"
+                  src="https://scontent.fdad1-4.fna.fbcdn.net/v/t31.18172-8/22050991_1955936507979322_7297608177679054681_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=bbgMtlKJwi0AX9iLOi2&_nc_ht=scontent.fdad1-4.fna&oh=00_AfCjnrKjVRH3wEg5-OI1GcJIWLrC6yeIZik_tKdnmFmwPQ&oe=6614EBF1"
+                  alt=""
+                />
+                <img
+                  className="h-full min-h-28 w-full max-w-36 rounded-tr-md"
+                  src="https://scontent.fdad1-4.fna.fbcdn.net/v/t31.18172-8/22050991_1955936507979322_7297608177679054681_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=bbgMtlKJwi0AX9iLOi2&_nc_ht=scontent.fdad1-4.fna&oh=00_AfCjnrKjVRH3wEg5-OI1GcJIWLrC6yeIZik_tKdnmFmwPQ&oe=6614EBF1"
+                  alt=""
+                />
+                <img
+                  className="h-full min-h-28 w-full max-w-36"
+                  src="https://scontent.fdad1-4.fna.fbcdn.net/v/t31.18172-8/22050991_1955936507979322_7297608177679054681_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=bbgMtlKJwi0AX9iLOi2&_nc_ht=scontent.fdad1-4.fna&oh=00_AfCjnrKjVRH3wEg5-OI1GcJIWLrC6yeIZik_tKdnmFmwPQ&oe=6614EBF1"
+                  alt=""
+                />
+                <img
+                  className="h-full min-h-28 w-full max-w-36"
+                  src="https://scontent.fdad1-4.fna.fbcdn.net/v/t31.18172-8/22050991_1955936507979322_7297608177679054681_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=bbgMtlKJwi0AX9iLOi2&_nc_ht=scontent.fdad1-4.fna&oh=00_AfCjnrKjVRH3wEg5-OI1GcJIWLrC6yeIZik_tKdnmFmwPQ&oe=6614EBF1"
+                  alt=""
+                />
+                <img
+                  className="h-full min-h-28 w-full max-w-36"
+                  src="https://scontent.fdad1-4.fna.fbcdn.net/v/t31.18172-8/22050991_1955936507979322_7297608177679054681_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=bbgMtlKJwi0AX9iLOi2&_nc_ht=scontent.fdad1-4.fna&oh=00_AfCjnrKjVRH3wEg5-OI1GcJIWLrC6yeIZik_tKdnmFmwPQ&oe=6614EBF1"
+                  alt=""
+                />
+                <img
+                  className="h-full min-h-28 w-full max-w-36 rounded-bl-md"
+                  src="https://scontent.fdad1-4.fna.fbcdn.net/v/t31.18172-8/22050991_1955936507979322_7297608177679054681_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=bbgMtlKJwi0AX9iLOi2&_nc_ht=scontent.fdad1-4.fna&oh=00_AfCjnrKjVRH3wEg5-OI1GcJIWLrC6yeIZik_tKdnmFmwPQ&oe=6614EBF1"
+                  alt=""
+                />
+                <img
+                  className="h-full min-h-28 w-full max-w-36"
+                  src="https://scontent.fdad1-4.fna.fbcdn.net/v/t31.18172-8/22050991_1955936507979322_7297608177679054681_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=bbgMtlKJwi0AX9iLOi2&_nc_ht=scontent.fdad1-4.fna&oh=00_AfCjnrKjVRH3wEg5-OI1GcJIWLrC6yeIZik_tKdnmFmwPQ&oe=6614EBF1"
+                  alt=""
+                />
+                <img
+                  className="min -h-28 h-full w-full max-w-36 rounded-br-md"
+                  src="https://scontent.fdad1-4.fna.fbcdn.net/v/t31.18172-8/22050991_1955936507979322_7297608177679054681_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=bbgMtlKJwi0AX9iLOi2&_nc_ht=scontent.fdad1-4.fna&oh=00_AfCjnrKjVRH3wEg5-OI1GcJIWLrC6yeIZik_tKdnmFmwPQ&oe=6614EBF1"
+                  alt=""
+                />
+              </div>
+            </div>
+            <div className=" mt-4 w-full rounded bg-white p-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-bold">Bạn Bè</h3>
+                <p className="rounded p-2 text-blue-500 hover:bg-gray-200">Xem tất cả bạn bè</p>
+              </div>
+              <p className="font-normal text-gray-500">627 người bạn</p>
+              <div className="mt-2 grid grid-cols-3 gap-2 rounded-sm">
+                <div className="h-full min-h-28 w-full max-w-36">
+                  <img
+                    className="min-h-28 rounded-sm"
+                    src="https://scontent.fdad1-4.fna.fbcdn.net/v/t31.18172-8/22050991_1955936507979322_7297608177679054681_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=bbgMtlKJwi0AX9iLOi2&_nc_ht=scontent.fdad1-4.fna&oh=00_AfCjnrKjVRH3wEg5-OI1GcJIWLrC6yeIZik_tKdnmFmwPQ&oe=6614EBF1"
+                    alt=""
+                  />
+                  <p className="mt-1 text-sm font-medium"> Chí Trung</p>
+                </div>
+                <div>
+                  <img
+                    className="min-h-28 rounded-sm"
+                    src="https://scontent.fdad1-4.fna.fbcdn.net/v/t31.18172-8/22050991_1955936507979322_7297608177679054681_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=bbgMtlKJwi0AX9iLOi2&_nc_ht=scontent.fdad1-4.fna&oh=00_AfCjnrKjVRH3wEg5-OI1GcJIWLrC6yeIZik_tKdnmFmwPQ&oe=6614EBF1"
+                    alt=""
+                  />
+                  <p className="mt-1 text-sm font-medium"> Chí Trung</p>
+                </div>
+                <div>
+                  <img
+                    className="min-h-28 rounded-sm"
+                    src="https://scontent.fdad1-4.fna.fbcdn.net/v/t31.18172-8/22050991_1955936507979322_7297608177679054681_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=bbgMtlKJwi0AX9iLOi2&_nc_ht=scontent.fdad1-4.fna&oh=00_AfCjnrKjVRH3wEg5-OI1GcJIWLrC6yeIZik_tKdnmFmwPQ&oe=6614EBF1"
+                    alt=""
+                  />
+                  <p className="mt-1 text-sm font-medium"> Chí Trung</p>
+                </div>
+                <div>
+                  <img
+                    className="min-h-28 rounded-sm"
+                    src="https://scontent.fdad1-4.fna.fbcdn.net/v/t31.18172-8/22050991_1955936507979322_7297608177679054681_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=bbgMtlKJwi0AX9iLOi2&_nc_ht=scontent.fdad1-4.fna&oh=00_AfCjnrKjVRH3wEg5-OI1GcJIWLrC6yeIZik_tKdnmFmwPQ&oe=6614EBF1"
+                    alt=""
+                  />
+                  <p className="mt-1 text-sm font-medium"> Chí Trung</p>
+                </div>
+                <div>
+                  <img
+                    className="min-h-28 rounded-sm"
+                    src="https://scontent.fdad1-4.fna.fbcdn.net/v/t31.18172-8/22050991_1955936507979322_7297608177679054681_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=bbgMtlKJwi0AX9iLOi2&_nc_ht=scontent.fdad1-4.fna&oh=00_AfCjnrKjVRH3wEg5-OI1GcJIWLrC6yeIZik_tKdnmFmwPQ&oe=6614EBF1"
+                    alt=""
+                  />
+                  <p className="mt-1 text-sm font-medium"> Chí Trung</p>
+                </div>
+                <div>
+                  <img
+                    className="min-h-28 rounded-sm"
+                    src="https://scontent.fdad1-4.fna.fbcdn.net/v/t31.18172-8/22050991_1955936507979322_7297608177679054681_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=bbgMtlKJwi0AX9iLOi2&_nc_ht=scontent.fdad1-4.fna&oh=00_AfCjnrKjVRH3wEg5-OI1GcJIWLrC6yeIZik_tKdnmFmwPQ&oe=6614EBF1"
+                    alt=""
+                  />
+                  <p className="mt-1 text-sm font-medium"> Chí Trung</p>
+                </div>
+                <div>
+                  <img
+                    className="min-h-28 rounded-sm"
+                    src="https://scontent.fdad1-4.fna.fbcdn.net/v/t31.18172-8/22050991_1955936507979322_7297608177679054681_o.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=bbgMtlKJwi0AX9iLOi2&_nc_ht=scontent.fdad1-4.fna&oh=00_AfCjnrKjVRH3wEg5-OI1GcJIWLrC6yeIZik_tKdnmFmwPQ&oe=6614EBF1"
+                    alt=""
+                  />
+                  <p className="mt-1 text-sm font-medium"> Chí Trung</p>
+                </div>
+              </div>
+            </div>
+            <div
+              className="
+            mt-2 flex flex-wrap items-center text-sm text-gray-600  "
+            >
+              <span className="cursor-pointer text-sm text-gray-600 hover:underline ">Quyền riêng tư</span>
+              <span className="-translate-y-1 px-1 text-gray-600">.</span>
+              <span className="cursor-pointer text-sm  text-gray-600 hover:underline ">Điều khoản</span>
+              <span className="-translate-y-1 px-1 text-gray-600">.</span>
+              <span className="cursor-pointer text-sm  text-gray-600 hover:underline ">Quảng cáo</span>
+              <span className="-translate-y-1 px-1 text-gray-600">.</span>
+              <span className="cursor-pointerhover:underline  text-sm text-gray-600 ">Lựa chọn quảng cáo</span>
+              <span className="-translate-y-1 px-1 text-gray-600">.</span>
+              <span className="cursor-pointer text-sm  text-gray-600 hover:underline ">Cookie</span>
+              <span className="-translate-y-1 px-1 text-gray-600">.</span>
+              <span className="cursor-pointer text-sm  text-gray-600 hover:underline ">Xem thêm</span>
+              <span className="-translate-y-1 px-1 text-gray-600">.</span>
+              Meta © 2024
             </div>
           </div>
-          {/* POST */}
-          <div className=" w-post">
-            <div className=" flex flex-col rounded-lg bg-white p-2 shadow-sm">
-              <div className=" flex w-full space-x-2">
-                <Link to={'/'} className="h-10 w-10 overflow-hidden rounded-full border">
-                  <img className=" h-9 w-9 rounded-full object-contain" src={`${meQuery?.data?.avatar}`} alt="" />
-                </Link>
-                <div className="flex w-full items-center justify-start space-x-1 rounded-full border bg-secondary-foreground p-2">
-                  <Search />
-
-                  <Input placeholder="Search..." className=" w-full border-none bg-transparent px-2" />
-                </div>
+          <div className="w-full ">
+            <div className=" rounded bg-white p-4">
+              <div className="flex  gap-2">
+                <img className="h-10 w-10 cursor-pointer rounded-full" src={userQuery?.data?.avatar} alt="" />
+                <button className="flex  w-full items-center justify-start rounded-3xl bg-gray-200 px-4 font-normal text-gray-500 hover:bg-gray-300">
+                  Bạn đang nghỉ gì?
+                </button>
               </div>
-
-              <hr className=" color-[#f0f2f5] mt-3 h-2 w-full" />
-
-              <div className=" mt-2 flex items-center justify-between text-nowrap">
-                <Button className="flex basis-1/3 items-center space-x-1 bg-white hover:bg-[#e1e4ea]">
-                  <Video className=" text-pink-900" />
-                  <p className=" text-black">Video trực tiếp</p>
-                </Button>
-                <Button className="flex basis-1/3 items-center space-x-1 bg-white hover:bg-[#e1e4ea]">
-                  <FileImage className=" text-green-500" />
-                  <p className=" text-black">Ảnh/video</p>
-                </Button>
-                <Button className="flex basis-1/3 items-center space-x-1 bg-white hover:bg-[#e1e4ea]">
-                  <SmilePlus className=" text-yellow-500" />
-                  <p className=" text-black">Sự kiện trong đời </p>
-                </Button>
+              <div className=" mt-4 h-px w-full bg-gray-300 "></div>
+              <div className="mt-2 flex justify-around">
+                <button className="flex w-full items-center justify-center gap-2 rounded p-2 text-base font-medium text-gray-500 hover:bg-gray-200">
+                  <img src="https://static.xx.fbcdn.net/rsrc.php/v3/yr/r/c0dWho49-X3.png" alt="" />
+                  Video trực tiếp
+                </button>
+                <button className="flex w-full items-center justify-center gap-2 rounded px-3 py-2 text-base font-medium  text-gray-500  hover:bg-gray-200">
+                  <img src="https://static.xx.fbcdn.net/rsrc.php/v3/y7/r/Ivw7nhRtXyo.png" alt="" />
+                  Ảnh/video
+                </button>
+                <button className="flex w-full items-center justify-center gap-2 rounded p-2 text-base font-medium   text-gray-500 hover:bg-gray-200">
+                  <img src="https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/pkbalDbTOVI.png" alt="" />
+                  Sự kiện trong đời
+                </button>
               </div>
             </div>
-            <div className="mt-4 rounded-lg bg-white p-2 text-black shadow-sm">
-              <div className=" flex items-center justify-between">
-                <p className=" font-bold ">Bài viết</p>
-                <div className=" flex space-x-1">
-                  <Dialog open={open} onOpenChange={setOpen}>
-                    <DialogTrigger className=" flex items-center space-x-1 rounded-sm bg-buttonColor p-2 text-sm text-black">
-                      <Settings2 className="  w-4 h-4" />
-                      <p className=" font-semibold">Bộ lọc</p>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <h4 className=" text-md p-2 text-center font-bold">Bộ lọc bài viết</h4>
-                      <hr className="w-full" />
-                      <div>
-                        <p className=" p-2 text-center text-sm font-bold">
-                          Dùng bộ lọc để tìm bài viết trên dòng thời gian của bạn.
-                        </p>
-                        <p className=" text-secondaryColor">
-                          Mọi người vẫn nhìn thấy dòng thời gian của bạn như bình thường.
-                        </p>
-                      </div>
-                      <div>
-                        <ul>
-                          <li className=" flex space-x-8">
-                            <p className=" min-w-44">Năm:</p>
-                            <select id="year">
-                              <option value="all">Tất cả các năm</option>
-                              <option value="2024">2024</option>
-                              <option value="2023">2023</option>
-                              <option value="2022">2022</option>
-                            </select>
-                          </li>
-                          <li className=" flex space-x-8">
-                            <p className=" min-w-44">Người đăng:</p>
-                            <select id="author">
-                              <option value="all">Bất kỳ ai</option>
-                              <option value="me">Bạn</option>
-                              <option value="friends">Bạn bè</option>
-                              <option value="family">Gia đình</option>
-                            </select>
-                          </li>
-                          <li className=" flex space-x-8">
-                            <p className=" min-w-44">Quyền riêng tư:</p>
-                            <select id="privacy">
-                              <option value="all">Tất cả bài viết</option>
-                              <option value="public">Công khai</option>
-                              <option value="friends">Chỉ bạn bè</option>
-                              <option value="private">Riêng tư</option>
-                            </select>
-                          </li>
-                          <li className=" flex space-x-8">
-                            <p className=" min-w-44">Bài viết được gắn thẻ:</p>
-                            <select id="tags">
-                              <option value="all">Tất cả bài viết</option>
-                              <option value="family">Gia đình</option>
-                              <option value="friends">Bạn bè</option>
-                              <option value="work">Công việc</option>
-                            </select>
-                          </li>
-                        </ul>
-                      </div>
-                      <div className=" flex items-center justify-end space-x-2">
-                        <Button
-                          className=" flex h-8 min-w-28 items-center bg-buttonColor px-2 text-black"
-                          onClick={() => setOpen(!open)}
-                        >
-                          Xoa
-                        </Button>
-                        <Button
-                          className=" flex h-8 min-w-28 items-center bg-primary px-6 text-white"
-                          onClick={() => setOpen(!open)}
-                        >
-                          Xong
-                        </Button>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-
-                  <Dialog open={open} onOpenChange={setOpen}>
-                    <DialogTrigger className=" flex items-center space-x-1 rounded-sm bg-buttonColor p-2 text-sm text-black">
-                      <Settings2 className=" w-4 h-4" />
-                      <p className=" font-semibold">Quản lý bài viết</p>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <h4 className=" text-md p-2 text-center font-bold">Bộ lọc bài viết</h4>
-                      <hr className="w-full mt-2 block h-1 bg-black" />
-                      <div>
-                        <p className=" p-2 text-center text-sm font-bold">
-                          Dùng bộ lọc để tìm bài viết trên dòng thời gian của bạn.
-                        </p>
-                        <p className=" text-secondaryColor">
-                          Mọi người vẫn nhìn thấy dòng thời gian của bạn như bình thường.
-                        </p>
-                      </div>
-                      <div>
-                        <ul>
-                          <li className=" flex space-x-8">
-                            <p className=" min-w-44">Năm:</p>
-                            <select id="year">
-                              <option value="all">Tất cả các năm</option>
-                              <option value="2024">2024</option>
-                              <option value="2023">2023</option>
-                              <option value="2022">2022</option>
-                            </select>
-                          </li>
-                          <li className=" flex space-x-8">
-                            <p className=" min-w-44">Người đăng:</p>
-                            <select id="author">
-                              <option value="all">Bất kỳ ai</option>
-                              <option value="me">Bạn</option>
-                              <option value="friends">Bạn bè</option>
-                              <option value="family">Gia đình</option>
-                            </select>
-                          </li>
-                          <li className=" flex space-x-8">
-                            <p className=" min-w-44">Quyền riêng tư:</p>
-                            <select id="privacy">
-                              <option value="all">Tất cả bài viết</option>
-                              <option value="public">Công khai</option>
-                              <option value="friends">Chỉ bạn bè</option>
-                              <option value="private">Riêng tư</option>
-                            </select>
-                          </li>
-                          <li className=" flex space-x-8">
-                            <p className=" min-w-44">Bài viết được gắn thẻ:</p>
-                            <select id="tags">
-                              <option value="all">Tất cả bài viết</option>
-                              <option value="family">Gia đình</option>
-                              <option value="friends">Bạn bè</option>
-                              <option value="work">Công việc</option>
-                            </select>
-                          </li>
-                        </ul>
-                      </div>
-                      <div className=" flex items-center justify-end space-x-2">
-                        <Button
-                          className=" flex h-8 min-w-28 items-center bg-buttonColor px-2 text-black"
-                          onClick={() => setOpen(!open)}
-                        >
-                          Xoa
-                        </Button>
-                        <Button
-                          className=" flex h-8 min-w-28 items-center bg-primary px-6 text-white"
-                          onClick={() => setOpen(!open)}
-                        >
-                          Xong
-                        </Button>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
+            <div className=" mt-4 rounded bg-white  ">
+              <div className="flex items-center justify-between px-4 py-2 ">
+                <h3 className="text-xl font-bold">Bài viết</h3>
+                <div className="flex items-center gap-2">
+                  <button className="flex gap-2  rounded bg-gray-200 p-2 font-medium hover:bg-gray-300">
+                    {' '}
+                    <Settings2 />
+                    Bộ Lọc{' '}
+                  </button>
+                  <button className="flex gap-2  rounded bg-gray-200 p-2 font-medium hover:bg-gray-300">
+                    {' '}
+                    <Settings />
+                    Quản lý bài viết
+                  </button>
                 </div>
               </div>
-              <hr />
-              <div></div>
+              <div className=" mt-2 h-px w-full bg-gray-300 "></div>
+              <div className="px-4">
+                <ul className="flex  border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
+                  <li className="active bg-white-300 inline-block flex w-2/4 w-full items-center justify-center gap-1  border-b-2 border-blue-500 p-2 text-base text-blue-600 dark:bg-gray-800 dark:text-blue-500">
+                    <Text />
+                    Xem theo danh sách
+                  </li>
+                  <li className=" bg-white-300 inline-block flex w-2/4 w-full items-center justify-center gap-1   rounded p-2 text-base  hover:bg-gray-300 dark:bg-gray-800 ">
+                    <Grid2X2 />
+                    Chế độ xem lưới
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

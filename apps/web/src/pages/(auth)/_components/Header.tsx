@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import FaceBookIcon from '@/assets/images/facebook-logo.png'
 import { Input } from '@/components/ui/input'
+import { User } from '@/apis/auth'
 
 import clsx from 'clsx'
 import {
@@ -27,10 +28,13 @@ import {
   UsersRound
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import UserProfile from './UserProfile'
-import { useQuery } from '@tanstack/react-query'
-import { getMe } from '@/apis/auth'
 import { useRef } from 'react'
+import UserProfile from './UserProfile'
+import Notification from './Notification'
+
+interface Props {
+  user: User
+}
 
 const FEATURES = [
   {
@@ -63,24 +67,19 @@ const FEATURES = [
   }
 ]
 
-export default function Header() {
+export default function Header({ user }: Props) {
   const navigate = useNavigate()
   const currentPath = useLocation().pathname
-  const { data: meQuery } = useQuery({
-    queryKey: ['me'],
-    queryFn: getMe
-  })
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  const onSearch = (e:React.KeyboardEvent<HTMLInputElement>)=>{
-    if(e.key === 'Enter'){
+  const onSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
       navigate(`search/people?q=${inputRef.current?.value}`)
     }
   }
 
   return (
     <div className=" fixed top-0 z-10 flex w-full flex-row justify-between border bg-white px-4 py-4 shadow-md ">
-      
       <div>
         <div className=" flex max-h-10 space-x-3">
           <Link to={'/'}>
@@ -88,8 +87,13 @@ export default function Header() {
           </Link>
           <div className="flex min-w-60 items-center justify-center space-x-1 rounded-full border bg-secondary-foreground p-2 px-2">
             <Search />
-          
-            <Input placeholder="Search..." className=" border-none bg-transparent " onKeyDown={onSearch} ref={inputRef} />
+
+            <Input
+              placeholder="Search..."
+              className=" border-none bg-transparent "
+              onKeyDown={onSearch}
+              ref={inputRef}
+            />
           </div>
         </div>
       </div>
@@ -139,12 +143,8 @@ export default function Header() {
         <li className="relative  flex h-10 w-10 cursor-pointer items-center justify-center gap-4 rounded-full bg-secondary-foreground">
           <DropdownMenu>
             <DropdownMenuTrigger className=" rounded-full">{ICON_MESSAGE[2].icon}</DropdownMenuTrigger>
-            <DropdownMenuContent className="w-90 hover:bg-white">
-              <DropdownMenuLabel>MESSENGER</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <p>HELLO</p>
-              </DropdownMenuItem>
+            <DropdownMenuContent className=" hover:bg-white">
+              <Notification />
             </DropdownMenuContent>
           </DropdownMenu>
         </li>
@@ -152,8 +152,8 @@ export default function Header() {
         <li className="relative flex h-10 w-10 cursor-pointer flex-col items-center justify-center gap-4 rounded-full bg-secondary-foreground">
           <DropdownMenu>
             <DropdownMenuTrigger className="rounded-full">
-              {meQuery?.data?.avatar ? (
-                <img src={`${meQuery?.data?.avatar}`} alt="avatar" className="h-10 w-10 rounded-full" />
+              {user?.avatar ? (
+                <img src={`${user?.avatar}`} alt="avatar" className="h-10 w-10 rounded-full" />
               ) : (
                 <UsersRound />
               )}
@@ -161,11 +161,11 @@ export default function Header() {
             <DropdownMenuContent className=" w-96 p-4 hover:bg-white ">
               <div className="flex flex-col items-start justify-start space-y-2 rounded-lg p-4 font-semibold text-black shadow-lg shadow-gray-300 ">
                 <Link
-                  to={`/profile/`}
+                  to={`/${user?.id}`}
                   className="flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200"
                 >
-                  <img src={`${meQuery?.data?.avatar}`} alt="avatar" className="h-9 w-9 rounded-full" />
-                  <p className="text-lg">{meQuery?.data?.firstname} {meQuery?.data?.lastname}</p>
+                  <img src={`${user?.avatar}`} alt="avatar" className="h-9 w-9 rounded-full" />
+                  <p className="text-lg">{user?.fullName}</p>
                 </Link>
                 <hr className=" h-3/4 w-full bg-secondary-foreground" />
                 <div className="flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200">

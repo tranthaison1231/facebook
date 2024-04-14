@@ -33,7 +33,7 @@ export class UsersService {
   static async getAll(q: string) {
     const users = await db.user.findMany({
       where: {
-        firstname: {
+        firstName: {
           contains: q,
         },
       },
@@ -41,3 +41,4 @@ export class UsersService {
     return users;
   }
 }
+

@@ -73,7 +73,7 @@ export default function Signup() {
               <p className='text-sm text-[#828697]'>Giới tính</p>
               <ShieldQuestion className='w-3 h-3 '/>
             </div>
-            <div className="grid grid-flow-col gap-2">
+            <div className="grid grid-flow-col gap-1">
               <div className="flex justify-center items-center gap-8 border border-gray-300 rounded-[5px] p-2">
                 <p>Nữ</p>
                 <Input type='checkbox' className='w-3 h-3' {...register('gender')} value="female" />

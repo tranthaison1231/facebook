@@ -12,13 +12,13 @@ const SIDEBARS = [
     icon: <Table2 />,
     path: '/top',
     content: 'Tất cả',
-    childern: []
+    children: []
   },
   {
     icon: <Newspaper />,
     path: '/posts',
     content: 'Bài viết',
-    childern: [
+    children: [
       {
         title: 'Bài viết gần đây '
       },
@@ -40,7 +40,7 @@ const SIDEBARS = [
     icon: <UsersRound />,
     path: '/people',
     content: 'Mọi người',
-    childern: [
+    children: [
       {
         title: 'Bạn bè '
       },
@@ -59,31 +59,31 @@ const SIDEBARS = [
     icon: <Image />,
     path: '/photos',
     content: 'Bài viết',
-    childern: []
+    children: []
   },
   {
     icon: <Clapperboard />,
     path: '/top',
     content: 'Ảnh',
-    childern: []
+    children: []
   },
   {
     icon: <Table2 />,
     path: '/top',
     content: 'Video',
-    childern: []
+    children: []
   },
   {
     icon: <Table2 />,
     path: '/top',
     content: 'Bài viết',
-    childern: []
+    children: []
   },
   {
     icon: <Table2 />,
     path: '/top',
     content: 'Bài viết',
-    childern: []
+    children: []
   }
 ]
 interface User {
@@ -145,7 +145,7 @@ export default function Component() {
                 </Link>
 
                 {`/search${item?.path}` === location?.pathname &&
-                  item?.childern.map(submenu => (
+                  item?.children.map(submenu => (
                     <div className="mt-2 flex rounded  pl-9  ">
                       <div className="flex w-full items-center justify-between rounded-sm p-2 hover:bg-gray-200">
                         <p>{submenu?.title}</p>

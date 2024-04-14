@@ -5,9 +5,7 @@ interface SignUp {
   lastname: string
   email: string
   password: string
-  day: number
-  month: number
-  year: number
+  birthday: number
   gender: string
 }
 export interface User {
@@ -20,7 +18,12 @@ export interface User {
   address: string
   workAt: string
 }
-
+interface UpdateMe {
+  fullName: string
+  age: number
+  avatar: string
+  phone: number
+}
 
 interface SignInData {
   email: string;
@@ -33,8 +36,10 @@ export const signIn = async (data: SignInData) => {
 }
 
 
-export const signUp = async ({ email, password }: SignUp) => {
+export const signUp = async ({ lastname,firstname,email, password }: SignUp) => {
   const res = await request.post('/sign-up', {
+    lastname,
+    firstname,
     email,
     password
   })
@@ -70,5 +75,16 @@ export const resetPassword = async (token: string, password: string) => {
   return res.data
 }
 
-
+export const getUser = async (id: string) => {
+  const res = await request.get(`/users/${id}`)
+  return res.data
+}
+export const updateMe = async ({ fullName, age, avatar, phone }: UpdateMe) => {
+  return request.put('/users/me', {
+    fullName,
+    age,
+    avatar,
+    phone
+  })
+}
 
