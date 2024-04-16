@@ -8,6 +8,7 @@ export type Path =
   | `/:id`
   | `/friends`
   | `/login`
+  | `/marketplace`
   | `/posts`
   | `/profile/profileHeader`
   | `/reset-password`

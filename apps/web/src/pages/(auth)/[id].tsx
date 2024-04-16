@@ -10,7 +10,7 @@ export default function Component() {
     queryKey: ['user', id],
     queryFn: () => getUser(id)
   })
-
+  
   const { data: postsQuery } = useQuery({
     queryKey: ['users', id, 'posts'],
     queryFn: () => fetchPostsByUserId(id)

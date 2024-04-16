@@ -14,7 +14,7 @@ export default function Component() {
   return (
     <div className="w-full">
       <Header user={meQuery?.data} />
-      <div className=" pt-16">
+      <div className=" pt-20">
         <Outlet context={{ me: meQuery?.data }} />
       </div>
     </div>
