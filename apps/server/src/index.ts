@@ -10,7 +10,9 @@ import { router as reviews } from "./modules/reviews/reviews.controller";
 import { router as uploadRouter } from "./modules/upload/upload.controller";
 import { router as posts } from "./modules/posts/posts.controller";
 import { router as products } from "./modules/products/products.controller";
+import { router as groups } from "./modules/groups/groups.controller";
 import { errorFilter } from "./lib/error-filter";
+import { auth as checkAuth } from "./middlewares/auth";
 
 const app = new Hono().basePath("/api");
 
@@ -33,6 +35,8 @@ app.route("/rooms", rooms);
 app.route("/users", users);
 app.route("/posts", posts);
 app.route("/products", products);
+app.route("/groups", groups);
+
 app.route("/upload", uploadRouter);
 
 app.notFound((c) => {

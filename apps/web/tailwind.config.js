@@ -21,7 +21,7 @@ module.exports = {
       width:{
         'max':'1048px',
         'intro':'488px',
-        'post':'677px'
+        'post': '677px',
       },
       backgroundImage: {
         avt1: 'url("@assets/images/avt1")'

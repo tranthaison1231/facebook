@@ -9,22 +9,31 @@ datasource db {
 }
 
 model Category {
-  id   String  @id @default(cuid())
-  name String  @unique
-  icon String?
-  products  Products[] 
+  id       String     @id @default(cuid())
+  name     String     @unique
+  icon     String?
+  products Product[]
+
   @@map("categories")
 }
 
 model User {
-  id       String   @id @default(cuid())
-  email    String   @unique
-  fullName String?
-  age      Int?
-  avatar   String?
-  phone    String?
-  password String
-  Post     Post[]
+  id          String         @id @default(cuid())
+  email       String         @unique
+  fullName    String?
+  age         Int?
+  avatar      String?
+  phone       String?
+  workAt      String?
+  address     String?
+  school      String?
+  background  String?
+  password    String
+  posts       Post[]
+  groups      GroupsOnUser[]
+  groupsRoles RolesOnGroup[]
+  Group       Group[]
+
   @@map("users")
 }
 
@@ -37,13 +46,24 @@ enum PublishType {
   CUSTOM
 }
 
+enum RoleOnGroup {
+  ADMIN
+  MOD
+  MEMBER
+}
+
+enum TypeOfGroup {
+  PUBLIC
+  PRIVATE
+}
+
 model Post {
-  id       String   @id @default(cuid())
-  user     User?    @relation(fields: [userId], references: [id])
-  userId   String?
-  content  String?
-  location String?
-  media    String[]
+  id          String      @id @default(cuid())
+  user        User?       @relation(fields: [userId], references: [id])
+  userId      String?
+  content     String?
+  location    String?
+  media       String[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   publishType PublishType @default(PUBLIC)
@@ -52,15 +72,50 @@ model Post {
   @@map("posts")
 }
 
-model Products {
-  id          String    @id @default(cuid())
-  categoryId  String    // Khai báo trường này để lưu trữ ID của Category
-  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  name        String ?
+model Product {
+  id          String   @id @default(cuid())
+  categoryId  String // Khai báo trường này để lưu trữ ID của Category
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name        String?
   price       Int?
   description String?
   location    String?
-  img String?
+  img         String?
+
   @@index([categoryId])
 }
 
+model Group {
+  id           String         @id @default(cuid())
+  name         String
+  userId       String
+  type         TypeOfGroup
+  users        GroupsOnUser[]
+  User         User           @relation(fields: [userId], references: [id])
+  RolesOnGroup RolesOnGroup[]
+
+  @@index([userId])
+  @@map("groups")
+}
+
+model RolesOnGroup {
+  user    User        @relation(fields: [userId], references: [id])
+  userId  String
+  group   Group       @relation(fields: [groupId], references: [id])
+  groupId String
+  role    RoleOnGroup
+
+  @@id([userId, groupId])
+  @@map("group_roles")
+}
+
+model GroupsOnUser {
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+  group   Group  @relation(fields: [groupId], references: [id])
+  groupId String
+
+  @@id([userId, groupId])
+  @@index([groupId])
+  @@map("group_members")
+}
