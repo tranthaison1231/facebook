@@ -22,7 +22,7 @@ import clsx from 'clsx'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import avatar from '@/assets/images/avt1.jpg'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { Outlet, useLocation } from 'react-router-dom'
+import {  useLocation } from 'react-router-dom'
 import { useParams } from '@/router'
 const images = [img1, img2, img3, img4, img5, img6]
 const navBar = [

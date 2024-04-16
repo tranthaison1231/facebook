@@ -32,16 +32,7 @@ export const fetchRoom = async (roomId: string) => {
 
 export type CreateRoomInputs = z.infer<typeof createRoomSchema>
 
-export const createRoom = async (data: CreateRoomInputs) => {
-  const res = await request.post('/categories/clqt6uvbo0000grxvj216i9ka/rooms', {
-    ...data,
-    startDate: new Date(),
-    endDate: new Date(),
-    images: [],
-    rate: 0
-  })
-  return roomSchema.parse(res.data.data)
-}
+
 
 export const deleteRoom = async (roomId: string) => {
   return request.delete(`/rooms/${roomId}`)
