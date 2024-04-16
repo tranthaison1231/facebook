@@ -31,50 +31,11 @@ model User {
   school      String?
   background  String?
   password    String
-  Room        Room[]
-  Review      Review[]
-  Post        Post[]
-  Group       Group[]
-  GroupMember GroupMember[]
-
+  posts        Post[]
+  groups GroupsOnUser[]
+  groupsRoles RolesOnGroup[]
+  
   @@map("users")
-}
-
-model Room {
-  id          String   @id @default(cuid())
-  name        String
-  price       Int
-  location    String
-  startDate   DateTime
-  endDate     DateTime
-  rate        Float    @default(0)
-  images      String[]
-  description String
-  categoryId  String
-  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Review      Review[]
-
-  @@index([categoryId])
-  @@index([userId])
-  @@map("rooms")
-}
-
-model Review {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  roomId    String
-  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  comment   String
-  rate      Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
-  @@index([roomId])
-  @@map("reviews")
 }
 
 enum PublishType {
@@ -118,14 +79,25 @@ model Group {
   name   String
   userId String
   type   TypeOfGroup
-  users  GroupMember[]
+  users  GroupsOnUser[]
   User   User          @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@map("groups")
 }
 
-model GroupMember {
+model RolesOnGroup {
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+  group   Group  @relation(fields: [groupId], references: [id])
+  groupId String
+  role    RoleOnGroup
+
+  @@id([userId, groupId])
+  @@map("group_roles")
+}
+
+model GroupsOnUser {
   user    User   @relation(fields: [userId], references: [id])
   userId  String
   group   Group  @relation(fields: [groupId], references: [id])

@@ -9,6 +9,9 @@ export type Path =
   | `/:id/about`
   | `/:id/friends`
   | `/friends`
+  | `/groups/discover`
+  | `/groups/feed`
+  | `/groups/joins`
   | `/login`
   | `/posts`
   | `/profile/profileHeader`
@@ -16,6 +19,7 @@ export type Path =
   | `/search/people`
   | `/search/photos`
   | `/search/posts`
+  | `/sign-up`
 
 export type Params = {
   '/:id': { id: string }
