@@ -20,18 +20,17 @@ model Category {
 }
 
 model User {
-  id          String        @id @default(cuid())
-  email       String        @unique
-  fullName    String?
-  age         Int?
-  avatar      String?
-  phone       String?
-  password    String
-  Room        Room[]
-  Review      Review[]
-  Post        Post[]
-  Groups      Group[]
-  GroupMember GroupMember[]
+  id        String        @id @default(cuid())
+  email     String        @unique
+  fullName  String?
+  age       Int?
+  avatar    String?
+  phone     String?
+  password  String
+  Room      Room[]
+  Review    Review[]
+  Post      Post[]
+  groups GroupOnUser[]
 
   @@map("users")
 }
@@ -114,20 +113,20 @@ model Group {
   name   String
   userId String
   type   TypeOfGroup
-  users  GroupMember[]
+  users  GroupOnUser[]
   User   User          @relation(fields: [userId], references: [id])
 
-  @@map("groups")
   @@index([userId])
+  @@map("groups")
 }
 
-model GroupMember {
+model GroupOnUser {
   user    User   @relation(fields: [userId], references: [id])
   userId  String
   group   Group  @relation(fields: [groupId], references: [id])
   groupId String
 
   @@id([userId, groupId])
-  @@map("group_members")
   @@index([groupId])
+  @@map("group_members")
 }
