@@ -10,8 +10,10 @@ import {
 } from "@/components/ui/select"
 
 interface InputYearProps {
-    className: string; // Định nghĩa kiểu dữ liệu của prop className là chuỗi (string)
-  }
+  className: string;
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void; // Thêm prop onChange
+}
   
 
 export function InputYear({ className }: InputYearProps) {

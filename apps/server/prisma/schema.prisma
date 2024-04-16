@@ -28,7 +28,7 @@ model User {
   avatar   String?
   phone    String?
   password String
-  birthday DateTime?
+  birthday String?
   gender String?
   Room     Room[]
   Review   Review[]

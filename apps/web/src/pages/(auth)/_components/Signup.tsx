@@ -14,6 +14,10 @@ import { InputMonth } from './InputMonth';
 import { InputYear } from './InputYear';
 
 export default function Signup() {
+  const [day, setDay] = useState('');
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -26,6 +30,7 @@ export default function Signup() {
   const onSubmit = async (data: any) => {
     try {
       setIsLoading(true);
+      data.birthday = `${year}-${month}-${day}`;
       await signUp(data);
       toast.success('Sign-up successfully!');
     } catch (error) {
@@ -35,6 +40,18 @@ export default function Signup() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleDayChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setDay(event.target.value);
+  };
+
+  const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setMonth(event.target.value);
+  };
+
+  const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setYear(event.target.value);
   };
 
   return (
@@ -65,9 +82,9 @@ export default function Signup() {
               <ShieldQuestion className='w-3 h-3 '/>
             </div>
             <div className="grid grid-flow-col gap-2">
-              <InputDay className='rounded-[5px]' {...register('day')} />
-              <InputMonth className='rounded-[5px]' {...register('month')} />
-              <InputYear className='rounded-[5px]' {...register('year')} />
+            <InputDay className='rounded-[5px]' value={day} onChange={handleDayChange} />
+            <InputMonth className='rounded-[5px]' value={month} onChange={handleMonthChange} />
+            <InputYear className='rounded-[5px]' value={year} onChange={handleYearChange} />
             </div>
             <div className="flex items-center">
               <p className='text-sm text-[#828697]'>Giới tính</p>

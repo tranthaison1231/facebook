@@ -36,12 +36,14 @@ export const signIn = async (data: SignInData) => {
 }
 
 
-export const signUp = async ({ lastname,firstname,email, password }: SignUp) => {
+export const signUp = async ({ lastname,firstname,email, password, birthday, gender }: SignUp) => {
   const res = await request.post('/sign-up', {
     lastname,
     firstname,
     email,
-    password
+    password,
+    birthday, 
+    gender
   })
   return res.data
 }
