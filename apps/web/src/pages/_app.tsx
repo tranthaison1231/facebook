@@ -21,6 +21,7 @@ export default function App() {
       <div className="bg-slate-100 h-screen font-primary">
         <Outlet />
       </div>
+      
     </QueryClientProvider>
   )
 }

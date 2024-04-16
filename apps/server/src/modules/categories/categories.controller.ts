@@ -4,6 +4,7 @@ import { RoomsService } from "../rooms/rooms.service";
 import { createRoomDto } from "./dtos/create-room.dto";
 import { zValidator } from "@hono/zod-validator";
 import { auth } from "@/middlewares/auth";
+import { date } from "zod";
 
 export const router = new Hono();
 
@@ -81,4 +82,13 @@ router
         status: 200,
       });
     },
-  );
+  )
+  .put('/',auth, async (c) => {
+    const data = await c.req.json();
+    const user = c.get("user");
+    const updatedCategories = await CategoriesService.updateBy(user.id, data);
+    return c.json({
+      data: updatedCategories,
+      status: 200,
+    });
+  })

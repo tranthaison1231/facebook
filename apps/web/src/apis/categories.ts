@@ -1,3 +1,5 @@
+import { request } from "@/utils/request"
+
 export interface Category {
   id: string
   name: string
@@ -5,7 +7,6 @@ export interface Category {
 }
 
 export const fetchCategories = async (): Promise<Category[]> => {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/categories`)
-  const json = await res.json()
-  return json.data
+  const res =  await request.get(`/categories`);
+  return res.data.data
 }

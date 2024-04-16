@@ -1,7 +1,7 @@
 import { getMe } from '@/apis/auth'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { Bookmark, CircleFadingPlus, MoveDown, PersonStanding, Users, Video } from 'lucide-react'
+import { Bookmark, CircleFadingPlus, MoveDown, PersonStanding, Store, Users, Video } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const SIDE_BAR = [
@@ -29,6 +29,11 @@ const SIDE_BAR = [
     title: 'Xem them',
     path: '/seemore',
     icon: <MoveDown className="text-primary" />
+  },
+  {
+    title: 'Market place',
+    path: '/marketplace',
+    icon: <Store className="text-primary" />
   }
 ]
 const SIDE_BAR2 = [
