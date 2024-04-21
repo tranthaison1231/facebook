@@ -18,5 +18,13 @@ router.get("/", auth, async (c) => {
     return c.json({
         data: product,
         status: 200,
-    });
+    })
+})
+.get("/:categoryId",auth,async (c) => {
+    const categoryId = c.req.param("categoryId");
+    const products = await ProductsService.getAllBy(categoryId);
+    return c.json({
+        data: products,
+        status: 200,
+    })
 })

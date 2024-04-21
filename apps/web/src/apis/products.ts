@@ -16,5 +16,5 @@ export const fetchProducts = async (): Promise<Products[]> => {
   }
 export const getProductsById = async (categoryId:string) => {
     const res = await request.get(`/products/${categoryId}`)
-    return res.data
+    return res.data.data
 } 

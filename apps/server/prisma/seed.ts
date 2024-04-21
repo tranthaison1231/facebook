@@ -14,17 +14,7 @@ async function main() {
   //   },
   // });
 
-  const product = await prisma.products.create({
-    data:{
-      "categoryId":"clv14foip0000zi018qpl5n3x",
-      "name":"Xe dep 1",
-      "price":10000000,
-      "description":"Top 10 chiếc xe 'hớp hồn' phái đẹp",
-      "img":"https://vnn-imgs-f.vgcloud.vn/2020/10/21/10/huracan-la-mo-t-trong-nhu-ng-ma-u-xe-de-p-nha-t-cu-a-lamborghini-a-nh-autocar.jpg",
-      "location":"New York"
-  }
-  });
-  console.log(product);
+
 
  
 }
