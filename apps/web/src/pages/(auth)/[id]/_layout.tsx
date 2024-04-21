@@ -1,4 +1,4 @@
-import { getUser } from '@/apis/auth'
+import { getUser, updateMe } from '@/apis/auth'
 import { fetchPostsByUserId } from '@/apis/posts'
 import { useParams } from '@/router'
 import { useQuery } from '@tanstack/react-query'
@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Pencil, Plus, Camera, Scissors, Clock } from 'lucide-react'
 import { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
+import { uploadFile } from '@/apis/upload'
 
 export default function Component() {
   const { id } = useParams('/:id')
@@ -36,7 +37,20 @@ export default function Component() {
     }
     setOpen(isOpen)
   }
+  const handleUploadS3 = async () => {
+    if (avatar !== null) {
+      const formData = new FormData()
+      formData.append('file', avatar)
+      console.log(avatar, 'avatar')
 
+      // const data = await uploadFile(formData)
+      // console.log(data, 'data')
+      // const dataNews = {
+      //   avatar: data?.url
+      // }
+      // updateMe(dataNews)
+    }
+  }
   return (
     <div>
       <div className="px-52">
@@ -90,7 +104,9 @@ export default function Component() {
                       </div>
                       <div className=" flex items-center justify-end gap-2 px-4">
                         <button className="text-base font-medium text-blue-800">Hủy</button>
-                        <button className="rounded-sm bg-blue-800 px-12 py-2 text-white">Lưu</button>
+                        <button onClick={handleUploadS3} className="rounded-sm bg-blue-800 px-12 py-2 text-white">
+                          Lưu
+                        </button>
                       </div>
                     </div>
                   )}
