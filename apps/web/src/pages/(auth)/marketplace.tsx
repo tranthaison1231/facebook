@@ -35,15 +35,7 @@ const SIDE_BAR = [
     path: 'you/selling'
   }
 ]
-const PRODUCTS = [
-  {
-    name: 'Xe dep 1',
-    price: 10000000,
-    img: 'https://vnn-imgs-f.vgcloud.vn/2020/10/21/10/huracan-la-mo-t-trong-nhu-ng-ma-u-xe-de-p-nha-t-cu-a-lamborghini-a-nh-autocar.jpg',
-    location: 'New York',
-    description:"Top 10 chiếc xe 'họp hồn' phái đẹp"
-  }
-]
+
 function Marketplace() {
   const navigate = useNavigate()
   const currentPath = useLocation().pathname
@@ -53,7 +45,7 @@ function Marketplace() {
       navigate(`/search/?q=${inputRef.current?.value}`)
     }
   }
-  const { data: category } = useQuery({
+  const { data: categorys } = useQuery({
     queryKey: ['category'],
     queryFn: () => fetchCategories()
   })
@@ -61,14 +53,27 @@ function Marketplace() {
     queryKey: ['products'],
     queryFn: () => fetchProducts()
   })
-  console.log(products)
-
- 
+  console.log(products);
+  
+  function formatNumber(num: number) {
+    // Check if the input is a number
+    if (typeof num !== 'number') {
+      throw new Error('Input must be a number');
+    }
+  
+    // Convert the number to a string
+    const str = num.toString();
+  
+    // Add commas for thousands separation
+    const formattedStr = str.replace(/(\d)(?=(\d{3})+$)/g, '$1.');
+  
+    return formattedStr;
+  }
 
   return (
     <div className=" flex justify-center">
       {/* ============== SIDEBAR ============= */}
-      <section className="min-h-screen min-w-72 bg-white px-3  shadow-md">
+      <section className=" sticky top-[80px] min-w-72 bg-white px-3 shadow-md max-h-screen hover:overflow-scroll">
         <div className=" mb-2 flex justify-between">
           <h1 className=" text-xl font-bold">MarketPlace</h1>
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f0f2f5] font-bold text-black">
@@ -111,22 +116,24 @@ function Marketplace() {
           </Button>
         </ul>
 
-        <hr className="my-4 h-1/2 w-full bg-[#f0f2f5]" />
+        <hr className="my-4  w-full bg-[#f0f2f5]" />
         <div>
           <h1 className=" font-semibold">Bộ lọc</h1>
           <p className=" text-xs font-semibold text-[#1877f2]">Thành phố Hồ Chí Minh Trong vòng 65 km</p>
         </div>
-        <hr className="my-4 h-1/2 w-full bg-[#f0f2f5]" />
+        <hr className="my-4 w-full bg-[#f0f2f5]" />
         <div>
           <h1 className=" text-xl font-bold">Hạng mục</h1>
           <ul className="flex flex-col">
-            {category?.map(item => (
+            {categorys?.map(item => (
+              <Link to={`/marketplace/category/${item.path}`} key={item.id}>
               <li key={item.id} className="flex items-center gap-x-1 py-2 rounded-sm text-base font-medium hover:bg-[#f0f2f5]">
                 <div className='flex h-8 w-8 items-center justify-center rounded-full bg-[#e4e6eb]'>
                   <img src={`${item.icon}`} alt={item.name} className=" w-4 h-4 object-cover" />
                 </div>
                 <p>{item.name}</p>
               </li>
+              </Link>
             ))}
           </ul>
         </div>
@@ -134,22 +141,48 @@ function Marketplace() {
 
       {/* ============== CONTENT ============= */}
       <section className=" w-full p-8 bg-[#f0f2f5]">
-        <h1 className=' font-bold text-lg'>Lựa chọn hôm nay</h1>
-       <div>
-            <ul className=' flex gap-x-1 gap-y-2'>
-              {PRODUCTS.map((item)=>(
-                <li className=' rounded-sm overflow-hidden'>
+        <h1 className=' font-bold text-lg mb-8'>Lựa chọn hôm nay</h1>
+       <div className=' mb-11'>
+            <ul className=' grid grid-cols-6 gap-x-2 gap-y-6 w-full '>
+              {products?.map((item)=>(
+                <li className='rounded-sm overflow-hidden'>
                     <div ><img src={`${item.img}`} alt={item.name} className='w-60 h-60 rounded-sm' /></div>
-                    <div>
-                      <p className=' font-bold text-base'>{item.price}đ</p>
-                      <p className=' font-light text-base'>{item.description} </p>
-                      <p  className=' font-light text-base'>{item.location}</p>
+                    <div className=''>
+                      <p className=' font-bold text-base'>{formatNumber(item.price)} đ</p>
+                      <p className=' font-normal text-base'>{item.description} </p>
+                      <p  className=' font-light text-sm'>{item.location}</p>
                     </div>
                 </li>
               )
               )}
             </ul>
        </div>
+       
+       <div>
+      {categorys?.map((category) => (
+        <div className=' mb-5'>
+          <hr className=" border-[1px] border-slate-300"/>
+          <div key={category.id}>
+          <div className=' flex gap-x-32 my-5'>
+            <p className=' font-bold text-lg'>Được tài trợ</p>
+            <p className=' font-bold text-lg'>{category.name}</p>
+          </div>
+          <ul className=' grid grid-cols-6 gap-x-2 gap-y-2 w-full '>
+            {products?.filter((product) => product.categoryId === category.id).map((item) => (
+              <li className='rounded-sm overflow-hidden'>
+              <div ><img src={`${item.img}`} alt={item.name} className='w-60 h-60 rounded-sm' /></div>
+              <div className=''>
+                <p className=' font-bold text-base'>{formatNumber(item.price)} đ</p>
+                <p className=' font-normal text-base'>{item.description} </p>
+                <p  className=' font-light text-sm'>{item.location}</p>
+              </div>
+          </li>
+            ))}
+          </ul>
+        </div></div>
+
+      ))}
+    </div>
        
       </section>
     </div>

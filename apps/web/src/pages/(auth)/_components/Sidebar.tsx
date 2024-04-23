@@ -79,7 +79,7 @@ export default function Sidebar() {
         </Link>
         {SIDE_BAR.map(item => (
           <Link to={`${item.path}`} key={item.title}>
-            <li className={clsx('flex cursor-pointer gap-4 rounded-sm px-6 py-2 font-bold')}>
+            <li className={clsx('flex cursor-pointer gap-4 rounded-sm px-6 py-2 font-bold hover:bg-gray-200' )}>
               {item.icon}
               <span>{item.title}</span>
             </li>

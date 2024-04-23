@@ -14,6 +14,10 @@ export type Path =
   | `/groups/joins`
   | `/login`
   | `/marketplace`
+  | `/marketplace/category/entertainment`
+  | `/marketplace/category/propertyrentals`
+  | `/marketplace/category/vehicles`
+  | `/marketplace/notification`
   | `/posts`
   | `/profile/profileHeader`
   | `/reset-password`
