@@ -10,13 +10,13 @@ export default function Component() {
     queryKey: ['user', id],
     queryFn: () => getUser(id)
   })
-
+  
   const { data: postsQuery } = useQuery({
     queryKey: ['users', id, 'posts'],
     queryFn: () => fetchPostsByUserId(id)
   })
 
-  console.log(postsQuery?.data)
+  console.log(postsQuery)
   return (
     <div>
       <div className="px-52">

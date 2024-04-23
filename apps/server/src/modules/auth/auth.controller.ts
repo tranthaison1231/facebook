@@ -8,9 +8,9 @@ export const router = new Hono();
 
 router
   .post("/sign-up", zValidator("json", signUpDto), async (c) => {
-    const { firstname,lastname,email, password,birthday,gender } = await c.req.json();
+    const signUpDto = await c.req.json();
 
-    await AuthService.signUp(firstname,lastname,email, password,birthday,gender);
+    await AuthService.signUp(signUpDto);
 
     return c.json({ message: "Sign up successfully!" });
   })

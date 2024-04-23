@@ -10,32 +10,31 @@ import { mailService } from "@/lib/mail.service";
 const ACCESS_TOKEN_EXPIRE_IN = 60 * 60;
 
 export class AuthService {
-  static async signUp(firstName: string, lastName: string, email: string, password: string, birthday: string, gender: string) {
+  static async signUp(signUpdto: any) {
+    const { email, firstName, lastName, dob, password } = signUpdto;
     const user = await db.user.findUnique({
       where: {
         email: email,
       },
     });
-  
+
     if (user) {
       throw new BadRequestException("User already exists");
     }
-  
+
     const salt = bcrypt.genSaltSync();
     const hashedPassword = await bcrypt.hash(password, salt);
-  
+
     await db.user.create({
       data: {
         firstName,
         lastName,
         email,
         password: hashedPassword,
-        birthday,
-        gender
+        dob,
       },
     });
   }
-  
 
   static createToken(user: User) {
     return jwt.sign({ userId: user.id }, JWT_SECRET, {

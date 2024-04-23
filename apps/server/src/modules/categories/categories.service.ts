@@ -25,4 +25,11 @@ export class CategoriesService {
     });
     return category;
   }
+  static async updateBy(categoryId: string, data: Category) {
+    const category = await db.category.update({
+      where: { id: categoryId },
+      data,
+    });
+    return category;
+  }
 }
