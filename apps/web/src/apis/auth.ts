@@ -13,10 +13,10 @@ export interface User {
   workAt: string
 }
 interface UpdateMe {
-  fullName: string
-  age: number
-  avatar: string
-  phone: number
+  fullName?: string
+  age?: number
+  avatar?: string
+  phone?: number
 }
 
 export const signIn = async ({ email, password }: SignUp) => {
