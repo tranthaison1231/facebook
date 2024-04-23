@@ -1,10 +1,15 @@
 import { request } from '@/utils/request'
 
 interface SignUp {
+  firstname: string
+  lastname: string
   email: string
   password: string
+  dob: string
 }
 export interface User {
+  lastName: string
+  firstName: string
   id: string
   fullName: string
   avatar: string
@@ -19,18 +24,23 @@ interface UpdateMe {
   phone?: number
 }
 
-export const signIn = async ({ email, password }: SignUp) => {
-  const res = await request.post('/sign-in', {
-    email,
-    password
-  })
+interface SignInData {
+  email: string
+  password: string
+}
+
+export const signIn = async (data: SignInData) => {
+  const res = await request.post('/sign-in', data)
   return res.data
 }
 
-export const signUp = async ({ email, password }: SignUp) => {
+export const signUp = async ({ lastname, firstname, email, password, dob }: SignUp) => {
   const res = await request.post('/sign-up', {
+    lastname,
+    firstname,
     email,
-    password
+    password,
+    dob
   })
   return res.data
 }
@@ -45,6 +55,10 @@ export const forgotPassword = async ({ email }: { email: string }) => {
 export const getMe = async () => {
   const res = await request.get('/users/me')
   return res.data
+}
+
+export const getAll = async () => {
+  const res = await request.get('')
 }
 
 export const resetPassword = async (token: string, password: string) => {
@@ -72,4 +86,3 @@ export const updateMe = async ({ fullName, age, avatar, phone }: UpdateMe) => {
     phone
   })
 }
-

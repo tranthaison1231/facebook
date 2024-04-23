@@ -24,9 +24,12 @@ import Sidebar from './_components/Sidebar'
 import Love from '@/assets/images/love.png'
 import Love2 from '@/assets/images/love2.png'
 import Like from '@/assets/images/like.png'
-
+import { useQuery } from '@tanstack/react-query'
+// import { getAll } from '@/apis/posts'
 import CreatePost from './_components/CreatePost'
 import FriendList from './_components/FriendList'
+import { Post, fetchAllPosts} from '@/apis/posts'
+import { map } from 'zod'
 
 const IMAGES = [
   {
@@ -68,7 +71,7 @@ const Extrafunction = [
     detail: 'Them vao danh sach luu'
   },
   {
-    icon: <MoveDown />,
+    icon: <MoveDown />,     
     name: 'Luu bai viet',
     detail: 'Them vao danh sach luu'
   },
@@ -79,8 +82,16 @@ const Extrafunction = [
   }
 ]
 
+
 export default function Dashboard() {
-  const [hidden, setHidden] = useState(true)
+  const [hidden, setHidden] = useState(true);
+  const { data: postsQuery } = useQuery({
+    queryKey: ['posts'],
+    queryFn: () => fetchAllPosts()
+  })
+
+console.log(postsQuery);
+
 
   return (
     <div className="flex">
@@ -135,9 +146,9 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
-
               {hidden ? (
-                <article className="mt-3 min-h-screen w-full rounded-lg bg-white">
+                postsQuery?.data.map((item: Post, index: number) => (
+                <article className="mt-3 min-h-screen w-full rounded-lg bg-white" key={index}>
                   <div className=" flex items-center justify-between p-3">
                     <div className="flex space-x-2">
                       <div className=" h-10 w-10 overflow-hidden rounded-sm">
@@ -184,16 +195,13 @@ export default function Dashboard() {
                   <hr className=" h-1 px-5" />
 
                   <div className="p-5 text-justify ">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Similique dicta doloribus, totam
-                    voluptates consectetur vel magnam saepe error soluta unde harum vero recusandae autem maiores nihil,
-                    corrupti voluptatum, iure esse asperiores! Incidunt, fuga a, perspiciatis minus fugiat reprehenderit
-                    officia dolores, hic cum quis rerum. Eos sequi tenetur quibusdam repellendus cupiditate.
+                    {item?.content}
                   </div>
 
                   <div className=" max-h-[500px] overflow-hidden ">
                     <img src={`${Avatar}`} alt="" className="w-full object-contain" />
                   </div>
-
+                  
                   <div className="flex justify-between p-5 ">
                     <div className=" flex items-center justify-center space-x-1">
                       <div className="flex items-center -space-x-1">
@@ -231,6 +239,7 @@ export default function Dashboard() {
                     </Button>
                   </div>
                 </article>
+                ))
               ) : (
                 <p>CLOSED</p>
               )}
@@ -242,3 +251,11 @@ export default function Dashboard() {
     </div>
   )
 }
+function getAll(context: { queryKey: never[]; signal: AbortSignal; meta: Record<string, unknown> | undefined }): unknown {
+  throw new Error('Function not implemented.')
+}
+
+function getAllPosts(id: string): any {
+  throw new Error('Function not implemented.')
+}
+
