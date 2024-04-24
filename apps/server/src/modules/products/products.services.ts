@@ -1,6 +1,13 @@
 import { db } from "@/lib/db";
 
 export class ProductsService {
+  static getProductsById(categoryId: string) {
+    return db.product.findMany({
+      where: {
+        categoryId,
+      },
+    });
+  }
   static async getAll() {
     const product = await db.product.findMany();
     return product;
