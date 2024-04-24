@@ -17,16 +17,19 @@ model Category {
 
 model User {
   id          String         @id @default(cuid())
+  firstName   String?
+  lastName    String?
   email       String         @unique
-  fullName    String?
   age         Int?
   avatar      String?
   phone       String?
-  workAt      String?
-  address     String?
+  password    String
+  dob         DateTime?
+  gender      String?
   school      String?
   background  String?
-  password    String
+  workAt      String?
+  address     String?
   posts       Post[]
   groups      GroupsOnUser[]
   groupsRoles RolesOnGroup[]
