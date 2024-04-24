@@ -72,72 +72,7 @@ function Marketplace() {
 
   return (
     <div className=" flex justify-center">
-      {/* ============== SIDEBAR ============= */}
-      <section className=" sticky top-[80px] min-w-72 bg-white px-3 shadow-md max-h-screen hover:overflow-scroll">
-        <div className=" mb-2 flex justify-between">
-          <h1 className=" text-xl font-bold">MarketPlace</h1>
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f0f2f5] font-bold text-black">
-            <Settings />
-          </div>
-        </div>
 
-        <div className="flex min-w-60 items-center justify-center space-x-1 rounded-full border bg-secondary-foreground p-1">
-          <Search />
-          <Input
-            placeholder="Tìm kiếm trên MarketPlace..."
-            className=" border-none bg-transparent p-1 "
-            onKeyDown={onSearch}
-            ref={inputRef}
-          />
-        </div>
-
-        <ul className="mt-2 flex flex-col">
-          {SIDE_BAR.map(item => (
-            <Link to={`/marketplace/${item.path}`} key={item.name}>
-              <li
-                key={item.name}
-                className={clsx('flex justify-start gap-3 rounded-sm py-2 text-base font-medium hover:bg-[#f0f2f5]', {
-                  'bg-[#1877f2]': currentPath === `/${item.path}`
-                })}
-              >
-                <div
-                  className={clsx('flex h-8 w-8 items-center justify-center rounded-full bg-[#e4e6eb]', {
-                    'bg-[#1877f2]': currentPath === `/${item.path}`
-                  })}
-                >
-                  {item.icon}
-                </div>
-                <p>{item.name}</p>
-              </li>
-            </Link>
-          ))}
-          <Button className=" rounded-[6px] bg-[#ebf5ff] text-[#0866FF]">
-            <span>+</span>Tạo bài viết mới
-          </Button>
-        </ul>
-
-        <hr className="my-4  w-full bg-[#f0f2f5]" />
-        <div>
-          <h1 className=" font-semibold">Bộ lọc</h1>
-          <p className=" text-xs font-semibold text-[#1877f2]">Thành phố Hồ Chí Minh Trong vòng 65 km</p>
-        </div>
-        <hr className="my-4 w-full bg-[#f0f2f5]" />
-        <div>
-          <h1 className=" text-xl font-bold">Hạng mục</h1>
-          <ul className="flex flex-col">
-            {categorys?.map(item => (
-              <Link to={`/marketplace/category/${item.path}`} key={item.id}>
-              <li key={item.id} className="flex items-center gap-x-1 py-2 rounded-sm text-base font-medium hover:bg-[#f0f2f5]">
-                <div className='flex h-8 w-8 items-center justify-center rounded-full bg-[#e4e6eb]'>
-                  <img src={`${item.icon}`} alt={item.name} className=" w-4 h-4 object-cover" />
-                </div>
-                <p>{item.name}</p>
-              </li>
-              </Link>
-            ))}
-          </ul>
-        </div>
-      </section>
 
       {/* ============== CONTENT ============= */}
       <section className=" w-full p-8 bg-[#f0f2f5]">

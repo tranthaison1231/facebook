@@ -86,7 +86,7 @@ export default function Dashboard() {
     <div className="flex">
       <Sidebar />
       <div className="flex w-full justify-center">
-        <div className=" w-full bg-[#f0f2f5] pt-24 ">
+        <div className=" w-full bg-[#f0f2f5] ">
           <div className="mx-auto flex h-full w-[590px] flex-col items-center ">
             <Carousel className="mx-auto h-64 ">
               <CarouselContent>

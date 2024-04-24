@@ -4,7 +4,10 @@ import { Navigate, Outlet } from 'react-router-dom'
 import { getMe } from '@/apis/auth'
 import { getToken } from '@/utils/token'
 import Header from '../_components/Header'
-import SideBar from './_component/SideBar'
+import LeftSideBar from './_component/LeftSideBar'
+
+
+
 
 
 
@@ -16,10 +19,10 @@ export default function Component() {
   const accessToken = getToken()
   if (!accessToken) return <Navigate to="/login" />
   return (
-    <div className="w-full">
-      <Header user={meQuery?.data} />
-      <SideBar/>
-      <div className=" pt-20">
+    <div className="w-full flex ">
+      <LeftSideBar/>
+      <div className=' w-full h-screen'>
+      
         <Outlet context={{ me: meQuery?.data }} />
       </div>
     </div>
