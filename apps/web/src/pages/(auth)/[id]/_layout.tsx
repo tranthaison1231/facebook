@@ -1,16 +1,19 @@
-import { getUser } from '@/apis/auth'
+import { getUser, updateMe } from '@/apis/auth'
 import { fetchPostsByUserId } from '@/apis/posts'
 import { useParams } from '@/router'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Pencil, Plus, Camera, Scissors, Clock } from 'lucide-react'
 import { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
+import { uploadFile } from '@/apis/upload'
 
 export default function Component() {
   const { id } = useParams('/:id')
   const [open, setOpen] = useState(false)
-  const [avatar, setAvatar] = useState<string | null>(null)
+  const [avatar, setAvatar] = useState<File | null>(null)
+
+  const clientQuery = useQueryClient()
   const { data: userQuery } = useQuery({
     queryKey: ['user', id],
     queryFn: () => getUser(id)
@@ -20,23 +23,37 @@ export default function Component() {
     queryKey: ['users', id, 'posts'],
     queryFn: () => fetchPostsByUserId(id)
   })
+  console.log(postsQuery)
   const handleEditAvata = () => {
     setAvatar(userQuery?.data?.avatar)
   }
   const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) {
-      setAvatar(URL.createObjectURL(e.target.files[0]))
+      setAvatar(e.target.files[0])
     }
   }
-  console.log(postsQuery?.data)
-
   const onOpenChange = (isOpen: boolean) => {
     if (!isOpen) {
       setAvatar(null)
     }
     setOpen(isOpen)
   }
-
+  const handleUploadS3 = async () => {
+    if (avatar !== null) {
+      try {
+        const formData = new FormData()
+        formData.append('file', avatar)
+        const data = await uploadFile(formData)
+        await updateMe({ avatar: data?.data?.url })
+        setOpen(false)
+        clientQuery.refetchQueries({
+          queryKey: ['user', id]
+        })
+      } catch {
+        console.log('Error!!!')
+      }
+    }
+  }
   return (
     <div>
       <div className="px-52">
@@ -70,7 +87,7 @@ export default function Component() {
                     <div>
                       <div className=" border-b-2 border-gray-200 p-4">
                         <textarea className="w-full p-4" name="" id="" placeholder="Mô tả"></textarea>
-                        <img className="mt-2 w-full" src={avatar} alt="" />
+                        <img className="mt-2 w-full" src={URL.createObjectURL(avatar)} alt="" />
                         <div className="my-4 flex w-full items-center justify-center gap-2">
                           <button className="flex items-center justify-center gap-2 rounded-sm bg-gray-200 p-2">
                             <Scissors className="h-4 w-4" />
@@ -90,7 +107,9 @@ export default function Component() {
                       </div>
                       <div className=" flex items-center justify-end gap-2 px-4">
                         <button className="text-base font-medium text-blue-800">Hủy</button>
-                        <button className="rounded-sm bg-blue-800 px-12 py-2 text-white">Lưu</button>
+                        <button onClick={handleUploadS3} className="rounded-sm bg-blue-800 px-12 py-2 text-white">
+                          Lưu
+                        </button>
                       </div>
                     </div>
                   )}

@@ -3,14 +3,13 @@ generator client {
 }
 
 datasource db {
-  provider     = "postgresql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Category {
-  id       String     @id @default(cuid())
-  name     String     @unique
+  id       String    @id @default(cuid())
+  name     String    @unique
   icon     String?
   path     String?
   products Product[]
@@ -20,16 +19,19 @@ model Category {
 
 model User {
   id          String         @id @default(cuid())
+  firstName   String?
+  lastName    String?
   email       String         @unique
-  fullName    String?
   age         Int?
   avatar      String?
   phone       String?
-  workAt      String?
-  address     String?
+  password    String
+  dob         DateTime?
+  gender      String?
   school      String?
   background  String?
-  password    String
+  workAt      String?
+  address     String?
   posts       Post[]
   groups      GroupsOnUser[]
   groupsRoles RolesOnGroup[]
@@ -117,6 +119,6 @@ model GroupsOnUser {
   groupId String
 
   @@id([userId, groupId])
-  @@index([groupId])
+  @@index([groupId, userId])
   @@map("group_members")
 }

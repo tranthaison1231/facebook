@@ -10,10 +10,11 @@ import { mailService } from "@/lib/mail.service";
 const ACCESS_TOKEN_EXPIRE_IN = 60 * 60;
 
 export class AuthService {
-  static async signUp(email: string, password: string) {
+  static async signUp(signUpdto: any) {
+    const { email, firstName, lastName, dob, password } = signUpdto;
     const user = await db.user.findUnique({
       where: {
-        email,
+        email: email,
       },
     });
 
@@ -26,8 +27,11 @@ export class AuthService {
 
     await db.user.create({
       data: {
+        firstName,
+        lastName,
         email,
         password: hashedPassword,
+        dob,
       },
     });
   }

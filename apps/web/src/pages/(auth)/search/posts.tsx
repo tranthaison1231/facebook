@@ -179,7 +179,7 @@ export default function Component() {
                 <div className="flex items-center ">
                   <h2 className="text-base font-medium ">Phạm Ngọc Thắm</h2> <ChevronRight className="h-4 w-4" />
                   <h2 className="text-base font-medium ">Phạm Ngọc Thắm</h2>
-                </div>
+                </div> 
                 <div className="flex items-center text-xs font-medium text-gray-500 ">
                   22 giờ
                   <span className="-translate-y-1 px-1 text-gray-600">.</span>
