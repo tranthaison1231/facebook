@@ -13,7 +13,7 @@ import { cn } from '@/utils/cn'
 
 export default function Component() {
   const { id } = useParams('/:id')
-  const editor = useRef<any>(null)
+  const editor = useRef<AvatarEditor | null>(null)
   const [open, setOpen] = useState(false)
   const [avatar, setAvatar] = useState<File | null>(null)
   const [scaleImg, setScaleImg] = useState(1.2)
@@ -48,8 +48,12 @@ export default function Component() {
     if (avatar !== null) {
       try {
         const formData = new FormData()
-        const dataUrl = editor?.current?.getImage().toDataURL()
-        formData.append('file', dataUrl)
+        const base64 = editor.current!.getImage().toDataURL()
+        const res = await fetch(base64)
+        const blob = await res.blob()
+
+        formData.append('file', blob)
+
         const data = await uploadFile(formData)
         await updateMe({ avatar: data?.data?.url })
         setOpen(false)
