@@ -3,16 +3,21 @@ import { fetchPostsByUserId } from '@/apis/posts'
 import { useParams } from '@/router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { Pencil, Plus, Camera, Scissors, Clock } from 'lucide-react'
-import { useState } from 'react'
+import { Pencil, Plus, Camera, Scissors, Clock, Minus } from 'lucide-react'
+import { Slider } from '@/components/ui/slider'
+import AvatarEditor from 'react-avatar-editor'
+import { useState, useRef } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { uploadFile } from '@/apis/upload'
+import { cn } from '@/utils/cn'
 
 export default function Component() {
   const { id } = useParams('/:id')
+  const editor = useRef<AvatarEditor | null>(null)
   const [open, setOpen] = useState(false)
   const [avatar, setAvatar] = useState<File | null>(null)
-
+  const [scaleImg, setScaleImg] = useState(1.2)
+  const [valueProgess, setValueProgess] = useState(0)
   const clientQuery = useQueryClient()
   const { data: userQuery } = useQuery({
     queryKey: ['user', id],
@@ -38,11 +43,17 @@ export default function Component() {
     }
     setOpen(isOpen)
   }
+
   const handleUploadS3 = async () => {
     if (avatar !== null) {
       try {
         const formData = new FormData()
-        formData.append('file', avatar)
+        const base64 = editor.current!.getImage().toDataURL()
+        const res = await fetch(base64)
+        const blob = await res.blob()
+
+        formData.append('file', blob)
+
         const data = await uploadFile(formData)
         await updateMe({ avatar: data?.data?.url })
         setOpen(false)
@@ -54,6 +65,19 @@ export default function Component() {
       }
     }
   }
+  const zoomIn = () => {
+    if (valueProgess < 100) {
+      setValueProgess(valueProgess + 10)
+      setScaleImg(scaleImg + 0.1)
+    }
+  }
+  const zoomOut = () => {
+    if (valueProgess > 0) {
+      setValueProgess(valueProgess - 10)
+      setScaleImg(scaleImg - 0.1)
+    }
+  }
+
   return (
     <div>
       <div className="px-52">
@@ -85,9 +109,36 @@ export default function Component() {
                   </div>
                   {avatar !== null && (
                     <div>
-                      <div className=" border-b-2 border-gray-200 p-4">
+                      <div className=" flex flex-col items-center border-b-2 border-gray-200 p-4">
                         <textarea className="w-full p-4" name="" id="" placeholder="Mô tả"></textarea>
-                        <img className="mt-2 w-full" src={URL.createObjectURL(avatar)} alt="" />
+                        <div className="flex items-center justify-center">
+                          <AvatarEditor
+                            image={URL.createObjectURL(avatar)}
+                            ref={editor}
+                            width={250}
+                            height={250}
+                            border={50}
+                            color={[255, 255, 255, 0.6]} // RGBA
+                            scale={scaleImg}
+                            rotate={0}
+                            borderRadius={200}
+                          />
+                        </div>
+                        <div className="flex w-[60%] items-center justify-center ">
+                          <Minus
+                            className={cn('', {
+                              'disabled  opacity-40': valueProgess === 0
+                            })}
+                            onClick={zoomOut}
+                          />
+                          <Slider defaultValue={[valueProgess]} max={100} step={1} />
+                          <Plus
+                            className={cn('', {
+                              'opacity-40': valueProgess === 100
+                            })}
+                            onClick={zoomIn}
+                          />
+                        </div>
                         <div className="my-4 flex w-full items-center justify-center gap-2">
                           <button className="flex items-center justify-center gap-2 rounded-sm bg-gray-200 p-2">
                             <Scissors className="h-4 w-4" />

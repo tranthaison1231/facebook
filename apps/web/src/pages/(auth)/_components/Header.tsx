@@ -31,6 +31,7 @@ import { Button } from '@/components/ui/button'
 import { useRef } from 'react'
 import UserProfile from './UserProfile'
 import Notification from './Notification'
+import { removeToken } from '@/utils/token'
 
 interface Props {
   user: User
@@ -76,6 +77,10 @@ export default function Header({ user }: Props) {
     if (e.key === 'Enter') {
       navigate(`search/people?q=${inputRef.current?.value}`)
     }
+  }
+  const logOut = () => {
+    removeToken()
+    navigate(`/login`)
   }
 
   return (
@@ -191,7 +196,7 @@ export default function Header({ user }: Props) {
                   </li>
                 ))}
                 <li className=" flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200">
-                  <LogOut />
+                  <LogOut onClick={logOut} />
                   <UserProfile />
                 </li>
               </ul>
