@@ -26,12 +26,15 @@ interface SignUpInputs {
   lastName: string
   email: string
   password: string
+  // dob: Date
+  gender: string
 }
 
 export default function Signup() {
-  const [day, setDay] = useState('1')
-  const [month, setMonth] = useState('1')
-  const [year, setYear] = useState('2024')
+  const dateObj = new Date()
+  const [day, setDay] = useState(`${dateObj.getDate()}`)
+  const [month, setMonth] = useState(`${dateObj.getMonth() + 1}`)
+  const [year, setYear] = useState(`${dateObj.getFullYear()}`)
 
   const [isLoading, setIsLoading] = useState(false)
   const {
@@ -57,17 +60,18 @@ export default function Signup() {
     }
   }
 
-  const handleDayChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setDay(event.target.value)
+  const handleDayChange = (value: string) => {
+    setDay(value)
   }
 
-  const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setMonth(event.target.value)
+  const handleMonthChange = (value: string) => {
+    setMonth(value)
   }
 
-  const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setYear(event.target.value)
+  const handleYearChange = (value: string) => {
+    setYear(value)
   }
+  console.log(dateObj.getMonth(), 'sss')
 
   return (
     <Dialog>
@@ -120,7 +124,7 @@ export default function Signup() {
               <ShieldQuestion className="h-3 w-3 " />
             </div>
             <div className="grid grid-flow-col gap-2">
-              <InputDay className="rounded-[5px]" value={day} onChange={handleDayChange} />
+              <InputDay className="rounded-[5px]" onChange={handleDayChange} value={day} />
               <InputMonth className="rounded-[5px]" value={month} onChange={handleMonthChange} />
               <InputYear className="rounded-[5px]" value={year} onChange={handleYearChange} />
             </div>
@@ -128,20 +132,20 @@ export default function Signup() {
               <p className="text-sm text-[#828697]">Giới tính</p>
               <ShieldQuestion className="h-3 w-3 " />
             </div>
-            {/* <div className="grid grid-flow-col gap-1"> */}
-            {/*   <div className="flex items-center justify-center gap-8 rounded-[5px] border border-gray-300 p-2"> */}
-            {/*     <p>Nữ</p> */}
-            {/*     <Input type="checkbox" className="h-3 w-3" {...register('gender')} value="female" /> */}
-            {/*   </div> */}
-            {/*   <div className="flex items-center justify-center gap-8 rounded-[5px] border border-gray-300 p-2"> */}
-            {/*     <p>Nam</p> */}
-            {/*     <Input type="checkbox" className="h-3 w-3" {...register('gender')} value="male" /> */}
-            {/*   </div> */}
-            {/*   <div className="flex items-center justify-center gap-8 rounded-[5px] border border-gray-300 p-2"> */}
-            {/*     <p>Tùy chỉnh</p> */}
-            {/*     <Input type="checkbox" className="h-3 w-3" {...register('gender')} value="custom" /> */}
-            {/*   </div> */}
-            {/* </div> */}
+            <div className="grid grid-flow-col gap-1">
+              <div className="flex items-center justify-center gap-8 rounded-[5px] border border-gray-300 p-2">
+                <p>Nữ</p>
+                <Input type="radio" className="h-3 w-3" {...register('gender')} value="female" />
+              </div>
+              <div className="flex items-center justify-center gap-8 rounded-[5px] border border-gray-300 p-2">
+                <p>Nam</p>
+                <Input type="radio" className="h-3 w-3" {...register('gender')} value="male" />
+              </div>
+              <div className="flex items-center justify-center gap-8 rounded-[5px] border border-gray-300 p-2">
+                <p>Tùy chỉnh</p>
+                <Input type="radio" className="h-3 w-3" {...register('gender')} value="custom" />
+              </div>
+            </div>
             <p className="text-sm text-[#828697]">
               Những người dùng dịch vụ của chúng tôi có thể đã tải thông tin liên hệ của bạn lên Facebook.{' '}
               <span className="text-primary">Tìm hiểu thêm.</span>
