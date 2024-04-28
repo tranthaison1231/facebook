@@ -86,9 +86,13 @@ export default function Header({ user }: Props) {
   return (
     <div className=" fixed top-0 z-10 flex w-full flex-row justify-between border bg-white px-4 py-4 shadow-md ">
       <div>
-        <div className=" flex max-h-10 space-x-3">
+        <div className=" flex max-h-10 items-center justify-center space-x-3">
           <Link to={'/'}>
-            <img className=" w-12" src={`${FaceBookIcon}`} alt="" />
+            <img
+              src="https://1.bp.blogspot.com/-S8HTBQqmfcs/XN0ACIRD9PI/AAAAAAAAAlo/FLhccuLdMfIFLhocRjWqsr9cVGdTN_8sgCPcBGAYYCw/s1600/f_logo_RGB-Blue_1024.png"
+              alt=""
+              className="h-10 w-10"
+            />
           </Link>
           <div className="flex min-w-60 items-center justify-center space-x-1 rounded-full border bg-secondary-foreground p-2 px-2">
             <Search />
@@ -170,7 +174,9 @@ export default function Header({ user }: Props) {
                   className="flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200"
                 >
                   <img src={`${user?.avatar}`} alt="avatar" className="h-9 w-9 rounded-full" />
-                  <p className="text-lg">{user?.fullName}</p>
+                  <p className="text-lg">
+                    {user?.firstName} {user?.lastName}
+                  </p>
                 </Link>
                 <hr className=" h-3/4 w-full bg-secondary-foreground" />
                 <div className="flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200">
@@ -195,8 +201,9 @@ export default function Header({ user }: Props) {
                     {item.arrow}
                   </li>
                 ))}
-                <li className=" flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200">
+                <li className=" flex w-full items-center justify-start gap-4 space-x-3 rounded-md p-2 hover:bg-slate-200">
                   <LogOut onClick={logOut} />
+                  Đăng xuất
                   <UserProfile />
                 </li>
               </ul>

@@ -93,8 +93,21 @@ export default function Component() {
   return (
     <div>
       <div className="px-52">
-        <div className="relative mt-2">
-          <img className="h-full max-h-96 w-full rounded-b-md object-cover " src={userQuery?.data?.background} alt="" />
+        <div className="relative ">
+          {userQuery?.data?.background !== null ? (
+            <img
+              className="h-full max-h-96 min-h-80 w-full rounded-b-md object-cover "
+              src={userQuery?.data?.background}
+              alt=""
+            />
+          ) : (
+            <img
+              className="h-full max-h-96 min-h-80 w-full rounded-b-md object-cover "
+              src="https://pbs.twimg.com/media/BtFUrp6CEAEmsml.jpg"
+              alt=""
+            />
+          )}
+
           <button className="absolute bottom-4 right-6 flex gap-2 rounded border-none bg-white px-3 py-2 font-medium hover:bg-gray-200">
             {' '}
             <Camera />
@@ -104,11 +117,19 @@ export default function Component() {
         <div className="-mt-8 px-6">
           <div className="flex items-end  gap-4">
             <div className="relative h-44 min-w-44">
-              <img
-                className="absolute h-44 w-44  rounded-full border-4 border-white "
-                src={userQuery?.data?.avatar}
-                alt=""
-              />
+              {userQuery?.data?.avatar !== null ? (
+                <img
+                  className="absolute h-44 w-44 rounded-full border-4 border-white object-cover "
+                  src={userQuery?.data?.avatar}
+                  alt=""
+                />
+              ) : (
+                <img
+                  className="absolute h-44 w-44 rounded-full border-4 border-white object-cover "
+                  src="https://tse3.explicit.bing.net/th?id=OIP.xTxu9pXFLyCrsK6ZIl5IMwHaEq&pid=Api&P=0&h=180"
+                />
+              )}
+
               <Dialog open={open} onOpenChange={onOpenChange}>
                 <DialogTrigger asChild>
                   <div className=" absolute bottom-0 right-5  w-10 rounded-full bg-gray-300 p-2">
@@ -331,7 +352,9 @@ export default function Component() {
             </div>
             <div className="flex w-full items-end justify-between gap-4 pb-4">
               <div className="flex flex-col gap-1">
-                <h2 className="text-3xl font-bold">{userQuery?.data?.fullName}</h2>
+                <h2 className="text-3xl font-bold">
+                  {userQuery?.data?.firstName} {userQuery?.data?.lastName}
+                </h2>
                 <p className="font-medium text-gray-500">626 bạn bè</p>
                 <div>
                   <img className="h-10 w-10 rounded-full border-2 border-white" src={userQuery?.data?.avatar} alt="" />
