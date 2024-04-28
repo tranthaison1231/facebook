@@ -14,10 +14,10 @@ import { cn } from '@/utils/cn'
 export default function Component() {
   const { id } = useParams('/:id')
   const editor = useRef<AvatarEditor | null>(null)
+  const uploadImage = useRef<File | null>(null)
   const [open, setOpen] = useState(false)
-  const [avatar, setAvatar] = useState<File | null>(null)
-  const [scaleImg, setScaleImg] = useState(1.2)
-  const [valueProgess, setValueProgess] = useState(0)
+  const [avatar, setAvatar] = useState<File | Blob | null>(null)
+  const [valueProgess, setValueProgess] = useState(1)
   const clientQuery = useQueryClient()
   const { data: userQuery } = useQuery({
     queryKey: ['user', id],
@@ -35,6 +35,7 @@ export default function Component() {
   const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) {
       setAvatar(e.target.files[0])
+      uploadImage.current = e.target.files[0]
     }
   }
   const onOpenChange = (isOpen: boolean) => {
@@ -66,15 +67,26 @@ export default function Component() {
     }
   }
   const zoomIn = () => {
-    if (valueProgess < 100) {
-      setValueProgess(valueProgess + 10)
-      setScaleImg(scaleImg + 0.1)
+    if (valueProgess < 11) {
+      setValueProgess(valueProgess + 1)
     }
   }
   const zoomOut = () => {
-    if (valueProgess > 0) {
-      setValueProgess(valueProgess - 10)
-      setScaleImg(scaleImg - 0.1)
+    if (valueProgess > 1) {
+      setValueProgess(valueProgess - 1)
+    }
+  }
+  const handleSliderChange = (value: number[]) => {
+    setValueProgess(value[0])
+  }
+  const handleCutImg = async () => {
+    if (avatar == uploadImage.current) {
+      const base64 = editor.current!.getImage().toDataURL()
+      const res = await fetch(base64)
+      const blob = await res.blob()
+      setAvatar(blob)
+    } else {
+      setAvatar(uploadImage.current)
     }
   }
 
@@ -115,11 +127,9 @@ export default function Component() {
                           <AvatarEditor
                             image={URL.createObjectURL(avatar)}
                             ref={editor}
-                            width={250}
-                            height={250}
                             border={50}
                             color={[255, 255, 255, 0.6]} // RGBA
-                            scale={scaleImg}
+                            scale={valueProgess}
                             rotate={0}
                             borderRadius={200}
                           />
@@ -131,7 +141,7 @@ export default function Component() {
                             })}
                             onClick={zoomOut}
                           />
-                          <Slider defaultValue={[valueProgess]} max={100} step={1} />
+                          <Slider onValueChange={handleSliderChange} value={[valueProgess]} max={11} min={1} step={1} />
                           <Plus
                             className={cn('', {
                               'opacity-40': valueProgess === 100
@@ -140,7 +150,10 @@ export default function Component() {
                           />
                         </div>
                         <div className="my-4 flex w-full items-center justify-center gap-2">
-                          <button className="flex items-center justify-center gap-2 rounded-sm bg-gray-200 p-2">
+                          <button
+                            onClick={handleCutImg}
+                            className="flex items-center justify-center gap-2 rounded-sm bg-gray-200 p-2"
+                          >
                             <Scissors className="h-4 w-4" />
                             Cắt ảnh
                           </button>
