@@ -27,7 +27,7 @@ app.use(
     credentials: true,
   }),
 );
-// Không hiểu 2 cục use này làm cái gì
+
 app.route("/", auth);
 app.route("/categories", categories);
 app.route("/reviews", reviews);
