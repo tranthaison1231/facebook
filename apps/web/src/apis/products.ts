@@ -14,7 +14,7 @@ export const fetchProducts = async (): Promise<Products[]> => {
     const res =  await request.get(`/products`);
     return res.data.data
   }
-export const getProductsById = async (categoryId:string) => {
+export const getProductsById = async (categoryId:string ) => {
     const res = await request.get(`/products/${categoryId}`)
     return res.data.data
 } 

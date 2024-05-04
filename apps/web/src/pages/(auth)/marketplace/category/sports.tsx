@@ -6,7 +6,7 @@ import { formatNumber } from '@/utils/number';
 
 
 
-function propertyrentals() {
+function sports() {
    const categoryId = useLocation();
    const currentId = categoryId.pathname.split('/').pop()?.trim() ;
   if(currentId == null)
@@ -18,7 +18,7 @@ function propertyrentals() {
    console.log('PROBUDTS BY ID',products);
 
   console.log('Vehicles')
-  
+ 
   return (
     <section className="">
     <h1 className=' font-bold text-lg mb-8'>Lựa chọn hôm nay</h1>
@@ -46,4 +46,4 @@ function propertyrentals() {
   )
 }
 
-export default propertyrentals
+export default sports

@@ -15,11 +15,11 @@ export default function Component() {
   })
   const accessToken = getToken()
   if (!accessToken) return <Navigate to="/login" />
+
   return (
-    <div className="w-full">
-      <Header user={meQuery?.data} />
+    <div className="flex ">
       <SideBar/>
-      <div className=" pt-20">
+      <div className='p-8 bg-[#f0f2f5] w-full'>
         <Outlet context={{ me: meQuery?.data }} />
       </div>
     </div>

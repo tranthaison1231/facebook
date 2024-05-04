@@ -11,3 +11,4 @@ export const fetchCategories = async (): Promise<Category[]> => {
   const res =  await request.get(`/categories`);
   return res.data.data
 }
+

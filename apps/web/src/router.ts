@@ -15,9 +15,11 @@ export type Path =
   | `/login`
   | `/marketplace`
   | `/marketplace/category/entertainment`
+  | `/marketplace/category/free`
   | `/marketplace/category/propertyrentals`
+  | `/marketplace/category/sports`
   | `/marketplace/category/vehicles`
-  | `/marketplace/notification`
+  | `/marketplace/notifications`
   | `/posts`
   | `/profile/profileHeader`
   | `/reset-password`

@@ -11,12 +11,18 @@ model Category {
   id       String    @id @default(cuid())
   name     String    @unique
   icon     String?
-  path     String?
   products Product[]
-
+  subcategory SubCategory[]
   @@map("categories")
 }
+model SubCategory {
+  id String @id @default(cuid())
+  name String
+  categoryId  String // Khai báo trường này để lưu trữ ID của Category
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
+  @@index([categoryId])
+}
 model User {
   id          String         @id @default(cuid())
   firstName   String?
