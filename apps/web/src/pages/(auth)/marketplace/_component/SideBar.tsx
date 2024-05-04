@@ -1,11 +1,11 @@
-import { fetchCategories } from '@/apis/categories'
+import { fetchRootCategories } from '@/apis/categories'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { BaggageClaim, Bell, Divide, Mails, Search, Settings, Store } from 'lucide-react'
-import React, { useRef, useState } from 'react'
+import { BaggageClaim, Bell, Mails, Search, Settings, Store } from 'lucide-react'
+import React, { useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 const SIDE_BAR = [
@@ -46,17 +46,16 @@ function SideBar() {
       navigate(`/search/?q=${inputRef.current?.value}`)
     }
   }
-  const { data: categorys } = useQuery({
-    queryKey: ['category'],
-    queryFn: () => fetchCategories()
+  const { data: categories } = useQuery({
+    queryKey: ['root-category'],
+    queryFn: () => fetchRootCategories()
   })
 
   const lowPrice = useRef<HTMLInputElement>(null)
   const highPrice = useRef<HTMLInputElement>(null)
 
-  const [cliked, setClicked] = useState(false)
   return (
-    <section className=" sticky left-0 top-0 max-h-screen w-72 shrink-0 bg-white p-3 shadow-md overflow-y-scroll">
+    <section className=" sticky left-0 top-0 max-h-screen w-72 shrink-0 overflow-y-scroll bg-white p-3 shadow-md">
       <div className=" mb-2 flex justify-between">
         <h1 className=" text-xl font-bold">MarketPlace</h1>
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f0f2f5] font-bold text-black">
@@ -70,7 +69,6 @@ function SideBar() {
           className=" border-none bg-transparent text-sm font-normal"
           onKeyDown={onSearch}
           ref={inputRef}
-
         />
       </div>
       {!categorySideBar && (
@@ -108,18 +106,18 @@ function SideBar() {
           <div>
             <h1>Sắp xếp theo</h1>
             <div>
-              <p className=' font-bold text-sm'>Giá</p>
-              <div className=' flex justify-between items-center text-sm'>
+              <p className=" text-sm font-bold">Giá</p>
+              <div className=" flex items-center justify-between text-sm">
                 <Input
                   placeholder="Thấp nhất"
-                  className=" w-24 rounded-[4px] font-semibold bg-[#f0f2f5] p-1 "
+                  className=" w-24 rounded-[4px] bg-[#f0f2f5] p-1 font-semibold "
                   onKeyDown={onSearch}
                   ref={lowPrice}
                 />
-                <p className=' text-sm'>đến</p>
+                <p className=" text-sm">đến</p>
                 <Input
                   placeholder="Cao nhất"
-                  className=" w-24 rounded-[4px] font-semibold bg-[#f0f2f5] p-1 "
+                  className=" w-24 rounded-[4px] bg-[#f0f2f5] p-1 font-semibold "
                   onKeyDown={onSearch}
                   ref={highPrice}
                 />
@@ -132,7 +130,7 @@ function SideBar() {
       <div>
         <h1 className=" text-xl font-bold">Hạng mục</h1>
         <ul className="flex flex-col">
-          {categorys?.map(item => (
+          {categories?.map(item => (
             <Link to={`/marketplace/category/${item.id}`} key={item.id}>
               <li
                 key={item.id}

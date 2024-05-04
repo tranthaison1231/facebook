@@ -25,11 +25,9 @@ import Love from '@/assets/images/love.png'
 import Love2 from '@/assets/images/love2.png'
 import Like from '@/assets/images/like.png'
 import { useQuery } from '@tanstack/react-query'
-// import { getAll } from '@/apis/posts'
 import CreatePost from './_components/CreatePost'
 import FriendList from './_components/FriendList'
-import { Post, fetchAllPosts} from '@/apis/posts'
-import { map } from 'zod'
+import { Post, fetchAllPosts } from '@/apis/posts'
 
 const IMAGES = [
   {
@@ -71,7 +69,7 @@ const Extrafunction = [
     detail: 'Them vao danh sach luu'
   },
   {
-    icon: <MoveDown />,     
+    icon: <MoveDown />,
     name: 'Luu bai viet',
     detail: 'Them vao danh sach luu'
   },
@@ -82,16 +80,14 @@ const Extrafunction = [
   }
 ]
 
-
 export default function Dashboard() {
-  const [hidden, setHidden] = useState(true);
+  const [hidden, setHidden] = useState(true)
   const { data: postsQuery } = useQuery({
     queryKey: ['posts'],
     queryFn: () => fetchAllPosts()
   })
 
-console.log(postsQuery);
-
+  console.log(postsQuery)
 
   return (
     <div className="flex">
@@ -148,97 +144,95 @@ console.log(postsQuery);
               </div>
               {hidden ? (
                 postsQuery?.data.map((item: Post, index: number) => (
-                <article className="mt-3 min-h-screen w-full rounded-lg bg-white" key={index}>
-                  <div className=" flex items-center justify-between p-3">
-                    <div className="flex space-x-2">
-                      <div className=" h-10 w-10 overflow-hidden rounded-sm">
-                        <img src={Avatar} alt="" className=" w-full rounded-sm" />
+                  <article className="mt-3 min-h-screen w-full rounded-lg bg-white" key={index}>
+                    <div className=" flex items-center justify-between p-3">
+                      <div className="flex space-x-2">
+                        <div className=" h-10 w-10 overflow-hidden rounded-sm">
+                          <img src={Avatar} alt="" className=" w-full rounded-sm" />
+                        </div>
+                        <div className="flex flex-col justify-start">
+                          <p className="font-bold">Đại học đừng học đại</p>
+                          <p>Đại học đừng học đại 2 giờ trước</p>
+                        </div>
                       </div>
-                      <div className="flex flex-col justify-start">
-                        <p className="font-bold">Đại học đừng học đại</p>
-                        <p>Đại học đừng học đại 2 giờ trước</p>
-                      </div>
-                    </div>
 
-                    <div className=" flex items-center justify-center">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger>
-                          <MoreHorizontal />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                          <ScrollArea className="h-[200px] w-[350px] p-4">
-                            <ul>
-                              {Extrafunction.map(item => (
-                                <li className=" hover:bg-slate-300">
-                                  <div>
+                      <div className=" flex items-center justify-center">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger>
+                            <MoreHorizontal />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <ScrollArea className="h-[200px] w-[350px] p-4">
+                              <ul>
+                                {Extrafunction.map(item => (
+                                  <li className=" hover:bg-slate-300">
                                     <div>
-                                      <img src={`$${item.icon}`} alt="" />
+                                      <div>
+                                        <img src={`$${item.icon}`} alt="" />
+                                      </div>
+                                      <div>
+                                        <p className="font-bold">{item.name}</p>
+                                        <p className="font-light">{item.detail}</p>
+                                      </div>
                                     </div>
-                                    <div>
-                                      <p className="font-bold">{item.name}</p>
-                                      <p className="font-light">{item.detail}</p>
-                                    </div>
-                                  </div>
-                                  <hr className="h-1/2 w-full bg-slate-100" />
-                                </li>
-                              ))}
-                            </ul>
-                          </ScrollArea>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                                    <hr className="h-1/2 w-full bg-slate-100" />
+                                  </li>
+                                ))}
+                              </ul>
+                            </ScrollArea>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
 
-                      <div onClick={() => setHidden(true)}>
-                        <X />
+                        <div onClick={() => setHidden(true)}>
+                          <X />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <hr className=" h-1 px-5" />
+                    <hr className=" h-1 px-5" />
 
-                  <div className="p-5 text-justify ">
-                    {item?.content}
-                  </div>
+                    <div className="p-5 text-justify ">{item?.content}</div>
 
-                  <div className=" max-h-[500px] overflow-hidden ">
-                    <img src={`${Avatar}`} alt="" className="w-full object-contain" />
-                  </div>
-                  
-                  <div className="flex justify-between p-5 ">
-                    <div className=" flex items-center justify-center space-x-1">
-                      <div className="flex items-center -space-x-1">
-                        <img src={`${Love}`} alt="" className=" h-4 w-4" />
-                        <img src={`${Love2}`} alt="" className=" h-4 w-4" />
-                        <img src={`${Like}`} alt="" className=" h-4 w-4" />
-                      </div>
-                      <p>Bạn và 1.9k người khác</p>
+                    <div className=" max-h-[500px] overflow-hidden ">
+                      <img src={`${Avatar}`} alt="" className="w-full object-contain" />
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="flex space-x-1">
-                        <p>219</p>
-                        <MessageCircle className="w-4" />
+
+                    <div className="flex justify-between p-5 ">
+                      <div className=" flex items-center justify-center space-x-1">
+                        <div className="flex items-center -space-x-1">
+                          <img src={`${Love}`} alt="" className=" h-4 w-4" />
+                          <img src={`${Love2}`} alt="" className=" h-4 w-4" />
+                          <img src={`${Like}`} alt="" className=" h-4 w-4" />
+                        </div>
+                        <p>Bạn và 1.9k người khác</p>
                       </div>
-                      <div className="flex">
-                        <p>52</p>
-                        <Forward className="w-4" />
+                      <div className="flex items-center space-x-2">
+                        <div className="flex space-x-1">
+                          <p>219</p>
+                          <MessageCircle className="w-4" />
+                        </div>
+                        <div className="flex">
+                          <p>52</p>
+                          <Forward className="w-4" />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <hr />
+                    <hr />
 
-                  <div className="flex justify-between px-5">
-                    <Button className="flex items-center space-x-2 bg-white text-secondaryColor hover:bg-[#e1e4ea]">
-                      <Heart />
-                      Thích
-                    </Button>
-                    <Button className="flex items-center space-x-2 bg-white text-secondaryColor hover:bg-[#e1e4ea]">
-                      <MessageCircle />
-                      Bình luận
-                    </Button>
-                    <Button className="flex items-center space-x-2 bg-white text-secondaryColor hover:bg-[#e1e4ea]">
-                      <Share />
-                      Chia sẻ
-                    </Button>
-                  </div>
-                </article>
+                    <div className="flex justify-between px-5">
+                      <Button className="flex items-center space-x-2 bg-white text-secondaryColor hover:bg-[#e1e4ea]">
+                        <Heart />
+                        Thích
+                      </Button>
+                      <Button className="flex items-center space-x-2 bg-white text-secondaryColor hover:bg-[#e1e4ea]">
+                        <MessageCircle />
+                        Bình luận
+                      </Button>
+                      <Button className="flex items-center space-x-2 bg-white text-secondaryColor hover:bg-[#e1e4ea]">
+                        <Share />
+                        Chia sẻ
+                      </Button>
+                    </div>
+                  </article>
                 ))
               ) : (
                 <p>CLOSED</p>
@@ -251,11 +245,3 @@ console.log(postsQuery);
     </div>
   )
 }
-function getAll(context: { queryKey: never[]; signal: AbortSignal; meta: Record<string, unknown> | undefined }): unknown {
-  throw new Error('Function not implemented.')
-}
-
-function getAllPosts(id: string): any {
-  throw new Error('Function not implemented.')
-}
-
