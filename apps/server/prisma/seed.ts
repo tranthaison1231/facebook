@@ -3,30 +3,77 @@ import { PrismaClient, PublishType } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  // const data = await prisma.post.create({
-  //   data: {
-  //     userId: "clumqswgs00008m39wl1wpnut",
-  //     content: "Hello world",
-  //     media: [
-  //       "https://vcdn-giaitri.vnecdn.net/2023/05/05/son-tung-mmw-2824-1683249980.jpg",
-  //     ],
-  //     publishType: PublishType.PUBLIC,
-  //   },
+  // const subcategory = await prisma.subCategory.createMany({
+  //   data: [
+  //     {
+  //       id: "apartments-for-rent",
+  //       categoryId: "propertyrentals",
+  //       name: "Căn hộ cho thuê",
+  //     },
+  //     {
+  //       id: "condos-for-rent",
+  //       categoryId: "propertyrentals",
+  //       name: "Chung cư cho thuê",
+  //     },
+  //     {
+  //       id: "houses-for-rent",
+  //       categoryId: "propertyrentals",
+  //       name: "Nhà cho thuê",
+  //     },
+  //     {
+  //       id: "townhouses-for-rent",
+  //       categoryId: "propertyrentals",
+  //       name: "Nhà liền kề cho thuê",
+  //     }
+  //   ],
   // });
+  const products = await prisma.product.createMany({
+    data:[
+      {
+        categoryId: "sports",
+        name: "Nike",
+        description: "Nike không chỉ là biểu tượng của sự đổi mới và hoàn thiện mà còn là nguồn cảm hứng cho vận động viên trên khắp thế giới",
+        img: "https://sneakerdaily.vn/wp-content/uploads/2022/06/thuong-hieu-giay-nike.jpg.webp",
+        location:'Hồ Chí Minh',
+        price: 5000000
+      },
+      {
+        categoryId: "sports",
+        name: "Adidas",
+        description: "Adidas được biết đến với sự kết hợp hoàn hảo giữa thiết kế và công nghệ",
+        img: "https://sneakerdaily.vn/wp-content/uploads/2022/06/thuong-hieu-giay-adidas.jpg.webp",
+        location:'Cần Thơ',
+        price: 25000000
+      },
+      {
+        categoryId: "sports",
+        name: "Puma",
+        description: "Nổi tiếng với sự linh hoạt và thiết kế độc đáo.",
+        img: "https://sneakerdaily.vn/wp-content/uploads/2022/06/thuong-hieu-giay-puma.jpg.webp",
+        location:'Cần Thơ',
+        price: 16700000
+      },
+      {
+        categoryId: "sports",
+        name: " Under Armour",
+        description: "Under Armour ban đầu được biết đến với quần áo thể thao hiệu suất cao",
+        img: "https://sneakerdaily.vn/wp-content/uploads/2022/06/thuong-hieu-giay-under-armour.jpg.webp",
+        location:'Cần Thơ',
+        price: 25600000
+      },
+      {
+        categoryId: "sports",
+        name: "Reebok",
+        description: "Reebok không ngừng nỗ lực mang đến cho người dùng những trải nghiệm tốt nhất qua từng sản phẩm.",
+        img: "https://sneakerdaily.vn/wp-content/uploads/2022/06/thuong-hieu-giay-reebok.jpg.webp",
+        location:'Hồ Chí Minh',
+        price: 10000000
+      },
+    ]
+  })
 
-  const product = await prisma.products.create({
-    data:{
-      "categoryId":"clv14foip0000zi018qpl5n3x",
-      "name":"Xe dep 1",
-      "price":10000000,
-      "description":"Top 10 chiếc xe 'hớp hồn' phái đẹp",
-      "img":"https://vnn-imgs-f.vgcloud.vn/2020/10/21/10/huracan-la-mo-t-trong-nhu-ng-ma-u-xe-de-p-nha-t-cu-a-lamborghini-a-nh-autocar.jpg",
-      "location":"New York"
-  }
-  });
-  console.log(product);
-
- 
+  console.log(products);
+  
 }
 
 main()

@@ -11,6 +11,7 @@ import { router as uploadRouter } from "./modules/upload/upload.controller";
 import { router as posts } from "./modules/posts/posts.controller";
 import { router as products } from "./modules/products/products.controller";
 import { router as groups } from "./modules/groups/groups.controller";
+import { router as subcategory } from "./modules/subcategory/subcategory.controller";
 import { errorFilter } from "./lib/error-filter";
 import { auth as checkAuth } from "./middlewares/auth";
 
@@ -36,7 +37,7 @@ app.route("/users", users);
 app.route("/posts", posts);
 app.route("/products", products);
 app.route("/groups", groups);
-
+app.route("/subcategory", subcategory);
 app.route("/upload", uploadRouter);
 
 app.notFound((c) => {

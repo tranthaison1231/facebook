@@ -84,7 +84,7 @@ export default function Header({ user }: Props) {
   }
 
   return (
-    <div className=" fixed top-0 z-10 flex w-full flex-row justify-between border bg-white px-4 py-4 shadow-md ">
+    <div className=" fixed top-0 z-10 flex w-full flex-row justify-between border bg-white p-2 shadow-md ">
       <div>
         <div className=" flex max-h-10 items-center justify-center space-x-3">
           <Link to={'/'}>
