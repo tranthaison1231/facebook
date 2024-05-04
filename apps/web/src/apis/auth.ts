@@ -1,11 +1,12 @@
 import { request } from '@/utils/request'
 
 interface SignUp {
-  firstname: string
-  lastname: string
+  firstName: string
+  lastName: string
   email: string
   password: string
   dob: string
+  gender: string
 }
 export interface User {
   lastName: string
@@ -34,13 +35,14 @@ export const signIn = async (data: SignInData) => {
   return res.data
 }
 
-export const signUp = async ({ lastname, firstname, email, password, dob }: SignUp) => {
+export const signUp = async ({ lastName, firstName, email, password, dob ,gender }: SignUp) => {
   const res = await request.post('/sign-up', {
-    lastname,
-    firstname,
+    lastName,
+    firstName,
     email,
     password,
-    dob
+    dob,
+    gender
   })
   return res.data
 }

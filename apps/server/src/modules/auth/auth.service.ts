@@ -11,7 +11,7 @@ const ACCESS_TOKEN_EXPIRE_IN = 60 * 60;
 
 export class AuthService {
   static async signUp(signUpdto: any) {
-    const { email, firstName, lastName, dob, password } = signUpdto;
+    const { email, firstName, lastName, dob, password , gender } = signUpdto;
     const user = await db.user.findUnique({
       where: {
         email: email,
@@ -32,6 +32,7 @@ export class AuthService {
         email,
         password: hashedPassword,
         dob,
+        gender
       },
     });
   }

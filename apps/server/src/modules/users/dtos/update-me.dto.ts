@@ -8,7 +8,7 @@ export const updateMeDto = z.object({
     .optional(),
   lastName: z.string({
     required_error: "Name is required",
-  }),
+  }).optional(),
   age: z
     .number({
       required_error: "Age is required",

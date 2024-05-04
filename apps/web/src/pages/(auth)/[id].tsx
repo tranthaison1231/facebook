@@ -10,7 +10,7 @@ export default function Component() {
     queryKey: ['user', id],
     queryFn: () => getUser(id)
   })
-  
+
   const { data: postsQuery } = useQuery({
     queryKey: ['users', id, 'posts'],
     queryFn: () => fetchPostsByUserId(id)
@@ -327,7 +327,16 @@ export default function Component() {
           <div className="w-full ">
             <div className=" rounded bg-white p-4">
               <div className="flex  gap-2">
-                <img className="h-10 w-10 cursor-pointer rounded-full" src={userQuery?.data?.avatar} alt="" />
+                {userQuery?.data?.avatar !== null ? (
+                  <img className="h-10 w-10 cursor-pointer rounded-full" src={userQuery?.data?.avatar} alt="" />
+                ) : (
+                  <img
+                    className="h-10 w-10 cursor-pointer rounded-full"
+                    src="https://tse3.explicit.bing.net/th?id=OIP.xTxu9pXFLyCrsK6ZIl5IMwHaEq&pid=Api&P=0&h=180"
+                    alt=""
+                  />
+                )}
+
                 <button className="flex  w-full items-center justify-start rounded-3xl bg-gray-200 px-4 font-normal text-gray-500 hover:bg-gray-300">
                   Bạn đang nghỉ gì?
                 </button>

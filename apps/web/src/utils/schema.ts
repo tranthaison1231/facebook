@@ -27,7 +27,8 @@ export const signUpSchema = z.object({
         .refine(value => /^[a-zA-Z]+[-'s]?[a-zA-Z]+$/.test(value), 'Last name should contain only alphabets')
     ),
   email: z.string().email({ message: 'Email is not valid!' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters!' })
+  password: z.string().min(6, { message: 'Password must be at least 6 characters!' }),
+  gender:  z.string()
 })
 
 export const forgotPasswordSchema = z.object({
