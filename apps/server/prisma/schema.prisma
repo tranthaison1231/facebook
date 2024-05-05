@@ -8,21 +8,17 @@ datasource db {
 }
 
 model Category {
-  id       String    @id @default(cuid())
-  name     String    @unique
-  icon     String?
-  products Product[]
-  subcategory SubCategory[]
+  id               String     @id @default(cuid())
+  name             String     @unique
+  icon             String?
+  products         Product[]
+  subCategories    Category[] @relation("SubCategories")
+  parentCategory   Category?  @relation("SubCategories", fields: [parentCategoryId], references: [id])
+  parentCategoryId String?
+
   @@map("categories")
 }
-model SubCategory {
-  id String @id @default(cuid())
-  name String
-  categoryId  String // Khai báo trường này để lưu trữ ID của Category
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-  @@index([categoryId])
-}
 model User {
   id          String         @id @default(cuid())
   firstName   String?
@@ -83,13 +79,13 @@ model Post {
 
 model Product {
   id          String   @id @default(cuid())
-  categoryId  String // Khai báo trường này để lưu trữ ID của Category
+  categoryId  String
   category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   name        String?
   price       Int?
   description String?
   location    String?
-  img         String?
+  images      Json?
 
   @@index([categoryId])
 }

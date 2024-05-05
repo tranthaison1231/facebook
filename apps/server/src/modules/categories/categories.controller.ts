@@ -1,10 +1,10 @@
 import { Hono } from "hono";
 import { CategoriesService } from "./categories.service";
-import { RoomsService } from "../rooms/rooms.service";
-import { createRoomDto } from "./dtos/create-room.dto";
-import { zValidator } from "@hono/zod-validator";
 import { auth } from "@/middlewares/auth";
-import { date } from "zod";
+import { ProductsService } from "../products/products.services";
+import { zValidator } from "@hono/zod-validator";
+import { createCategoryDto } from "./dtos/create-category.dto";
+import { createProductDto } from "../products/dto/create-products.dto";
 
 export const router = new Hono();
 
@@ -16,7 +16,14 @@ router
       status: 200,
     });
   })
-  .post("/", async (c) => {
+  .get("/root", async (c) => {
+    const categories = await CategoriesService.getRootCategories();
+    return c.json({
+      data: categories,
+      status: 200,
+    });
+  })
+  .post("/", auth, zValidator("json", createCategoryDto), async (c) => {
     const data = await c.req.json();
     const category = await CategoriesService.create(data);
     return c.json({
@@ -32,7 +39,7 @@ router
       status: 200,
     });
   })
-  .delete("/:categoryId", async (c) => {
+  .delete("/:categoryId", auth, async (c) => {
     const categoryId = c.req.param("categoryId");
     const category = await CategoriesService.delete(categoryId);
     return c.json({
@@ -40,50 +47,37 @@ router
       status: 200,
     });
   })
-  .get("/:categoryId/rooms", async (c) => {
+  .get("/:categoryId/products", async (c) => {
     const categoryId = c.req.param("categoryId");
-    const rooms = await RoomsService.getAllBy({ categoryId });
+    const rooms = await ProductsService.getAllBy({ categoryId });
     return c.json({
       data: rooms,
       status: 200,
     });
   })
   .post(
-    "/:categoryId/rooms",
+    "/:categoryId/products",
     auth,
-    zValidator("json", createRoomDto),
+    zValidator("json", createProductDto),
     async (c) => {
-      const {
-        name,
-        price,
-        location,
-        startDate,
-        endDate,
-        rate,
-        description,
-        images,
-      } = await c.req.json();
-      const user = c.get("user");
-
+      const input = await c.req.json();
       const categoryId = c.req.param("categoryId");
-      const room = await RoomsService.create(categoryId, user.id, {
-        name,
-        price,
-        startDate,
-        endDate,
-        rate,
-        location,
-        description,
-        images,
-      });
-
+      const rooms = await ProductsService.addProduct(categoryId, input);
       return c.json({
-        data: room,
+        data: rooms,
         status: 200,
       });
     },
   )
-  .put('/',auth, async (c) => {
+  .get("/:categoryId/sub-categories", async (c) => {
+    const categoryId = c.req.param("categoryId");
+    const subCategories = await CategoriesService.getSubCategories(categoryId);
+    return c.json({
+      data: subCategories,
+      status: 200,
+    });
+  })
+  .put("/", auth, async (c) => {
     const data = await c.req.json();
     const user = c.get("user");
     const updatedCategories = await CategoriesService.updateBy(user.id, data);
@@ -91,4 +85,4 @@ router
       data: updatedCategories,
       status: 200,
     });
-  })
+  });

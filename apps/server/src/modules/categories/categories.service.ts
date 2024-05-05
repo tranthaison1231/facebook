@@ -7,6 +7,13 @@ export class CategoriesService {
     return data;
   }
 
+  static async getRootCategories() {
+    const categories = await db.category.findMany({
+      where: { parentCategoryId: null },
+    });
+    return categories;
+  }
+
   static async create(data: Category) {
     const category = await db.category.create({ data });
     return category;
@@ -17,6 +24,13 @@ export class CategoriesService {
       where: { id: categoryId },
     });
     return category;
+  }
+
+  static async getSubCategories(categoryId: string) {
+    const subCategories = await db.category.findMany({
+      where: { parentCategoryId: categoryId },
+    });
+    return subCategories;
   }
 
   static async delete(categoryId: string) {

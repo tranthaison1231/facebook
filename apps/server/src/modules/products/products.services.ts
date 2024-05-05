@@ -1,30 +1,27 @@
 import { db } from "@/lib/db";
+import { CreateProductDto } from "./dto/create-products.dto";
 
 export class ProductsService {
-  static async getAllById(id: any) {
-    const product = await db.product.findMany({
+  static async getAllBy({ categoryId }: { categoryId?: string }) {
+    const products = await db.product.findMany({
       where: {
-        categoryId: id,
+        categoryId: categoryId,
       },
     });
-    return product;
-  }
-  static async getAllBy( categoryId: string ) {
-      const products = await db.product.findMany({
-        where: {
-          categoryId: categoryId,
-        },
-      });
-      return products;
+    return products;
   }
   static async getAll() {
     const product = await db.product.findMany();
     return product;
   }
 
-  static async addProducts(data) {
+  static async addProduct(categoryId: string, data: CreateProductDto) {
     const product = await db.product.create({
-      data,
+      data: {
+        ...data,
+        categoryId: categoryId,
+        images: JSON.stringify(data.images),
+      },
     });
     return product;
   }
