@@ -20,7 +20,7 @@ export class ProductsService {
       data: {
         ...data,
         categoryId: categoryId,
-        images: JSON.stringify(data.images),
+        images: data.images,
       },
     });
     return product;
