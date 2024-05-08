@@ -11,8 +11,8 @@ export class ProductsService {
     return products;
   }
   static async getAll() {
-    const product = await db.product.findMany();
-    return product;
+    const products = await db.product.findMany();
+    return products;
   }
 
   static async addProduct(categoryId: string, data: CreateProductDto) {
