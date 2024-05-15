@@ -12,6 +12,7 @@ export type Path =
   | `/groups/discover`
   | `/groups/feed`
   | `/groups/joins`
+  | `/latest/content-calendar`
   | `/login`
   | `/marketplace`
   | `/marketplace/category/:id`

@@ -34,26 +34,6 @@ const IMAGES = [
     name: 'Huynh Chi Trung',
     avt: Avatar,
     bg: Background
-  },
-  {
-    name: 'Huynh Chi Trung',
-    avt: Avatar,
-    bg: Background
-  },
-  {
-    name: 'Huynh Chi Trung',
-    avt: Avatar,
-    bg: Background
-  },
-  {
-    name: 'Huynh Chi Trung',
-    avt: Avatar,
-    bg: Background
-  },
-  {
-    name: 'Huynh Chi Trung',
-    avt: Avatar,
-    bg: Background
   }
 ]
 
@@ -87,8 +67,6 @@ export default function Dashboard() {
     queryFn: () => fetchAllPosts()
   })
 
-  console.log(postsQuery)
-
   return (
     <div className="flex">
       <Sidebar />
@@ -98,7 +76,10 @@ export default function Dashboard() {
             <Carousel className="mx-auto h-64 ">
               <CarouselContent>
                 {IMAGES.map(item => (
-                  <CarouselItem className="relative inline-block h-64 basis-1/4 items-center rounded-lg ">
+                  <CarouselItem
+                    key={item.name}
+                    className="relative inline-block h-64 basis-1/4 items-center rounded-lg "
+                  >
                     <div className="h-64 rounded-lg">
                       <img src={`${item.bg}`} alt=" avt" className="h-full w-full rounded-lg" />
                     </div>
@@ -143,8 +124,8 @@ export default function Dashboard() {
                 </div>
               </div>
               {hidden ? (
-                postsQuery?.data.map((item: Post, index: number) => (
-                  <article className="mt-3 min-h-screen w-full rounded-lg bg-white" key={index}>
+                postsQuery?.data.map((item: Post) => (
+                  <article className="mt-3 min-h-screen w-full rounded-lg bg-white" key={item.id}>
                     <div className=" flex items-center justify-between p-3">
                       <div className="flex space-x-2">
                         <div className=" h-10 w-10 overflow-hidden rounded-sm">
@@ -165,7 +146,7 @@ export default function Dashboard() {
                             <ScrollArea className="h-[200px] w-[350px] p-4">
                               <ul>
                                 {Extrafunction.map(item => (
-                                  <li className=" hover:bg-slate-300">
+                                  <li className=" hover:bg-slate-300" key={item.name}>
                                     <div>
                                       <div>
                                         <img src={`$${item.icon}`} alt="" />
