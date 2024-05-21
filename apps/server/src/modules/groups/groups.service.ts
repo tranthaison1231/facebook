@@ -1,7 +1,5 @@
-import { Group, Prisma } from '@prisma/client';
-import { Params } from './../../../../web/src/router';
-import { db } from '@/lib/db';
-
+import { Group } from "@prisma/client";
+import { db } from "@/lib/db";
 
 export const GroupsService = {
   getAll: async () => {
