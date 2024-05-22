@@ -17,6 +17,8 @@ export type Path =
   | `/marketplace/category/entertainment`
   | `/marketplace/category/propertyrentals`
   | `/marketplace/category/vehicles`
+  | `/marketplace/create`
+  | `/marketplace/create/item`
   | `/marketplace/inbox`
   | `/marketplace/notifications`
   | `/posts`

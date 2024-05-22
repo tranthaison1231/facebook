@@ -1,12 +1,10 @@
 import { fetchCategories } from '@/apis/categories'
 import { fetchProducts } from '@/apis/products'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+
 import { useQuery } from '@tanstack/react-query'
-import clsx from 'clsx'
-import { BaggageClaim, Bell, Mails, Search, Settings, Store } from 'lucide-react'
+import { BaggageClaim, Bell, Mails, Store } from 'lucide-react'
 import React, { useRef } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import {  useNavigate } from 'react-router-dom'
 
 const SIDE_BAR = [
   {
@@ -38,7 +36,7 @@ const SIDE_BAR = [
 
 function Marketplace() {
   const navigate = useNavigate()
-  const currentPath = useLocation().pathname
+ 
   const inputRef = useRef<HTMLInputElement>(null)
   const onSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -72,8 +70,6 @@ function Marketplace() {
 
   return (
     <div className=" flex justify-center">
-
-
       {/* ============== CONTENT ============= */}
       <section className=" w-full p-8 bg-[#f0f2f5]">
         <h1 className=' font-bold text-lg mb-8'>Lựa chọn hôm nay</h1>
@@ -83,7 +79,7 @@ function Marketplace() {
                 <li className='rounded-sm overflow-hidden'>
                     <div ><img src={`${item.img}`} alt={item.name} className='w-60 h-60 rounded-sm' /></div>
                     <div className=''>
-                      <p className=' font-bold text-base'>{formatNumber(item.price)} đ</p>
+                      <p className=' font-bold text-base'>{item.price == 0 ? 'Miễn phí' :`${item.price}` } </p>
                       <p className=' font-normal text-base'>{item.description} </p>
                       <p  className=' font-light text-sm'>{item.location}</p>
                     </div>
@@ -107,7 +103,7 @@ function Marketplace() {
               <li className='rounded-sm overflow-hidden'>
               <div ><img src={`${item.img}`} alt={item.name} className='w-60 h-60 rounded-sm' /></div>
               <div className=''>
-                <p className=' font-bold text-base'>{formatNumber(item.price)} đ</p>
+                <p className=' font-bold text-base'>{item.price == 0 ? 'Miễn phí' :(`${item.price}`)} </p>
                 <p className=' font-normal text-base'>{item.description} </p>
                 <p  className=' font-light text-sm'>{item.location}</p>
               </div>

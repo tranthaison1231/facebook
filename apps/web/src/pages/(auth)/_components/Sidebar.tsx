@@ -31,7 +31,7 @@ const SIDE_BAR = [
     icon: <MoveDown className="text-primary" />
   },
   {
-    title: 'Market place',
+    title: 'Marketplace',
     path: '/marketplace',
     icon: <Store className="text-primary" />
   }

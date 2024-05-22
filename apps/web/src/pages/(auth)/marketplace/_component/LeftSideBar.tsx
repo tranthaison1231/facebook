@@ -58,7 +58,7 @@ function LeftSideBar() {
   })
   const [cliked, setClicked] = useState(false)
   return (
-    <section className=" sticky top-[80px] w-[360px] bg-white px-3 shadow-md h-fit overflow-scroll">
+    <section className=" sticky top-[80px] w-[360px] bg-white px-3 shadow-md h-screen overflow-x-hidden">
     <div className=" mb-2 flex justify-between">
       <h1 className=" text-xl font-bold">MarketPlace</h1>
       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f0f2f5] font-bold text-black">

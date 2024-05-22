@@ -8,10 +8,14 @@ datasource db {
 }
 
 model Category {
-  id       String    @id
-  name     String    @unique
-  icon     String?
-  products Product[]
+  id               String     @id @default(cuid())
+  name             String     @unique
+  icon             String?
+  products         Product[]
+  subCategories    Category[] @relation("SubCategories")
+  parentCategory   Category?  @relation("SubCategories", fields: [parentCategoryId], references: [id])
+  parentCategoryId String?
+
   @@map("categories")
 }
 
@@ -31,11 +35,27 @@ model User {
   workAt      String?
   address     String?
   posts       Post[]
-  groups      GroupsOnUser[]
+  userGroups  GroupsOnUser[]
   groupsRoles RolesOnGroup[]
-  Group       Group[]
+  groups      Group[]
+  page        Page?          @relation(fields: [pageId], references: [id])
+  pageId      String?
 
   @@map("users")
+}
+
+model Page {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  avatar      String?
+  cover       String?
+  followers   User[]
+  posts       Post[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("pages")
 }
 
 enum PublishType {
@@ -68,6 +88,9 @@ model Post {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   publishType PublishType @default(PUBLIC)
+  isDeleted   Boolean     @default(false)
+  page        Page?       @relation(fields: [pageId], references: [id])
+  pageId      String?
 
   @@index([userId])
   @@map("posts")
@@ -75,13 +98,13 @@ model Post {
 
 model Product {
   id          String   @id @default(cuid())
-  categoryId  String // Khai báo trường này để lưu trữ ID của Category
+  categoryId  String
   category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   name        String?
   price       Int?
   description String?
   location    String?
-  img         String?
+  images      Json?
 
   @@index([categoryId])
 }
