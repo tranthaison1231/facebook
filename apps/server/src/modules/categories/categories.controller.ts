@@ -33,7 +33,7 @@ router
   })
   .get("/:categoryId", async (c) => {
     const categoryId = c.req.param("categoryId");
-    const category = await CategoriesService.getBy(categoryId);
+    const category = await CategoriesService.getCategoryById(categoryId);
     return c.json({
       data: category,
       status: 200,

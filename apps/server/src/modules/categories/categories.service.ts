@@ -19,9 +19,10 @@ export class CategoriesService {
     return category;
   }
 
-  static async getBy(categoryId: string) {
+  static async getCategoryById(categoryId: string) {
     const category = await db.category.findUnique({
       where: { id: categoryId },
+      include: { products: true, subCategories: true },
     });
     return category;
   }
@@ -34,10 +35,18 @@ export class CategoriesService {
   }
 
   static async delete(categoryId: string) {
-    const category = await db.category.delete({
-      where: { id: categoryId },
-    });
-    return category;
+    const category = await this.getCategoryById(categoryId);
+
+    const productIds = category.products.map((product) => product.id);
+    const subCategoryIds = category.subCategories.map(
+      (subCategory) => subCategory.id,
+    );
+
+    return db.$transaction([
+      db.product.deleteMany({ where: { id: { in: productIds } } }),
+      db.category.deleteMany({ where: { id: { in: subCategoryIds } } }),
+      db.category.delete({ where: { id: categoryId } }),
+    ]);
   }
   static async updateBy(categoryId: string, data: Category) {
     const category = await db.category.update({

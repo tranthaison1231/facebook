@@ -17,7 +17,6 @@ router
       status: 201,
     });
   })
-
   .get("/", auth, async (c) => {
     const posts = await PostsService.getAllPosts();
     return c.json({

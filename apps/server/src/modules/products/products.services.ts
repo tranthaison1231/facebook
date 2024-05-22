@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { CreateProductDto } from "./dto/create-products.dto";
+import { NotFoundException } from "@/lib/exceptions";
 
 export class ProductsService {
   static async getAllBy({ categoryId }: { categoryId?: string }) {
@@ -24,5 +25,20 @@ export class ProductsService {
       },
     });
     return product;
+  }
+
+  static deleteMultipleProducts(ids: string[]) {
+    return db.$transaction(async (transactionClient) => {
+      const deleteResponse = await transactionClient.product.deleteMany({
+        where: {
+          id: {
+            in: ids,
+          },
+        },
+      });
+      if (deleteResponse.count !== ids.length) {
+        throw new NotFoundException("One of the posts cold not be deleted");
+      }
+    });
   }
 }

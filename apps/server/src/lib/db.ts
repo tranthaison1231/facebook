@@ -14,17 +14,7 @@ export const db = new PrismaClient().$extends({
     post: {
       async findMany({ args, query }) {
         args.where = { ...args.where, isDeleted: false };
-
         return query(args);
-      },
-      async delete({ args, query }) {
-        await query({
-          ...args,
-          operation: "update",
-          data: {
-            isDeleted: true,
-          },
-        });
       },
     },
   },

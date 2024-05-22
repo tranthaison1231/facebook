@@ -24,10 +24,13 @@ export class PostsService {
 
   static async deletePost(id: string, userId: string) {
     try {
-      await db.post.delete({
+      await db.post.update({
         where: {
           id: id,
           userId: userId,
+        },
+        data: {
+          isDeleted: true,
         },
       });
     } catch (error) {
