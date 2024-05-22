@@ -1,6 +1,8 @@
 import { Hono } from "hono";
 import { auth } from "@/middlewares/auth";
 import { PostsService } from "./posts.service";
+import { zValidator } from "@hono/zod-validator";
+import { queryPostArgs } from "./dtos/query-post.dto";
 export const router = new Hono();
 
 router
@@ -17,10 +19,19 @@ router
       status: 201,
     });
   })
-  .get("/", auth, async (c) => {
-    const posts = await PostsService.getAllPosts();
+  .get("/", auth, zValidator("query", queryPostArgs), async (c) => {
+    const page = +c.req.query("page") || 1;
+    const limit = +c.req.query("limit") || 10;
+    const startingId = c.req.query("startingId");
+
+    const data = await PostsService.getAllPosts({
+      limit,
+      page,
+      startingId,
+    });
+
     return c.json({
-      data: posts,
+      data: data,
       status: 200,
     });
   })

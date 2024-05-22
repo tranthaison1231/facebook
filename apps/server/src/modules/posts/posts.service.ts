@@ -1,6 +1,12 @@
 import { db } from "@/lib/db";
 import { Post } from "@prisma/client";
 
+interface GetAllPostsArgs {
+  limit?: number;
+  page?: number;
+  startingId?: string;
+}
+
 export class PostsService {
   static async create(data: Post) {
     const post = await db.post.create({
@@ -17,9 +23,23 @@ export class PostsService {
 
     return posts;
   }
-  static async getAllPosts() {
-    const posts = await db.post.findMany({});
-    return posts;
+  static async getAllPosts({
+    limit = 10,
+    page = 1,
+    startingId,
+  }: GetAllPostsArgs) {
+    const posts = await db.post.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      cursor: startingId ? { id: startingId } : undefined,
+    });
+    const total = await db.post.count({});
+
+    return {
+      data: posts,
+      total,
+      totalPage: Math.ceil(total / limit),
+    };
   }
 
   static async deletePost(id: string, userId: string) {

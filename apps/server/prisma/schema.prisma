@@ -107,6 +107,7 @@ model Product {
   images      Json?
 
   @@index([categoryId])
+  @@map("products")
 }
 
 model Group {
