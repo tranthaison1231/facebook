@@ -9,7 +9,7 @@ import { mailService } from "@/lib/mail.service";
 import { generateOpaqueToken } from "@/utils/token";
 import { redisService } from "@/lib/redis.service";
 
-const ACCESS_TOKEN_EXPIRE_IN = 10;
+const ACCESS_TOKEN_EXPIRE_IN = 60 * 60 * 24;
 export const REFRESH_TOKEN_EXPIRE_IN = 60 * 60 * 24 * 30;
 
 export class AuthService {
@@ -61,7 +61,7 @@ export class AuthService {
     const redisRefreshToken = await redisService.get(`refresh-token:${userID}`);
     if (redisRefreshToken !== refreshToken)
       throw new UnauthorizedException("Invalid refresh token");
-    const accessToken = await AuthService.createToken({
+    const accessToken = AuthService.createToken({
       userId: userID.toString(),
     });
     const newRefreshToken = await AuthService.createRefreshToken({

@@ -1,15 +1,8 @@
 import { request } from '@/utils/request'
-import { ReactNode } from 'react'
-
-export interface Post {
-  [x: string]: ReactNode
-  id: string
-}
+import { User } from './auth'
 
 interface CreatePost {
-  content : String
-  // media : String[]
-  // publishType : String
+  content: String
 }
 
 export const fetchPostsByUserId = async (userId: string) => {
@@ -21,7 +14,24 @@ export const createPost = async (data: CreatePost) => {
   await request.post('/posts', data)
 }
 
-export const fetchAllPosts = async () => {
-  const res = await request.get('/posts');
-    return res.data;
+export interface Like {
+  id: string
+  user: User
+  post: Post
+  createdAt: string
+}
+
+export interface Post {
+  id: string
+  content: string
+  user: User
+  createdAt: string
+  media: string[]
+  updatedAt: string
+  likes: Like[]
+}
+
+export const fetchPosts = async () => {
+  const res = await request.get('/posts')
+  return res.data
 }

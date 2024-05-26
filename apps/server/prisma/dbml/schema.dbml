@@ -1,0 +1,191 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table categories {
+  id String [pk]
+  name String [unique, not null]
+  icon String
+  products products [not null]
+  subCategories categories [not null]
+  parentCategory categories
+  parentCategoryId String
+}
+
+Table users {
+  id String [pk]
+  firstName String
+  lastName String
+  email String [unique, not null]
+  age Int
+  avatar String
+  phone String
+  password String [not null]
+  dob DateTime
+  gender String
+  school String
+  background String
+  workAt String
+  address String
+  posts posts [not null]
+  userGroups group_members [not null]
+  groupsRoles group_roles [not null]
+  groups groups [not null]
+  page pages
+  pageId String
+  stories stories [not null]
+  likes likes [not null]
+  comments comments [not null]
+}
+
+Table stories {
+  id String [pk]
+  user users
+  userId String
+  content String
+  media String[] [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table pages {
+  id String [pk]
+  name String [not null]
+  description String
+  avatar String
+  cover String
+  followers users [not null]
+  posts posts [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table posts {
+  id String [pk]
+  user users
+  userId String
+  content String
+  location String
+  media Json
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  publishType PublishType [not null, default: 'PUBLIC']
+  isDeleted Boolean [not null, default: false]
+  page pages
+  pageId String
+  likes likes [not null]
+  comments comments [not null]
+}
+
+Table comments {
+  id String [pk]
+  user users [not null]
+  userId String [not null]
+  post posts [not null]
+  postId String [not null]
+  content String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table likes {
+  id String [pk]
+  user users [not null]
+  userId String [not null]
+  post posts [not null]
+  postId String [not null]
+}
+
+Table products {
+  id String [pk]
+  categoryId String [not null]
+  category categories [not null]
+  name String
+  price Int
+  description String
+  location String
+  images Json
+}
+
+Table groups {
+  id String [pk]
+  name String [not null]
+  userId String [not null]
+  type TypeOfGroup [not null]
+  users group_members [not null]
+  User users [not null]
+  RolesOnGroup group_roles [not null]
+}
+
+Table group_roles {
+  user users [not null]
+  userId String [not null]
+  group groups [not null]
+  groupId String [not null]
+  role RoleOnGroup [not null]
+
+  indexes {
+    (userId, groupId) [pk]
+  }
+}
+
+Table group_members {
+  user users [not null]
+  userId String [not null]
+  group groups [not null]
+  groupId String [not null]
+
+  indexes {
+    (userId, groupId) [pk]
+  }
+}
+
+Enum PublishType {
+  PUBLIC
+  FRIENDS
+  FRIENDS_EXCEPT
+  ONLY_ME
+  SPECIFIC_FRIENDS
+  CUSTOM
+}
+
+Enum RoleOnGroup {
+  ADMIN
+  MOD
+  MEMBER
+}
+
+Enum TypeOfGroup {
+  PUBLIC
+  PRIVATE
+}
+
+Ref: categories.parentCategoryId > categories.id
+
+Ref: users.pageId > pages.id
+
+Ref: stories.userId > users.id
+
+Ref: posts.userId > users.id
+
+Ref: posts.pageId > pages.id
+
+Ref: comments.userId > users.id
+
+Ref: comments.postId > posts.id
+
+Ref: likes.userId > users.id
+
+Ref: likes.postId > posts.id
+
+Ref: products.categoryId > categories.id [delete: Cascade]
+
+Ref: groups.userId > users.id
+
+Ref: group_roles.userId > users.id
+
+Ref: group_roles.groupId > groups.id
+
+Ref: group_members.userId > users.id
+
+Ref: group_members.groupId > groups.id

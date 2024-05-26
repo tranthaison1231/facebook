@@ -24,11 +24,6 @@ export default function Component() {
     queryFn: () => getUser(id)
   })
 
-  const { data: postsQuery } = useQuery({
-    queryKey: ['users', id, 'posts'],
-    queryFn: () => fetchPostsByUserId(id)
-  })
-  console.log(postsQuery)
   const handleEditAvata = () => {
     setAvatar(userQuery?.data?.avatar)
   }

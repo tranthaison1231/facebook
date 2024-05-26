@@ -24,7 +24,7 @@ router
     const limit = +c.req.query("limit") || 10;
     const startingId = c.req.query("startingId");
 
-    const data = await PostsService.getAllPosts({
+    const data = await PostsService.getPosts({
       limit,
       page,
       startingId,

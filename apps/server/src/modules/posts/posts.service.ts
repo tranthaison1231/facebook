@@ -23,20 +23,23 @@ export class PostsService {
 
     return posts;
   }
-  static async getAllPosts({
-    limit = 10,
-    page = 1,
-    startingId,
-  }: GetAllPostsArgs) {
+  static async getPosts({ limit = 10, page = 1, startingId }: GetAllPostsArgs) {
     const posts = await db.post.findMany({
       skip: (page - 1) * limit,
       take: limit,
       cursor: startingId ? { id: startingId } : undefined,
+      include: {
+        user: true,
+        likes: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
     const total = await db.post.count({});
 
     return {
-      data: posts,
+      items: posts,
       total,
       totalPage: Math.ceil(total / limit),
     };
