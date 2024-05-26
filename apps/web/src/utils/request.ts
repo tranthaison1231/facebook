@@ -1,30 +1,30 @@
-import axios from 'axios'
-import { getToken, removeToken, setToken } from './token'
+import axios from 'axios';
+import { getToken, removeToken, setToken } from './token';
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 export const request = axios.create({
   baseURL: BASE_URL,
   timeout: 30000,
   withCredentials: true
-})
+});
 
 request.interceptors.request.use(
   config => {
-    const token = getToken()
+    const token = getToken();
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+      config.headers.Authorization = `Bearer ${token}`;
     }
-    return config
+    return config;
   },
   error => {
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
-)
+);
 
 request.interceptors.response.use(
   response => {
-    return response
+    return response;
   },
   async error => {
     if (error.response.status === 401 && error.config.url !== '/sign-in') {
@@ -35,15 +35,15 @@ request.interceptors.response.use(
           headers: {
             Authorization: `Bearer ${getToken()}`
           }
-        })
-        error.config.headers.Authorization = `Bearer ${accessToken.data.accessToken}`
-        setToken(accessToken.data.accessToken)
-        return request(error.config)
+        });
+        error.config.headers.Authorization = `Bearer ${accessToken.data.accessToken}`;
+        setToken(accessToken.data.accessToken);
+        return request(error.config);
       } catch (error) {
-        removeToken()
-        window.location.href = '/login'
+        removeToken();
+        window.location.href = '/login';
       }
     }
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
-)
+);

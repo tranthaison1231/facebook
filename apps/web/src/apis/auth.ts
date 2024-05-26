@@ -8,6 +8,7 @@ interface SignUp {
   dob: string
   gender: string
 }
+
 export interface User {
   lastName: string
   firstName: string
@@ -35,7 +36,7 @@ export const signIn = async (data: SignInData) => {
   return res.data
 }
 
-export const signUp = async ({ lastName, firstName, email, password, dob ,gender }: SignUp) => {
+export const signUp = async ({ lastName, firstName, email, password, dob, gender }: SignUp) => {
   const res = await request.post('/sign-up', {
     lastName,
     firstName,

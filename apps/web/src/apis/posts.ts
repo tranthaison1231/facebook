@@ -2,7 +2,7 @@ import { request } from '@/utils/request'
 import { User } from './auth'
 
 interface CreatePost {
-  content: String
+  content: string
 }
 
 export const fetchPostsByUserId = async (userId: string) => {
