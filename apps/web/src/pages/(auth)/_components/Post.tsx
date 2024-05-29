@@ -1,4 +1,4 @@
-import { Forward, Heart, MessageCircle, MoreHorizontal, MoveDown, Share } from 'lucide-react'
+import { Heart, MessageCircle, MoreHorizontal, MoveDown, Share } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '@/components/ui/dropdown-menu'
 import { ScrollArea } from '@/components/ui/scroll-area'
