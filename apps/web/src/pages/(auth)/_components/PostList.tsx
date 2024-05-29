@@ -1,56 +1,48 @@
-import Avatar from '@/assets/images/avt1.jpg'
-
-import {
-  FileImage,
-  Forward,
-  Heart,
-  MessageCircle,
-  MoreHorizontal,
-  MoveDown,
-  Share,
-  SmilePlus,
-  Video
-} from 'lucide-react'
+import { FileImage, SmilePlus, Video } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '@/components/ui/dropdown-menu'
-import { ScrollArea } from '@/components/ui/scroll-area'
 
-import Love from '@/assets/images/love.png'
-import Love2 from '@/assets/images/love2.png'
-import Like from '@/assets/images/like.png'
-import { Post, fetchPosts } from '@/apis/posts'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import CreatePost from './CreatePost'
-import dayjs from 'dayjs'
-
-const Extrafunction = [
-  {
-    icon: <MoveDown />,
-    name: 'Luu bai viet',
-    detail: 'Them vao danh sach luu'
-  },
-  {
-    icon: <MoveDown />,
-    name: 'Luu bai viet',
-    detail: 'Them vao danh sach luu'
-  },
-  {
-    icon: <MoveDown />,
-    name: 'Luu bai viet',
-    detail: 'Them vao danh sach luu'
-  },
-  {
-    icon: <MoveDown />,
-    name: 'Luu bai viet',
-    detail: 'Them vao danh sach luu'
-  }
-]
+import Post from './Post'
+import { Post as IPost, fetchPosts } from '@/apis/posts'
+import { useCallback, useMemo, useRef } from 'react'
 
 export default function PostList() {
-  const { data: postsQuery } = useQuery({
+  const observer = useRef<IntersectionObserver>()
+
+  const { data, fetchNextPage, hasNextPage, isFetching, isLoading } = useInfiniteQuery({
     queryKey: ['posts'],
-    queryFn: () => fetchPosts()
+    queryFn: ({ pageParam }) => fetchPosts({ pageParam }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.length ? allPages.length + 1 : undefined
+    }
   })
+  console.log({ isFetching, isLoading })
+
+  const posts = useMemo(() => {
+    return data?.pages.reduce((acc, page) => {
+      return [...acc, ...page]
+    }, [])
+  }, [data])
+
+  const lastElementRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (isLoading) return
+
+      if (observer.current) observer.current.disconnect()
+
+      observer.current = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetching) {
+          fetchNextPage()
+        }
+      })
+
+      if (node) observer.current.observe(node)
+    },
+    [fetchNextPage, hasNextPage, isFetching, isLoading]
+  )
+
   return (
     <div className="w-[520px]">
       <div className="w-full rounded-lg bg-white p-5">
@@ -77,93 +69,19 @@ export default function PostList() {
           </div>
         </div>
       </div>
-      {postsQuery?.data.items.map((post: Post) => (
-        <article className="mt-3 w-full rounded-lg bg-white" key={post.id}>
-          <div className=" flex items-center justify-between p-3">
-            <div className="flex space-x-2">
-              <img src={post.user.avatar} alt="" className="size-10 rounded-full" />
-              <div className="flex flex-col justify-start">
-                <p className="font-bold">{post.user.firstName + ' ' + post.user.lastName} </p>
-                <p>{dayjs(post.createdAt).fromNow()}</p>
-              </div>
-            </div>
-
-            <div className=" flex items-center justify-center">
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <MoreHorizontal />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <ScrollArea className="h-[200px] w-[350px] p-4">
-                    <ul>
-                      {Extrafunction.map(item => (
-                        <li className=" hover:bg-slate-300" key={item.name}>
-                          <div>
-                            <div>
-                              <img src={`$${item.icon}`} alt="" />
-                            </div>
-                            <div>
-                              <p className="font-bold">{item.name}</p>
-                              <p className="font-light">{item.detail}</p>
-                            </div>
-                          </div>
-                          <hr className="h-1/2 w-full bg-slate-100" />
-                        </li>
-                      ))}
-                    </ul>
-                  </ScrollArea>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+      <div className="mt-4 space-y-4">
+        {posts?.map((post: IPost) => (
+          <div key={post.id} ref={lastElementRef}>
+            <Post post={post} key={post.id} />{' '}
           </div>
-          <hr className=" h-1 px-5" />
-
-          <div className="p-5 text-justify ">{post?.content}</div>
-
-          {post?.media?.length > 0 && (
-            <div className=" max-h-[500px] overflow-hidden">
-              <img src={post?.media?.[0]} alt="" className="w-full object-contain" />
-            </div>
-          )}
-
-          <div className="flex justify-between p-5 ">
-            <div className=" flex items-center justify-center space-x-1">
-              <div className="flex items-center -space-x-1">
-                <img src={`${Love}`} alt="" className=" h-4 w-4" />
-                <img src={`${Love2}`} alt="" className=" h-4 w-4" />
-                <img src={`${Like}`} alt="" className=" h-4 w-4" />
-              </div>
-              <p>{post.likes.length}</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="flex space-x-1">
-                <p>219</p>
-                <MessageCircle className="w-4" />
-              </div>
-              <div className="flex">
-                <p>52</p>
-                <Forward className="w-4" />
-              </div>
-            </div>
-          </div>
-          <hr />
-
-          <div className="flex justify-between px-5">
-            <Button className="flex items-center space-x-2 bg-white text-secondaryColor hover:bg-[#e1e4ea]">
-              <Heart />
-              Thích
-            </Button>
-            <Button className="flex items-center space-x-2 bg-white text-secondaryColor hover:bg-[#e1e4ea]">
-              <MessageCircle />
-              Bình luận
-            </Button>
-            <Button className="flex items-center space-x-2 bg-white text-secondaryColor hover:bg-[#e1e4ea]">
-              <Share />
-              Chia sẻ
-            </Button>
-          </div>
-        </article>
-      ))}
+        ))}
+      </div>
+      {isFetching && (
+        <div className="mt-4 space-y-4">
+          <Post.Sekelton />
+          <Post.Sekelton />
+        </div>
+      )}
     </div>
   )
 }

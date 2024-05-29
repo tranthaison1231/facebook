@@ -21,6 +21,14 @@ export interface Like {
   createdAt: string
 }
 
+export interface Comment {
+  id: string
+  content: string
+  user: User
+  post: Post
+  createdAt: string
+}
+
 export interface Post {
   id: string
   content: string
@@ -29,9 +37,10 @@ export interface Post {
   media: string[]
   updatedAt: string
   likes: Like[]
+  comments: Comment[]
 }
 
-export const fetchPosts = async () => {
-  const res = await request.get('/posts')
-  return res.data
+export const fetchPosts = async ({ pageParam }: { pageParam: number }) => {
+  const res = await request.get(`/posts?page=${pageParam}&limit=3`)
+  return res.data.data.items
 }

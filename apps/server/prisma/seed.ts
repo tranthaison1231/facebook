@@ -1,12 +1,14 @@
 import { PrismaClient, PublishType } from "@prisma/client";
+import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.like.create({
+  await prisma.comment.createMany({
     data: {
-      userId: "clutx2uws0000xodzr08i58r7",
-      postId: "clwnomanv00018rcwqbci4cz0",
+      postId: "clwruqzrl00058c8420isezmp",
+      userId: "clvf9vi2800006n7a6ea28ggz",
+      content: faker.lorem.sentence(),
     },
   });
 }

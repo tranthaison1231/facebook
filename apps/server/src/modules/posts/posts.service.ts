@@ -31,6 +31,11 @@ export class PostsService {
       include: {
         user: true,
         likes: true,
+        comments: {
+          include: {
+            user: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",

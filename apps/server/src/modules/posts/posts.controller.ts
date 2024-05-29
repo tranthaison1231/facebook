@@ -21,7 +21,7 @@ router
   })
   .get("/", auth, zValidator("query", queryPostArgs), async (c) => {
     const page = +c.req.query("page") || 1;
-    const limit = +c.req.query("limit") || 10;
+    const limit = +c.req.query("limit") || 3;
     const startingId = c.req.query("startingId");
 
     const data = await PostsService.getPosts({
