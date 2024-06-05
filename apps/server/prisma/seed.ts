@@ -4,14 +4,32 @@ const prisma = new PrismaClient();
 
 async function main() {
 
+ const category = await prisma.category.create({
+   data: {
+     id:"test",
+     name: "Đáng mà mua",
+     icon: "https:www.facebook.com/images/fb_icon_325x325.png",
+     subCategories:{
+       createMany:{
+         data:[
+           {
+             id:"nike real",
+             name: "Đáng mà mua 1111",
+             icon: "https:www.facebook.com/images/fb_icon_325x325.png",
+            
+           },
+           {
+             id:"nike fake",
+             name: "Đáng mà mua 2222",
+             icon: "https:www.facebook.com/images/fb_icon_325x325.png",
+           }
+         ]
+       }
 
-  const product = await prisma.product.deleteMany({})
-  const products = await prisma.category.deleteMany({})
-  console.log(product);
+     }}})
 
- 
+   console.log(category)
 }
-
 main()
   .then(async () => {
     await prisma.$disconnect();

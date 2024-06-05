@@ -16,8 +16,7 @@ function inbox() {
             </Tabs>
             
         </div>
-        <div className=' w-1/4'></div>
-      
+        <div className='w-1/4'></div>
     </div>
   )
 }

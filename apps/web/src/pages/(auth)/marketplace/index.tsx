@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { BaggageClaim, Bell, Mails, Store } from 'lucide-react'
 import React, { useRef } from 'react'
 import {  useNavigate } from 'react-router-dom'
+import LeftSideBar from './_component/LeftSideBar'
 
 const SIDE_BAR = [
   {
@@ -69,7 +70,9 @@ function Marketplace() {
   }
 
   return (
-    <div className=" flex justify-center">
+    <div className=' flex w-full'>
+        <LeftSideBar/>
+       <div className=" w-full flex justify-center">
       {/* ============== CONTENT ============= */}
       <section className=" w-full p-8 bg-[#f0f2f5]">
         <h1 className=' font-bold text-lg mb-8'>Lựa chọn hôm nay</h1>
@@ -116,7 +119,9 @@ function Marketplace() {
     </div>
        
       </section>
+       </div>
     </div>
+   
   )
 }
 

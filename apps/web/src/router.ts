@@ -14,9 +14,7 @@ export type Path =
   | `/groups/joins`
   | `/login`
   | `/marketplace`
-  | `/marketplace/category/entertainment`
-  | `/marketplace/category/propertyrentals`
-  | `/marketplace/category/vehicles`
+  | `/marketplace/category/:id`
   | `/marketplace/create`
   | `/marketplace/create/item`
   | `/marketplace/inbox`
@@ -34,6 +32,7 @@ export type Params = {
   '/:id': { id: string }
   '/:id/about': { id: string }
   '/:id/friends': { id: string }
+  '/marketplace/category/:id': { id: string }
 }
 
 export type ModalPath = never

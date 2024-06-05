@@ -1,12 +1,23 @@
-import { Tag, Tags, CircleHelp } from 'lucide-react'
+import { Tag, Tags, CircleHelp, X } from 'lucide-react'
+import FaceBookIcon from '@/assets/images/facebook-logo.png'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
+
 
 function index() {
+  const navigate = useNavigate()
   return (
     <div className=' flex'>
        {/* TAO BAI VIET */}
-       <section className=" sticky left-0 top-0 max-h-max w-72 shrink-0 bg-white p-3 shadow-md">
+       <section className=" -mt-20 sticky h-screen w-[360px] overflow-x-hidden bg-white px-3 shadow-md">
+        <div className='flex mb-2 mt-2 gap-x-3'>
+          <Button className=' size-10 bg-[#0006] rounded-full flex justify-center items-center' onClick={() => navigate("/marketplace")}><X className=' text-white size-5'/></Button>
+        <Link to={'/'} >
+            <img className=" size-10" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWmwYccpGN_2SFl5JJMSaCdmCGmLyaKEwEVw&s" alt="" />
+          </Link>
+        </div>
+        <hr/>
         <div className=" mb-2 flex justify-between">
           <h1 className=" text-base font-bold">Tạo bài niêm yết mới</h1>
         </div>
@@ -44,28 +55,28 @@ function index() {
       <div className=' w-full flex items-center justify-center'>
         <div className=''>
             <h1 className=' font-bold text-lg mb-2'>Chọn loại bài niêm yết</h1>
-            <div className=' flex gap-2'>
-                <Link className=' w-40 h-56 rounded-sm p-4  bg-white hover:bg-[#f2f2f2] hover:cursor-pointer' to={'item'} >
-                  <div className=' w-full h-28 overflow-hidden'><img className=' w-full h-full object-cover' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfHNI8xj7t4nedP6KO0YmC8Ng1FU0Y6cMb9xqa9po1yQ&s" alt="" /></div>
+            <div className='  flex items-center justify-center gap-2 '>
+                <Link className=' w-40 h-52 rounded-sm py-12 px-4 flex items-center justify-center flex-col gap-y-3  bg-white hover:bg-[#f2f2f2] hover:cursor-pointer' to={'item'} >
+                  <div className=' size-16 rounded-full'><img className=' size-16 rounded-full overflow-hidden' src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" /></div>
                   <div className=''>
                     <p className=' font-semibold text-sm'>Mặt hàng cần bán</p>
-                    <p className=' font-light text-xs'>Tạo một bài niêm yết duy nhất để bán một hoặc nhiều mặt hàng.</p>
+                    <p className=' font-normal text-xs'>Tạo một bài niêm yết duy nhất để bán một hoặc nhiều mặt hàng.</p>
                   </div>
                 </Link>
-                <button className=' w-40 h-56 rounded-sm p-4  bg-white hover:bg-[#f2f2f2] hover:cursor-pointer'>
-                  <div className=' w-full h-28 overflow-hidden'><img className=' w-full h-full object-cover' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfHNI8xj7t4nedP6KO0YmC8Ng1FU0Y6cMb9xqa9po1yQ&s" alt="" /></div>
+               <Link className=' w-40 h-52 rounded-sm py-12 px-4 flex items-center justify-center flex-col gap-y-3  bg-white hover:bg-[#f2f2f2] hover:cursor-pointer' to={'item'} >
+                  <div className=' size-16 rounded-full'><img className=' size-16 rounded-full overflow-hidden' src="https://images.unsplash.com/photo-1586374579358-9d19d632b6df?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" /></div>
                   <div className=''>
                     <p className=' font-semibold text-sm'>Mặt hàng cần bán</p>
-                    <p className=' font-light text-xs'>Tạo một bài niêm yết duy nhất để bán một hoặc nhiều mặt hàng.</p>
+                    <p className=' font-normal text-xs'>Tạo một bài niêm yết duy nhất để bán một hoặc nhiều mặt hàng.</p>
                   </div>
-                </button>
-                <button className=' w-40 h-56 rounded-sm p-4  bg-white hover:bg-[#f2f2f2] hover:cursor-pointer'>
-                  <div className=' w-full h-28 overflow-hidden'><img className=' w-full h-full object-cover' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfHNI8xj7t4nedP6KO0YmC8Ng1FU0Y6cMb9xqa9po1yQ&s" alt="" /></div>
+                </Link>
+               <Link className=' w-40 h-52 rounded-sm py-12 px-4 flex items-center justify-center flex-col gap-y-3  bg-white hover:bg-[#f2f2f2] hover:cursor-pointer' to={'item'} >
+                  <div className=' size-16 rounded-full'><img className=' size-16 rounded-full overflow-hidden' src="https://plus.unsplash.com/premium_photo-1683120968693-9af51578770e?q=80&w=1926&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" /></div>
                   <div className=''>
                     <p className=' font-semibold text-sm'>Mặt hàng cần bán</p>
-                    <p className=' font-light text-xs'>Tạo một bài niêm yết duy nhất để bán một hoặc nhiều mặt hàng.</p>
+                    <p className=' font-normal text-xs'>Tạo một bài niêm yết duy nhất để bán một hoặc nhiều mặt hàng.</p>
                   </div>
-                </button>
+                </Link>
             </div>
         </div>
         
