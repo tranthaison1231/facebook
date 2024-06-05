@@ -18,7 +18,6 @@ export default function PostList() {
       return lastPage.length ? allPages.length + 1 : undefined
     }
   })
-  console.log({ isFetching, isLoading })
 
   const posts = useMemo(() => {
     return data?.pages.reduce((acc, page) => {

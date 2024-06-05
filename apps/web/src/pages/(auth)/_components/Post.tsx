@@ -7,6 +7,10 @@ import Love2 from '@/assets/images/love2.png'
 import Like from '@/assets/images/like.png'
 import dayjs from 'dayjs'
 import { Post as IPost } from '@/apis/posts'
+import { CommentInput } from './CommentInput'
+import { useQuery } from '@tanstack/react-query'
+import { Comment as IComment, getComments } from '@/apis/comments'
+import { Comment } from './Comment'
 
 const Extrafunction = [
   {
@@ -36,6 +40,11 @@ interface PostProps {
 }
 
 export default function Post({ post }: PostProps) {
+  const { data: commentsQuery } = useQuery({
+    queryKey: ['comments', post.id],
+    queryFn: () => getComments(post.id)
+  })
+
   return (
     <article className="w-full rounded-lg bg-white" key={post.id}>
       <div className=" flex items-center justify-between p-3">
@@ -94,7 +103,7 @@ export default function Post({ post }: PostProps) {
           </div>
           <p>{post.likes.length}</p>
         </div>
-        <p>{post.comments.length} comments</p>
+        <p>{commentsQuery?.length ?? 0} comments</p>
       </div>
       <hr />
 
@@ -114,15 +123,8 @@ export default function Post({ post }: PostProps) {
       </div>
       <hr />
       <div className="p-4">
-        {post.comments.map(comment => (
-          <div key={comment.id} className="flex gap-4">
-            <img src={comment.user.avatar} alt="" className="size-10 rounded-full object-cover" />
-            <div>
-              <p>{comment.user.firstName + ' ' + comment.user.lastName}</p>
-              {comment.content}
-            </div>
-          </div>
-        ))}
+        {commentsQuery?.map((comment: IComment) => <Comment comment={comment} key={comment.id} />)}
+        <CommentInput post={post} />
       </div>
     </article>
   )

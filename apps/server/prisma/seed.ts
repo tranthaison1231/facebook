@@ -4,11 +4,12 @@ import { faker } from "@faker-js/faker";
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.comment.createMany({
+  await prisma.user.createMany({
     data: {
-      postId: "clwruqzrl00058c8420isezmp",
-      userId: "clvf9vi2800006n7a6ea28ggz",
-      content: faker.lorem.sentence(),
+      email: faker.internet.email(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      password: faker.internet.password(),
     },
   });
 }
