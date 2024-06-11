@@ -1,7 +1,3 @@
-import React from 'react'
-
 export default function Posts() {
-  return (
-    <div>Posts</div>
-  )
+  return <div>Posts</div>
 }

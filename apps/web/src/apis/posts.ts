@@ -1,8 +1,10 @@
 import { request } from '@/utils/request'
 import { User } from './auth'
+import { Comment } from './comments'
 
 interface CreatePost {
   content: string
+  media: string[]
 }
 
 export const fetchPostsByUserId = async (userId: string) => {
@@ -16,14 +18,6 @@ export const createPost = async (data: CreatePost) => {
 
 export interface Like {
   id: string
-  user: User
-  post: Post
-  createdAt: string
-}
-
-export interface Comment {
-  id: string
-  content: string
   user: User
   post: Post
   createdAt: string

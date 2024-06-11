@@ -1,5 +1,4 @@
 import { getUser, updateMe } from '@/apis/auth'
-import { fetchPostsByUserId } from '@/apis/posts'
 import { useParams } from '@/router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
@@ -24,7 +23,7 @@ export default function Component() {
     queryFn: () => getUser(id)
   })
 
-  const handleEditAvata = () => {
+  const handleEditAvatar = () => {
     setAvatar(userQuery?.data?.avatar)
   }
   const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -213,7 +212,7 @@ export default function Component() {
                         <button className="w-full rounded-sm bg-gray-200 py-2 text-base font-medium">
                           Thêm Khung{' '}
                         </button>
-                        <button onClick={handleEditAvata} className="rounded-sm bg-gray-200 px-4 py-2">
+                        <button onClick={handleEditAvatar} className="rounded-sm bg-gray-200 px-4 py-2">
                           <Pencil />
                         </button>
                       </div>

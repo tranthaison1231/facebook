@@ -1,4 +1,3 @@
 import { z } from "zod";
 
-export const updatePostDto = z.object({
-});
+export const updatePostDto = z.object({});
