@@ -4,6 +4,7 @@ import { Comment } from './comments'
 
 interface CreatePost {
   content: string
+  media: string[]
 }
 
 export const fetchPostsByUserId = async (userId: string) => {

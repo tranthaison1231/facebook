@@ -89,8 +89,10 @@ export default function Post({ post }: PostProps) {
       <div className="p-5 text-justify ">{post?.content}</div>
 
       {post?.media?.length > 0 && (
-        <div className=" max-h-[500px] overflow-hidden">
-          <img src={post?.media?.[0]} alt="" className="w-full object-contain" />
+        <div className="h-50 grid grid-cols-2 ">
+          {post.media.map(media => (
+            <img key={media} src={media} alt="" className="h-full w-full object-cover" />
+          ))}
         </div>
       )}
 
