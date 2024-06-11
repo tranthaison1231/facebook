@@ -15,7 +15,6 @@ router
     });
   })
   .post('/', zValidator("json", createGroupDto), async (c) => {
-    const groups = await GroupsService.getAll();
     const createGroup = await c.req.json();
     const group = await GroupsService.create(createGroup);
 
