@@ -15,7 +15,6 @@ model Category {
   subCategories    Category[] @relation("SubCategories")
   parentCategory   Category?  @relation("SubCategories", fields: [parentCategoryId], references: [id])
   parentCategoryId String?
-
   @@map("categories")
 }
 

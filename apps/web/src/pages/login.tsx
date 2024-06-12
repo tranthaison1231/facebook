@@ -43,6 +43,8 @@ export default function Component() {
         toast.error(error.response?.data.message)
       }
     } finally {
+      console.log('LOGIN',data);
+      
       setIsLoading(false)
     }
   }

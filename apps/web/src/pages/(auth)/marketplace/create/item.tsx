@@ -1,15 +1,15 @@
 import { getMe } from '@/apis/auth'
 import { Button } from '@/components/ui/button'
-import { Form,FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { Earth, SmartphoneCharging, X } from 'lucide-react'
-import { Image } from 'lucide-react'
+import { Bitcoin, ChevronDown, ChevronUp, Divide, DoorOpen, Earth, Rocket, SmartphoneCharging, X } from 'lucide-react'
+import { Image, Lock } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import {  Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
 function item() {
@@ -53,14 +53,22 @@ function item() {
     }
   })
 
+  const [open, setOpen] = useState(false)
+  const [checked1, setChecked] = useState(false)
+
+  const handleToggle = () => {
+    setChecked(!checked1)
+  }
+  console.log('KICH THUOC',images.length);
+  
   return (
     <div className=" -mt-20 flex">
-      <section className="sticky left-0 top-0 h-screen w-[360px] shrink-0 bg-white p-4 shadow-md">
+      <section className="sticky left-0 top-0 w-[360px] shrink-0 bg-white p-4 pt-0 shadow-md">
         {/* HEADER */}
         <div className="mb-2 mt-2 flex gap-x-3">
           <X
-            size={5}
-            className=" size-10 flex-shrink-0 rounded-full bg-[#0006] text-white"
+            size={10}
+            className=" size-8 flex-shrink-0 rounded-full bg-[#0006] text-white"
             onClick={() => navigate('/marketplace')}
           />
           <Link to={'/'}>
@@ -85,7 +93,7 @@ function item() {
           </Button>
         </div>
         {/* BODY */}
-        <div className=" custom-scrollbar h-[500px] w-full ">
+        <div className=" custom-scrollbar h-[500px] w-full overflow-y-auto ">
           <div className="mb-3 flex gap-x-2">
             <div>
               <img src={me?.data.avatar} alt="" className="h-10 w-10 rounded-full object-cover" />
@@ -111,7 +119,7 @@ function item() {
                   <img key={index} src={src} alt={`Uploaded ${index}`} className=" size-24 rounded-sm object-cover" />
                 ))}
                 <div>
-                  <form className=" flex size-24 items-center justify-center rounded-sm border-[#e4e6eb] bg-[#e4e6eb]">
+                  <form className="  flex size-24 items-center justify-center rounded-sm border-[#e4e6eb] bg-[#e4e6eb]">
                     <label htmlFor="image" className="flex w-full items-center justify-center rounded-sm border-2">
                       <input type="file" id="image" className="hidden" onChange={handleUpload} />
                       <p className=" size-full text-sm font-medium">Thêm ảnh +</p>
@@ -150,28 +158,146 @@ function item() {
                 Tải trực tiếp ảnh lên từ điện thoại của bạn. <a href="#"> Tìm hiểu thêm</a>
               </p>
             </div>
-            <Button className=" w-fit text-nowrap bg-[#e4e6eb] px-3 py-0 font-semibold text-black rounded-[5px] h-[30px]">Dùng thử</Button>
+            <Button className=" h-[30px] w-fit text-nowrap rounded-[5px] bg-[#e4e6eb] px-3 py-0 font-semibold text-black">
+              Dùng thử
+            </Button>
           </div>
-          <div className=" flex items-center justify-between">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem className=' border-4 rounded-lg px-5'>
-                    <FormLabel>Tiêu đề</FormLabel>
-                    <FormControl className=' h-5'>
-                      <Input placeholder="shadcn" {...field} />
-                    </FormControl>
-                    <FormDescription>This is your public display name.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
+          <div className=" ">
+            <p className="text-md font-bold">Bắt buộc</p>
+            <p className=" mb-2 text-sm font-normal">Hãy mô tả rõ nhất có thể.</p>
+            <form action="" className=" flex flex-col items-center justify-center gap-2">
+              <Input
+                className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="text"
+                placeholder="Tiêu đề"
               />
-              <Button type="submit">Submit</Button>
+              <Input
+                className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="text"
+                placeholder="Giá"
+              />
+              <Input
+                className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="text"
+                placeholder="Hạng mục"
+              />
+              <Input
+                className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="text"
+                placeholder="Tình trạng"
+              />
             </form>
-            </Form>
+          </div>
+          <div>
+            <p className="text-md font-bold">Chi tiết khác</p>
+
+            <Button
+              className=" font-mormal bg-white p-1 text-start text-sm text-black hover:bg-slate-300"
+              onClick={() => setOpen(!open)}
+            >
+              Bổ sung chi tiết để thu hút thêm sự quan tâm. {open ? <ChevronUp /> : <ChevronDown />}
+            </Button>
+            {/* FIELDS */}
+            <div className={clsx(' mt-2', { hidden: !open })}>
+              <form action="" className=" flex flex-col items-center justify-center gap-2">
+                <textarea
+                  className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Mô tả"
+                ></textarea>
+                <Select>
+                  <SelectTrigger className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <SelectValue placeholder="Tình trạng hàng" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="light">Niêm yết là còn hàng</SelectItem>
+                    <SelectItem value="dark">Niêm yết là chỉ còn môt mặt hàng</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input
+                  className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  type="text"
+                  placeholder="Thẻ sản phẩm"
+                />
+                <Input
+                  className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  type="text"
+                  placeholder="Vị trí"
+                />
+              </form>
+              {/* TUY CHON VIEC GAP MAT */}
+              <div className=" m-2 p-2">
+                <p className="text-md font-bold">Tuy chọn vị trí</p>
+                <p className=" text-sm font-light">
+                  Người mua có thể nhìn thấy tùy chọn của bạn trên bài niêm yết. Tìm hiểu thêm
+                </p>
+                <div className="flex items-center justify-around gap-2 rounded-sm p-2 hover:bg-[#e4e6eb]">
+                  <Bitcoin className=" shrink-0" />
+                  <div className="">
+                    <p className=" text-md font-semibold">Gặp mặt ở nơi công cộng</p>
+                    <p className=" text-sm font-light">Gặp mặt tại vị trí công cộng.</p>
+                  </div>
+                  <div className="shrink-0">
+                    <Input type="checkbox" className=" " />
+                  </div>
+                </div>
+                <div className="flex items-center justify-around gap-2 rounded-sm p-2 hover:bg-[#e4e6eb]">
+                  <DoorOpen className=" shrink-0" />
+                  <div className="">
+                    <p className=" text-md font-semibold">Đặt mua rồi tự đến lấy</p>
+                    <p className=" text-sm font-light">Người mua nhận hàng tại nơi của bạn.</p>
+                  </div>
+                  <div className="shrink-0">
+                    <Input type="checkbox" className=" " />
+                  </div>
+                </div>
+                <div className="flex items-center justify-around gap-2 rounded-sm p-2 hover:bg-[#e4e6eb]">
+                  <DoorOpen className=" shrink-0" />
+                  <div className="">
+                    <p className=" text-md font-semibold">Để hàng trước cửa</p>
+                    <p className=" text-sm font-light">Bạn để hàng trước cửa nhà người mua.</p>
+                  </div>
+                  <div className="shrink-0">
+                    <Input type="checkbox" className=" " />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* TOGGLE BUTTON */}
+            <div className={clsx(' mt-2 ', {})}>
+              <div className="flex justify-between gap-2 rounded-sm p-2 hover:bg-[#e4e6eb]">
+                <Rocket className=" shrink-0" />
+                <div className="">
+                  <p className=" text-md font-semibold">Quảng cáo bài niêm yết sau khi đăng</p>
+                  <p className=" text-sm font-light">
+                    Thêm bước quảng cáo bài niêm yết sau khi đăng. Khi chuyển bài niêm yết thành quảng cáo, bạn có thể
+                    tiếp cận nhiều người mua tiềm năng hơn.
+                  </p>
+                </div>
+                <div className="shrink-0">
+                  <Input
+                    type="checkbox"
+                    className=" after:contents-[''] relative inline-block h-7 w-14 appearance-none rounded-full bg-gray-400 shadow-sm transition-all after:absolute after:left-[3px] after:top-[3px] after:h-4/5 after:w-2/5 after:rounded-full after:bg-white after:transition-all checked:bg-[#1876f2] checked:after:translate-x-6"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-between gap-2 rounded-sm p-2 hover:bg-[#e4e6eb]">
+                <Lock className=" shrink-0" />
+                <div className="">
+                  <p className=" text-md font-semibold">Ẩn với bạn bè</p>
+                  <p className=" text-sm font-light">
+                    Bài niêm yết này vẫn ở chế độ công khai nhưng sẽ ẩn với bạn bè trên Facebook và Messenger trong hầu
+                    hết các trường hợp.
+                  </p>
+                </div>
+                <div className="shrink-0">
+                  <Input
+                    type="checkbox"
+                    className=" after:contents-[''] relative inline-block h-7 w-14 appearance-none rounded-full bg-gray-400 shadow-sm transition-all after:absolute after:left-[3px] after:top-[3px] after:h-4/5 after:w-2/5 after:rounded-full after:bg-white after:transition-all checked:bg-[#1876f2] checked:after:translate-x-6"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
           {/* FIELDS */}
           <p className="text-xs font-light">
@@ -181,11 +307,35 @@ function item() {
           </p>
         </div>
         {/* FOOTER */}
-        <div className="h-[120px] w-full">
-          <h1>FOOOTER</h1>
+        <div className={clsx(' mt-3 w-full', {})}>
+          <div className=" flex items-center justify-between gap-1">
+            <div className=" h-2 w-1/2 rounded-full bg-slate-300"></div>
+            <div className=" h-2 w-1/2 rounded-full bg-slate-300"></div>
+          </div>
+          <hr className=" m-2" />
+          <Button className=" w-full rounded-sm bg-primary text-white">Tiếp</Button>
         </div>
       </section>
-      <section>CONTENT</section>
+      <section className=" w-full flex items-center justify-center bg-[#f0f2f5]">
+        <div className=' min-h-[650px] mx-auto p-3 rounded-lg bg-white mt-10'>
+              <h1 className=' font-bold mb-3'>Xem trước</h1>
+              <div className=' h-full flex items-center justify-between'>
+                {/* BACKGROUND */}
+                <div className=' w-2/3 bg-[#f0f2f5] flex items-center justify-center'>
+                  {images.length >= 0 ? <div className=' min-h-[600px] flex flex-col items-center justify-center'>
+                    <div className=' w-2/3 text-center'>
+                      <h1 className=' font-bold text-lg'>Bản xem trước bài niêm yết</h1>
+                      <p className=' text-lg'>Trong khi tạo, bạn có thể xem trước để biết bài niêm yết sẽ hiển thị thế nào với mọi người trên Marketplace.</p>
+                    </div>
+                  </div>: <div className=' w-2/3 bg-slate-400 '></div>}
+                </div>
+                {/* CONTENT */}
+                <div>
+                  <h1 className=' font-bold text-2xl'>{}</h1>
+                </div>
+              </div>
+        </div>  
+      </section>
     </div>
   )
 }

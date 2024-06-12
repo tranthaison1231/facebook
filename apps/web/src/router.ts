@@ -16,6 +16,7 @@ export type Path =
   | `/marketplace`
   | `/marketplace/category/:id`
   | `/marketplace/create`
+  | `/marketplace/create/Status`
   | `/marketplace/create/item`
   | `/marketplace/inbox`
   | `/marketplace/notifications`
