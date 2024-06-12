@@ -46,16 +46,6 @@ const SIDE_BAR2 = [
     title: 'Facebook',
     path: '/',
     icon: <CircleFadingPlus className="text-primary" />
-  },
-  {
-    title: 'Facebook',
-    path: '/',
-    icon: <CircleFadingPlus className="text-primary" />
-  },
-  {
-    title: 'Facebook',
-    path: '/',
-    icon: <CircleFadingPlus className="text-primary" />
   }
 ]
 
@@ -74,12 +64,14 @@ export default function Sidebar() {
               <img src={meQuery?.data?.avatar} alt="avatar" className="h-full w-full object-cover" />
             </div>
 
-            <p>{meQuery?.data?.firstname} {meQuery?.data?.lastname}</p>
+            <p>
+              {meQuery?.data?.firstname} {meQuery?.data?.lastname}
+            </p>
           </li>
         </Link>
         {SIDE_BAR.map(item => (
           <Link to={`${item.path}`} key={item.title}>
-            <li className={clsx('flex cursor-pointer gap-4 rounded-sm px-6 py-2 font-bold hover:bg-gray-200' )}>
+            <li className={clsx('flex cursor-pointer gap-4 rounded-sm px-6 py-2 font-bold hover:bg-gray-200')}>
               {item.icon}
               <span>{item.title}</span>
             </li>

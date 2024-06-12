@@ -7,7 +7,6 @@ import IMG4 from '@/assets/images/avt4.jpg'
 import clsx from 'clsx'
 import { useState } from 'react'
 
-
 export default function Component() {
   const [items, setItems] = useState([
     {
@@ -75,11 +74,9 @@ export default function Component() {
     }
   ])
   const handleRemoveItem = (id: number) => {
-    console.log('REMOVE')
     setItems(prevItems => prevItems.map(item => (item.id === id ? { ...item, isRemoved: true } : item)))
   }
   const handleConfirmItem = (id: number) => {
-    console.log('CONFIRM')
     setItems(prevItems => prevItems.map(item => (item.id === id ? { ...item, isConfirmed: true } : item)))
   }
 
@@ -160,7 +157,7 @@ export default function Component() {
   return (
     <div className="flex">
       <Sidebar />
-      
+
       <div className=" ml-96 p-9">
         <h1 className=" text-3xl font-bold">Lời mời kết bạn</h1>
         <div className="pt-5">
@@ -195,11 +192,7 @@ export default function Component() {
                     >
                       Xác nhận
                     </Button>
-                    {item.isConfirmed ? (
-                      <p className=" font-light text-black">Đã gửi lời mời kết bạn</p>
-                    ) : (
-                      ''
-                    )}
+                    {item.isConfirmed ? <p className=" font-light text-black">Đã gửi lời mời kết bạn</p> : ''}
                     <Button
                       className=" h-9 bg-[#e4e6eb] text-black hover:text-white hover:opacity-50"
                       onClick={() => handleRemoveFriend(item.id)}
@@ -247,11 +240,7 @@ export default function Component() {
                     >
                       Xác nhận
                     </Button>
-                    {item.isConfirmed ? (
-                      <p className=" font-light text-black">Đã gửi lời mời kết bạn</p>
-                    ) : (
-                      ''
-                    )}
+                    {item.isConfirmed ? <p className=" font-light text-black">Đã gửi lời mời kết bạn</p> : ''}
                     <Button
                       className=" h-9 bg-[#e4e6eb] text-black hover:text-white hover:opacity-50"
                       onClick={() => handleRemoveItem(item.id)}

@@ -12,6 +12,7 @@ export type Path =
   | `/groups/discover`
   | `/groups/feed`
   | `/groups/joins`
+  | `/latest/content-calendar`
   | `/login`
   | `/marketplace`
   | `/marketplace/category/:id`
@@ -29,7 +30,6 @@ export type Path =
   | `/sign-up`
 
 export type Params = {
-  '/:id': { id: string }
   '/:id': { id: string }
   '/:id/about': { id: string }
   '/:id/friends': { id: string }

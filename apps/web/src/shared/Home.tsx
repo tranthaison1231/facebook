@@ -3,6 +3,7 @@ import Avt2 from '@/assets/images/avt2.jpg'
 import Avt3 from '@/assets/images/avt3.jpg'
 import Avt4 from '@/assets/images/avt4.jpg'
 import { Bell, Clapperboard, Home, LayoutGrid, MessageCircle, Store, UsersRound } from 'lucide-react'
+
 export const ICON_FEATURES = [
   {
     title: 'Home',
@@ -23,13 +24,9 @@ export const ICON_FEATURES = [
     title: 'Nhom',
     path: '/nhom',
     icon: <UsersRound className=" border-none" />
-  },
-  {
-    title: 'Nhom',
-    path: '/nhom',
-    icon: <UsersRound className=" border-none" />
   }
 ]
+
 export const ICON_MESSAGE = [
   {
     title: 'Menu',

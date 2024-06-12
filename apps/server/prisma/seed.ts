@@ -1,19 +1,17 @@
 import { PrismaClient, PublishType } from "@prisma/client";
+import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
 async function main() {
-
-  const category = await prisma.category.delete({
-    where: {
-      id: "test"
-    }
-    })
-
-    console.log(category)
-
-  // npx prisma db seed
-
+  await prisma.user.createMany({
+    data: {
+      email: faker.internet.email(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      password: faker.internet.password(),
+    },
+  });
 }
 main()
   .then(async () => {

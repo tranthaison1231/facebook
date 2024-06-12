@@ -11,23 +11,46 @@ export class CategoriesService {
     return data;
   }
 
+  static async getRootCategories() {
+    const categories = await db.category.findMany({
+      where: { parentCategoryId: null },
+    });
+    return categories;
+  }
+
   static async create(data: Category) {
     const category = await db.category.create({ data });
     return category;
   }
 
-  static async getBy(categoryId: string) {
+  static async getCategoryById(categoryId: string) {
     const category = await db.category.findUnique({
       where: { id: categoryId },
+      include: { products: true, subCategories: true },
     });
     return category;
   }
 
-  static async delete(categoryId: string) {
-    const category = await db.category.delete({
-      where: { id: categoryId },
+  static async getSubCategories(categoryId: string) {
+    const subCategories = await db.category.findMany({
+      where: { parentCategoryId: categoryId },
     });
-    return category;
+    return subCategories;
+  }
+
+  static async delete(categoryId: string) {
+    const category = await this.getCategoryById(categoryId);
+
+    const productIds = category.products.map((product) => product.id);
+    const subCategoryIds = category.subCategories.map(
+      (subCategory) => subCategory.id,
+    );
+
+    return db.$transaction([
+      db.product.deleteMany({ where: { id: { in: productIds } } }),
+      db.category.deleteMany({ where: { id: { in: subCategoryIds } } }),
+      db.category.delete({ where: { id: categoryId } }),
+    ]);
   }
   static async updateBy(categoryId: string, data: Category) {
     const category = await db.category.update({

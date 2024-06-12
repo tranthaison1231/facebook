@@ -12,14 +12,14 @@ router
       status: 200,
     });
   })
-  .post("/", auth, async (c) => {
-    const data = await c.req.json();
-    const product = await ProductsService.addProducts(data);
-    return c.json({
-      data: product,
-      status: 200,
-    });
-  })
+  // .post("/", auth, async (c) => {
+  //   const data = await c.req.json();
+  //   const product = await ProductsService.addProduct(data);
+  //   return c.json({
+  //     data: product,
+  //     status: 200,
+  //   });
+  // })
   .get("/:categoryId", auth, async (c) => {
     const categoryId = c.req.param("categoryId");
     const products = await ProductsService.getProductsById(categoryId);

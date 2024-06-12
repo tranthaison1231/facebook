@@ -1,35 +1,35 @@
 import { getUser, updateMe } from '@/apis/auth'
-import { fetchPostsByUserId } from '@/apis/posts'
 import { useParams } from '@/router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { Pencil, Plus, Camera, Scissors, Clock } from 'lucide-react'
-import { useState } from 'react'
+import { Pencil, Plus, Camera, Scissors, Clock, Minus } from 'lucide-react'
+import { Slider } from '@/components/ui/slider'
+import AvatarEditor from 'react-avatar-editor'
+import { useState, useRef } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { uploadFile } from '@/apis/upload'
+import { cn } from '@/utils/cn'
 
 export default function Component() {
   const { id } = useParams('/:id')
+  const editor = useRef<AvatarEditor | null>(null)
+  const uploadImage = useRef<File | null>(null)
   const [open, setOpen] = useState(false)
-  const [avatar, setAvatar] = useState<File | null>(null)
-
+  const [avatar, setAvatar] = useState<File | Blob | null>(null)
+  const [valueProgess, setValueProgess] = useState(1)
   const clientQuery = useQueryClient()
   const { data: userQuery } = useQuery({
     queryKey: ['user', id],
     queryFn: () => getUser(id)
   })
 
-  const { data: postsQuery } = useQuery({
-    queryKey: ['users', id, 'posts'],
-    queryFn: () => fetchPostsByUserId(id)
-  })
-  console.log(postsQuery)
-  const handleEditAvata = () => {
+  const handleEditAvatar = () => {
     setAvatar(userQuery?.data?.avatar)
   }
   const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) {
       setAvatar(e.target.files[0])
+      uploadImage.current = e.target.files[0]
     }
   }
   const onOpenChange = (isOpen: boolean) => {
@@ -38,11 +38,17 @@ export default function Component() {
     }
     setOpen(isOpen)
   }
+
   const handleUploadS3 = async () => {
     if (avatar !== null) {
       try {
         const formData = new FormData()
-        formData.append('file', avatar)
+        const base64 = editor.current!.getImage().toDataURL()
+        const res = await fetch(base64)
+        const blob = await res.blob()
+
+        formData.append('file', blob)
+
         const data = await uploadFile(formData)
         await updateMe({ avatar: data?.data?.url })
         setOpen(false)
@@ -54,11 +60,48 @@ export default function Component() {
       }
     }
   }
+  const zoomIn = () => {
+    if (valueProgess < 11) {
+      setValueProgess(valueProgess + 1)
+    }
+  }
+  const zoomOut = () => {
+    if (valueProgess > 1) {
+      setValueProgess(valueProgess - 1)
+    }
+  }
+  const handleSliderChange = (value: number[]) => {
+    setValueProgess(value[0])
+  }
+  const handleCutImg = async () => {
+    if (avatar == uploadImage.current) {
+      const base64 = editor.current!.getImage().toDataURL()
+      const res = await fetch(base64)
+      const blob = await res.blob()
+      setAvatar(blob)
+    } else {
+      setAvatar(uploadImage.current)
+    }
+  }
+
   return (
     <div>
       <div className="px-52">
-        <div className="relative mt-2">
-          <img className="h-full max-h-96 w-full rounded-b-md object-cover " src={userQuery?.data?.background} alt="" />
+        <div className="relative ">
+          {userQuery?.data?.background !== null ? (
+            <img
+              className="h-full max-h-96 min-h-80 w-full rounded-b-md object-cover "
+              src={userQuery?.data?.background}
+              alt=""
+            />
+          ) : (
+            <img
+              className="h-full max-h-96 min-h-80 w-full rounded-b-md object-cover "
+              src="https://pbs.twimg.com/media/BtFUrp6CEAEmsml.jpg"
+              alt=""
+            />
+          )}
+
           <button className="absolute bottom-4 right-6 flex gap-2 rounded border-none bg-white px-3 py-2 font-medium hover:bg-gray-200">
             {' '}
             <Camera />
@@ -68,11 +111,19 @@ export default function Component() {
         <div className="-mt-8 px-6">
           <div className="flex items-end  gap-4">
             <div className="relative h-44 min-w-44">
-              <img
-                className="absolute h-44 w-44  rounded-full border-4 border-white "
-                src={userQuery?.data?.avatar}
-                alt=""
-              />
+              {userQuery?.data?.avatar !== null ? (
+                <img
+                  className="absolute h-44 w-44 rounded-full border-4 border-white object-cover "
+                  src={userQuery?.data?.avatar}
+                  alt=""
+                />
+              ) : (
+                <img
+                  className="absolute h-44 w-44 rounded-full border-4 border-white object-cover "
+                  src="https://tse3.explicit.bing.net/th?id=OIP.xTxu9pXFLyCrsK6ZIl5IMwHaEq&pid=Api&P=0&h=180"
+                />
+              )}
+
               <Dialog open={open} onOpenChange={onOpenChange}>
                 <DialogTrigger asChild>
                   <div className=" absolute bottom-0 right-5  w-10 rounded-full bg-gray-300 p-2">
@@ -85,11 +136,39 @@ export default function Component() {
                   </div>
                   {avatar !== null && (
                     <div>
-                      <div className=" border-b-2 border-gray-200 p-4">
+                      <div className=" flex flex-col items-center border-b-2 border-gray-200 p-4">
                         <textarea className="w-full p-4" name="" id="" placeholder="Mô tả"></textarea>
-                        <img className="mt-2 w-full" src={URL.createObjectURL(avatar)} alt="" />
+                        <div className="flex items-center justify-center">
+                          <AvatarEditor
+                            image={URL.createObjectURL(avatar)}
+                            ref={editor}
+                            border={50}
+                            color={[255, 255, 255, 0.6]} // RGBA
+                            scale={valueProgess}
+                            rotate={0}
+                            borderRadius={200}
+                          />
+                        </div>
+                        <div className="flex w-[60%] items-center justify-center ">
+                          <Minus
+                            className={cn('', {
+                              'disabled  opacity-40': valueProgess === 0
+                            })}
+                            onClick={zoomOut}
+                          />
+                          <Slider onValueChange={handleSliderChange} value={[valueProgess]} max={11} min={1} step={1} />
+                          <Plus
+                            className={cn('', {
+                              'opacity-40': valueProgess === 100
+                            })}
+                            onClick={zoomIn}
+                          />
+                        </div>
                         <div className="my-4 flex w-full items-center justify-center gap-2">
-                          <button className="flex items-center justify-center gap-2 rounded-sm bg-gray-200 p-2">
+                          <button
+                            onClick={handleCutImg}
+                            className="flex items-center justify-center gap-2 rounded-sm bg-gray-200 p-2"
+                          >
                             <Scissors className="h-4 w-4" />
                             Cắt ảnh
                           </button>
@@ -133,7 +212,7 @@ export default function Component() {
                         <button className="w-full rounded-sm bg-gray-200 py-2 text-base font-medium">
                           Thêm Khung{' '}
                         </button>
-                        <button onClick={handleEditAvata} className="rounded-sm bg-gray-200 px-4 py-2">
+                        <button onClick={handleEditAvatar} className="rounded-sm bg-gray-200 px-4 py-2">
                           <Pencil />
                         </button>
                       </div>
@@ -267,7 +346,9 @@ export default function Component() {
             </div>
             <div className="flex w-full items-end justify-between gap-4 pb-4">
               <div className="flex flex-col gap-1">
-                <h2 className="text-3xl font-bold">{userQuery?.data?.fullName}</h2>
+                <h2 className="text-3xl font-bold">
+                  {userQuery?.data?.firstName} {userQuery?.data?.lastName}
+                </h2>
                 <p className="font-medium text-gray-500">626 bạn bè</p>
                 <div>
                   <img className="h-10 w-10 rounded-full border-2 border-white" src={userQuery?.data?.avatar} alt="" />

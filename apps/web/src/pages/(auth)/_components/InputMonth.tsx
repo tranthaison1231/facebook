@@ -1,30 +1,23 @@
-import * as React from "react"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import * as React from 'react'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 interface InputMonthProps {
-  className: string;
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void; // Thêm prop onChange
+  className: string
+  value: string
+  onChange: (value: string) => void
 }
 
-export function InputMonth({ className }: InputMonthProps) {
-  const days = Array.from({ length: 12 }, (_, index) => index + 1);
+export function InputMonth({ className, value, onChange }: InputMonthProps) {
+  const days = Array.from({ length: 12 }, (_, index) => index + 1)
 
   return (
-    <Select>
+    <Select onValueChange={onChange}>
       <SelectTrigger className={className}>
-        <SelectValue placeholder="1" />
+        <SelectValue placeholder={value} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          {days.map((day) => (
+          {days.map(day => (
             <SelectItem key={day} value={day.toString()}>
               Tháng {day}
             </SelectItem>

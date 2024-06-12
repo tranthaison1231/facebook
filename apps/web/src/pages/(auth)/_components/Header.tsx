@@ -1,6 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-import FaceBookIcon from '@/assets/images/facebook-logo.png'
 import { Input } from '@/components/ui/input'
 import { User } from '@/apis/auth'
 
@@ -31,6 +30,9 @@ import { Button } from '@/components/ui/button'
 import { useRef, useState } from 'react'
 import UserProfile from './UserProfile'
 import Notification from './Notification'
+import { removeToken } from '@/utils/token'
+import { useQuery } from '@tanstack/react-query'
+import { Page, getPages } from '@/apis/pages'
 
 interface Props {
   user: User
@@ -72,10 +74,20 @@ export default function Header({ user }: Props) {
   const currentPath = useLocation().pathname
   const inputRef = useRef<HTMLInputElement>(null)
 
+  const { data } = useQuery({
+    queryKey: ['pages'],
+    queryFn: getPages
+  })
+  console.log(data)
+
   const onSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       navigate(`search/people?q=${inputRef.current?.value}`)
     }
+  }
+  const logOut = () => {
+    removeToken()
+    navigate(`/login`)
   }
 
   console.log(currentPath)
@@ -84,9 +96,13 @@ export default function Header({ user }: Props) {
       'hidden': currentPath.includes('/marketplace/create') 
     })}>
       <div>
-        <div className=" flex max-h-10 space-x-3">
+        <div className=" flex max-h-10 items-center justify-center space-x-3">
           <Link to={'/'}>
-            <img className=" w-12" src={`${FaceBookIcon}`} alt="" />
+            <img
+              src="https://1.bp.blogspot.com/-S8HTBQqmfcs/XN0ACIRD9PI/AAAAAAAAAlo/FLhccuLdMfIFLhocRjWqsr9cVGdTN_8sgCPcBGAYYCw/s1600/f_logo_RGB-Blue_1024.png"
+              alt=""
+              className="h-10 w-10"
+            />
           </Link>
           <div className="flex min-w-60 items-center justify-center space-x-1 rounded-full border bg-secondary-foreground p-2 px-2">
             <Search />
@@ -168,17 +184,20 @@ export default function Header({ user }: Props) {
                   className="flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200"
                 >
                   <img src={`${user?.avatar}`} alt="avatar" className="h-9 w-9 rounded-full" />
-                  <p className="text-lg">{user?.fullName}</p>
+                  <p className="text-lg">
+                    {user?.firstName} {user?.lastName}
+                  </p>
                 </Link>
                 <hr className=" h-3/4 w-full bg-secondary-foreground" />
-                <div className="flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200">
-                  <img
-                    src="https://scontent.fsgn5-2.fna.fbcdn.net/v/t39.30808-6/287783869_177078658070053_1098275628170852232_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_ohc=FexHRjMt5YwAX_2Foh4&_nc_ht=scontent.fsgn5-2.fna&oh=00_AfDo0hiA4XwHCRH8gA45Fugs6dx7LC9Qjpl25P59c9TrkA&oe=65F08F5B"
-                    alt="avatar"
-                    className="h-9 w-9 rounded-full"
-                  />
-                  <p className="text-lg">Ban quyền lực E21CQCN01-N</p>
-                </div>
+                {data?.data?.map((item: Page) => (
+                  <div
+                    key={item.id}
+                    className="flex w-full cursor-pointer items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200"
+                  >
+                    <img src={item.avatar} alt="avatar" className="h-9 w-9 min-w-9 rounded-full object-cover" />
+                    <p className="text-lg">{item.name}</p>
+                  </div>
+                ))}
                 <hr className=" h-3/4 w-full bg-secondary-foreground" />
                 <Button className="flex w-full space-x-2 rounded-sm bg-[#e4e6eb] text-black hover:bg-[#e4e6eb] hover:opacity-80">
                   <UserRoundSearch />
@@ -187,14 +206,21 @@ export default function Header({ user }: Props) {
               </div>
               <ul className=" mt-4 font-semibold text-black">
                 {FEATURES.map(item => (
-                  <li className=" flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200">
+                  <li
+                    key={item.content}
+                    className=" flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200"
+                  >
                     {item.icon}
                     <p>{item.content}</p>
                     {item.arrow}
                   </li>
                 ))}
-                <li className=" flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200">
+                <li
+                  onClick={logOut}
+                  className="flex w-full cursor-pointer items-center justify-start gap-4 space-x-3 rounded-md p-2 hover:bg-slate-200"
+                >
                   <LogOut />
+                  Đăng xuất
                   <UserProfile />
                 </li>
               </ul>

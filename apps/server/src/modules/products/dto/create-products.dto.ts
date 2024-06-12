@@ -8,6 +8,9 @@ export const createProductDto = z.object({
   price: z.number().optional(),
   images: z.array(z.string()).optional(),
   location: z.string().optional(),
+  categoryId: z.string({
+    required_error: "CategoryId is required",
+  })
 });
 
 export type CreateProductDto = z.infer<typeof createProductDto>;

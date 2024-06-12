@@ -37,7 +37,6 @@ const SIDE_BAR = [
 
 function Marketplace() {
   const navigate = useNavigate()
- 
   const inputRef = useRef<HTMLInputElement>(null)
   const onSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {

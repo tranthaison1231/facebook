@@ -1,25 +1,9 @@
 import { Gift, Search, Plus } from 'lucide-react'
 
 export default function FriendList() {
-  const LIST = [
-    {
-      avata: null,
-      name: 'Đàm thoại tin'
-    }
-  ]
-  for (let i = 0; i <= 10; i++) {
-    LIST.push({
-      avata: null,
-      name: 'Đàm thoại tin'
-    })
-  }
-  const GROUP = []
-  for (let i = 0; i <= 3; i++) {
-    GROUP.push({
-      avata: null,
-      name: 'Groups'
-    })
-  }
+  const LIST: { avatar: string; name: string }[] = []
+
+  const GROUP: { avatar: string; name: string }[] = []
 
   return (
     <div className={`fixed right-0 h-screen  max-w-72  border-none bg-[#f0f2f5] text-[#050505]  `}>
@@ -56,9 +40,9 @@ export default function FriendList() {
           </div>
 
           {LIST.map(item => (
-            <div className="flex items-center gap-2 rounded-sm p-2 hover:bg-gray-200" key={item.avata}>
-              {item.avata !== null ? (
-                <img className="h-8 w-8" src={item.avata} alt="" />
+            <div className="flex items-center gap-2 rounded-sm p-2 hover:bg-gray-200" key={item.avatar}>
+              {item.avatar !== null ? (
+                <img className="h-8 w-8" src={item.avatar} alt="" />
               ) : (
                 <img
                   className="h-8 w-8 rounded-full"
@@ -85,9 +69,9 @@ export default function FriendList() {
         <div className="mb-8 mt-2 border-b-2 border-gray-300">
           <h3 className=" my-2 px-2 text-lg font-bold text-gray-500">Cuộc trò truyện nhóm</h3>
           {GROUP.map(item => (
-            <div className="flex items-center gap-2 rounded-sm p-2 hover:bg-gray-200" key={item.avata}>
-              {item.avata !== null ? (
-                <img className="h-8 w-8" src={item.avata} alt="" />
+            <div className="flex items-center gap-2 rounded-sm p-2 hover:bg-gray-200" key={item.avatar}>
+              {item.avatar !== null ? (
+                <img className="h-8 w-8" src={item.avatar} alt="" />
               ) : (
                 <img
                   className="h-8 w-8 rounded-full"
