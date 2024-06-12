@@ -8,7 +8,7 @@ export type Path =
   | `/:id`
   | `/:id/about`
   | `/:id/friends`
-  | `/:id/posts/:id`
+  | `/:id/posts/:postId`
   | `/friends`
   | `/groups/discover`
   | `/groups/feed`
@@ -30,7 +30,7 @@ export type Params = {
   '/:id': { id: string }
   '/:id/about': { id: string }
   '/:id/friends': { id: string }
-  '/:id/posts/:id': { id: string; id: string }
+  '/:id/posts/:postId': { id: string; postId: string }
   '/marketplace/category/:id': { id: string }
 }
 

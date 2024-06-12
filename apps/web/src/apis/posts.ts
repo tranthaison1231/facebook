@@ -7,6 +7,11 @@ interface CreatePost {
   media: string[]
 }
 
+export const fetechPostById = async (postId: string) => {
+  const res = await request.get(`/posts/${postId}`)
+  return res.data.data
+}
+
 export const fetchPostsByUserId = async (userId: string) => {
   const res = await request.get(`/users/${userId}/posts`)
   return res.data

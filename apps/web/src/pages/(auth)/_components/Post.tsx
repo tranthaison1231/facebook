@@ -14,6 +14,7 @@ import { Comment } from './Comment'
 import { useLocation, useOutletContext } from 'react-router-dom'
 import { toast } from 'sonner'
 import { User } from '@/apis/auth'
+import { formatName } from '@/utils/name'
 
 const Extrafunction = [
   {
@@ -42,7 +43,7 @@ interface PostProps {
   post: IPost
 }
 
-export default function Post({ post }: PostProps) {
+export default function Post({ post = {} }: PostProps) {
   const { me } = useOutletContext<{ me: User }>()
 
   const { data: commentsQuery } = useQuery({
@@ -86,9 +87,9 @@ export default function Post({ post }: PostProps) {
     <article className="w-full rounded-lg bg-white" key={post.id}>
       <div className=" flex items-center justify-between p-3">
         <div className="flex space-x-2">
-          <img src={post.user.avatar} alt="" className="size-10 rounded-full" />
+          <img src={post.user?.avatar} alt="" className="size-10 rounded-full" />
           <div className="flex flex-col justify-start">
-            <p className="font-bold">{post.user.firstName + ' ' + post.user.lastName} </p>
+            <p className="font-bold">{formatName(post.user)} </p>
             <p>{dayjs(post.createdAt).fromNow()}</p>
           </div>
         </div>
@@ -140,7 +141,7 @@ export default function Post({ post }: PostProps) {
             <img src={`${Love2}`} alt="" className=" h-4 w-4" />
             <img src={`${Like}`} alt="" className=" h-4 w-4" />
           </div>
-          <p>{post.likes.length}</p>
+          <p>{post.likes?.length}</p>
         </div>
         <p>{commentsQuery?.length ?? 0} comments</p>
       </div>
