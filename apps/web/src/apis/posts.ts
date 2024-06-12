@@ -4,6 +4,7 @@ import { Comment } from './comments'
 
 interface CreatePost {
   content: string
+  publishType: string
   media: string[]
 }
 
