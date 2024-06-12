@@ -23,6 +23,25 @@ export class PostsService {
 
     return posts;
   }
+
+  static async getPostById(id: string) {
+    const post = await db.post.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        user: true,
+        likes: true,
+        comments: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+    return post;
+  }
+
   static async getPosts({ limit = 10, page = 1, startingId }: GetAllPostsArgs) {
     const posts = await db.post.findMany({
       skip: (page - 1) * limit,

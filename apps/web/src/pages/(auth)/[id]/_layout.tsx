@@ -10,7 +10,7 @@ import { Link, Outlet } from 'react-router-dom'
 import { uploadFile } from '@/apis/upload'
 import { cn } from '@/utils/cn'
 
-export default function Component() {
+export default function Layout() {
   const { id } = useParams('/:id')
   const editor = useRef<AvatarEditor | null>(null)
   const uploadImage = useRef<File | null>(null)

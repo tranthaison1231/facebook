@@ -1,4 +1,4 @@
-import { Heart, MessageCircle, MoreHorizontal, MoveDown, Share } from 'lucide-react'
+import { Heart, Link, MessageCircle, MoreHorizontal, MoveDown, Share } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '@/components/ui/dropdown-menu'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -11,6 +11,9 @@ import { CommentInput } from './CommentInput'
 import { useQuery } from '@tanstack/react-query'
 import { Comment as IComment, getComments } from '@/apis/comments'
 import { Comment } from './Comment'
+import { useLocation, useOutletContext } from 'react-router-dom'
+import { toast } from 'sonner'
+import { User } from '@/apis/auth'
 
 const Extrafunction = [
   {
@@ -40,10 +43,44 @@ interface PostProps {
 }
 
 export default function Post({ post }: PostProps) {
+  const { me } = useOutletContext<{ me: User }>()
+
   const { data: commentsQuery } = useQuery({
     queryKey: ['comments', post.id],
     queryFn: () => getComments(post.id)
   })
+
+  const handleCopy = async () => {
+    try {
+      const content = `${window.location.origin}/${me.id}/posts/${post.id}`
+      await navigator.clipboard.writeText(content)
+      toast.success('Copied to clipboard', {
+        position: 'bottom-left'
+      })
+    } catch (error) {
+      console.error('Failed to copy:', error)
+    }
+  }
+
+  const actions = [
+    {
+      icon: <Heart />,
+      name: 'Thích'
+    },
+    {
+      icon: <MessageCircle />,
+      name: 'Bình luận'
+    },
+    {
+      icon: <Link />,
+      name: 'Copy',
+      onClick: handleCopy
+    },
+    {
+      icon: <Share />,
+      name: 'Chia sẻ'
+    }
+  ]
 
   return (
     <article className="w-full rounded-lg bg-white" key={post.id}>
@@ -110,18 +147,16 @@ export default function Post({ post }: PostProps) {
       <hr />
 
       <div className="flex justify-between px-5">
-        <Button className="flex items-center space-x-2 bg-white text-secondaryColor hover:bg-[#e1e4ea]">
-          <Heart />
-          Thích
-        </Button>
-        <Button className="flex items-center space-x-2 bg-white text-secondaryColor hover:bg-[#e1e4ea]">
-          <MessageCircle />
-          Bình luận
-        </Button>
-        <Button className="flex items-center space-x-2 bg-white text-secondaryColor hover:bg-[#e1e4ea]">
-          <Share />
-          Chia sẻ
-        </Button>
+        {actions.map(action => (
+          <Button
+            key={action.name}
+            onClick={action.onClick}
+            className="flex items-center gap-2 space-x-2 bg-white text-secondaryColor hover:bg-[#e1e4ea]"
+          >
+            {action.icon}
+            {action.name}
+          </Button>
+        ))}
       </div>
       <hr />
       <div className="p-4">
