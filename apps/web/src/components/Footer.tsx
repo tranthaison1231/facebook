@@ -1,4 +1,4 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 
 const CATEGORIES = [
   {
@@ -80,11 +80,7 @@ const CATEGORIES = [
   }
 ]
 
-
 export default function Footer() {
-
- 
-
   return (
     <div className=" bg-gray-100">
       <div className="grid grid-cols-[302px_1208px_302px] px-20 py-12">

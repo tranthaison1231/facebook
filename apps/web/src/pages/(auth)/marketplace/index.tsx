@@ -1,12 +1,10 @@
 import { fetchCategories } from '@/apis/categories'
 import { fetchProducts } from '@/apis/products'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+
 import { useQuery } from '@tanstack/react-query'
-import clsx from 'clsx'
-import { BaggageClaim, Bell, Mails, Search, Settings, Store } from 'lucide-react'
+import { BaggageClaim, Bell, Mails,  Store } from 'lucide-react'
 import React, { useRef } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const SIDE_BAR = [
   {
@@ -38,7 +36,7 @@ const SIDE_BAR = [
 
 function Marketplace() {
   const navigate = useNavigate()
-  const currentPath = useLocation().pathname
+
   const inputRef = useRef<HTMLInputElement>(null)
   const onSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {

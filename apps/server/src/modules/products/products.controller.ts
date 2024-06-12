@@ -14,7 +14,7 @@ router
   })
   .post("/", auth, async (c) => {
     const data = await c.req.json();
-    const product = await ProductsService.addProducts(data);
+    const product = await ProductsService.addProduct(data);
     return c.json({
       data: product,
       status: 200,

@@ -2,17 +2,15 @@ import { Hono } from "hono";
 import { serve } from "@hono/node-server";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
-import { router as auth } from "./modules/auth/auth.controller";
-import { router as categories } from "./modules/categories/categories.controller";
-import { router as rooms } from "./modules/rooms/rooms.controller";
-import { router as users } from "./modules/users/users.controller";
-import { router as reviews } from "./modules/reviews/reviews.controller";
+import { router as authRouter } from "./modules/auth/auth.controller";
+import { router as categoriesRouter } from "./modules/categories/categories.controller";
+import { router as usersRouter } from "./modules/users/users.controller";
 import { router as uploadRouter } from "./modules/upload/upload.controller";
-import { router as posts } from "./modules/posts/posts.controller";
-import { router as products } from "./modules/products/products.controller";
-import { router as groups } from "./modules/groups/groups.controller";
+import { router as postsRouter } from "./modules/posts/posts.controller";
+import { router as productsRouter } from "./modules/products/products.controller";
+import { router as groupsRouter } from "./modules/groups/groups.controller";
 import { errorFilter } from "./lib/error-filter";
-import { auth as checkAuth } from "./middlewares/auth";
+import { auth } from "./middlewares/auth";
 
 const app = new Hono().basePath("/api");
 
@@ -22,22 +20,19 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://airbnb-clone-nu-rouge.vercel.app", 
+      "https://airbnb-clone-nu-rouge.vercel.app",
     ],
     credentials: true,
   }),
 );
 
-app.route("/", auth);
-app.route("/categories", categories);
-app.route("/reviews", reviews);
-app.route("/rooms", rooms);
-app.route("/users", users);
-app.route("/posts", posts);
-app.route("/products", products);
-app.route("/groups", groups);
-
-app.route("/upload", uploadRouter);
+app.route("/", authRouter);
+app.route("/categories", categoriesRouter);
+app.route("/users", usersRouter);
+app.route("/posts", postsRouter);
+app.route("/products", productsRouter);
+app.route("/groups", groupsRouter);
+app.all("*", auth).route("/upload", uploadRouter);
 
 app.notFound((c) => {
   return c.json(

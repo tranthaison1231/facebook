@@ -7,11 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
 model Category {
-  id       String    @id
-  name     String    @unique
-  icon     String?
-  products Product[]
+  id               String     @id @default(cuid())
+  name             String     @unique
+  icon             String?
+  products         Product[]
+  subCategories    Category[] @relation("SubCategories")
+  parentCategory   Category?  @relation("SubCategories", fields: [parentCategoryId], references: [id])
+  parentCategoryId String?
+
   @@map("categories")
 }
 
@@ -31,11 +39,43 @@ model User {
   workAt      String?
   address     String?
   posts       Post[]
-  groups      GroupsOnUser[]
+  userGroups  GroupsOnUser[]
   groupsRoles RolesOnGroup[]
-  Group       Group[]
+  groups      Group[]
+  page        Page?          @relation(fields: [pageId], references: [id])
+  pageId      String?
+  stories     Story[]
+  likes       Like[]
+  comments    Comment[]
 
   @@map("users")
+}
+
+model Story {
+  id        String   @id @default(cuid())
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  content   String?
+  media     String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("stories")
+}
+
+model Page {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  avatar      String?
+  cover       String?
+  followers   User[]
+  posts       Post[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("pages")
 }
 
 enum PublishType {
@@ -64,26 +104,69 @@ model Post {
   userId      String?
   content     String?
   location    String?
-  media       String[]
+  media       Json?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   publishType PublishType @default(PUBLIC)
+  isDeleted   Boolean     @default(false)
+  page        Page?       @relation(fields: [pageId], references: [id])
+  pageId      String?
+  likes       Like[]
+  comments    Comment[]
 
   @@index([userId])
   @@map("posts")
 }
 
+model Comment {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  content   String
+  media     Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, postId])
+  @@map("comments")
+}
+
+enum TypeOfLike {
+  LIKE
+  LOVE
+  CARE
+  HAHA
+  WOW
+  SAD
+  ANGRY
+}
+
+model Like {
+  id     String     @id @default(cuid())
+  user   User       @relation(fields: [userId], references: [id])
+  userId String
+  post   Post       @relation(fields: [postId], references: [id])
+  postId String
+  type   TypeOfLike
+
+  @@index([userId, postId])
+  @@map("likes")
+}
+
 model Product {
   id          String   @id @default(cuid())
-  categoryId  String // Khai báo trường này để lưu trữ ID của Category
+  categoryId  String
   category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   name        String?
   price       Int?
   description String?
   location    String?
-  img         String?
+  images      Json?
 
   @@index([categoryId])
+  @@map("products")
 }
 
 model Group {

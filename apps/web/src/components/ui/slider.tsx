@@ -14,9 +14,9 @@ const Slider = React.forwardRef<React.ElementRef<typeof SliderPrimitive.Root>, S
       {...props}
     >
       <SliderPrimitive.Track className="relative h-1 w-full grow overflow-hidden rounded-full bg-secondary">
-        <SliderPrimitive.Range className="absolute h-full bg-black" />
+        <SliderPrimitive.Range className="absolute h-full bg-blue-600" />
       </SliderPrimitive.Track>
-      <SliderPrimitive.Thumb className="group relative block h-6 w-6 cursor-pointer rounded-full bg-black outline-none transition-colors active:scale-125 disabled:pointer-events-none disabled:opacity-50">
+      <SliderPrimitive.Thumb className="group relative block h-5 w-5 cursor-pointer rounded-full border-2 border-gray-400 bg-white outline-none transition-colors active:scale-125 disabled:pointer-events-none disabled:opacity-50">
         {tooltipValue && (
           <div className="absolute bottom-8 right-0 hidden w-24 translate-x-1/3 rounded-full bg-black p-0.5 text-white group-active:block">
             {tooltipValue}
