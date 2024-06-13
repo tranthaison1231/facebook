@@ -1,6 +1,7 @@
 import { request } from '@/utils/request'
 
 export interface Category {
+  parentCategoryId: string
   path: string
   id: string
   name: string

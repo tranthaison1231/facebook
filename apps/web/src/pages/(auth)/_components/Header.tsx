@@ -27,7 +27,7 @@ import {
   UsersRound
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import UserProfile from './UserProfile'
 import Notification from './Notification'
 import { removeToken } from '@/utils/token'
@@ -90,8 +90,11 @@ export default function Header({ user }: Props) {
     navigate(`/login`)
   }
 
+  console.log(currentPath)
   return (
-    <div className=" fixed top-0 z-10 flex w-full flex-row justify-between border bg-white p-2 shadow-md ">
+    <div className={clsx("fixed top-0 z-10 flex w-full flex-row justify-between border bg-white px-4 py-4 shadow-md",{
+      'hidden': currentPath.includes('/marketplace/create') 
+    })}>
       <div>
         <div className=" flex max-h-10 items-center justify-center space-x-3">
           <Link to={'/'}>

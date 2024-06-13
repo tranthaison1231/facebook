@@ -6,7 +6,7 @@ export default function FriendList() {
   const GROUP: { avatar: string; name: string }[] = []
 
   return (
-    <div className={`fixed right-0   h-screen  max-w-72  border-none bg-[#f0f2f5] text-[#050505]  `}>
+    <div className={`fixed right-0 h-screen  max-w-72  border-none bg-[#f0f2f5] text-[#050505]  `}>
       <div className=" flex max-h-full flex-col overflow-scroll">
         <div className="mt-4 border-b-2 border-gray-300">
           <h3 className=" my-2 px-2 text-lg font-bold text-gray-500">Sinh nhật</h3>

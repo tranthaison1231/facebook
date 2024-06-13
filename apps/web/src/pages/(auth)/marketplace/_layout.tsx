@@ -3,7 +3,10 @@ import { Navigate, Outlet } from 'react-router-dom'
 
 import { getMe } from '@/apis/auth'
 import { getToken } from '@/utils/token'
-import SideBar from './_component/SideBar'
+import LeftSideBar from './_component/LeftSideBar'
+
+
+
 
 export default function Component() {
   const { data: meQuery } = useQuery({
@@ -14,9 +17,8 @@ export default function Component() {
   if (!accessToken) return <Navigate to="/login" />
 
   return (
-    <div className="flex ">
-      <SideBar />
-      <div className="w-full bg-[#f0f2f5] p-8">
+    <div className="w-full">
+      <div className=' w-full '>
         <Outlet context={{ me: meQuery?.data }} />
       </div>
     </div>

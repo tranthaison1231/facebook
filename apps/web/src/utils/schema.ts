@@ -68,4 +68,10 @@ export const createRoomSchema = z.object({
   price: z.coerce.number().min(1, { message: 'Price is required' }),
   location: z.string().min(1, { message: 'Location is required' }),
   description: z.string().min(1, { message: 'Description is required' })
-});
+})
+
+
+export const marketPlace = z.object({
+  price: z.coerce.number().min(1, { message: 'Price is required' }),
+  
+})

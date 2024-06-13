@@ -10,7 +10,7 @@ export const router = new Hono();
 
 router
   .get("/", async (c) => {
-    const categories = await CategoriesService.getAll();
+    const categories = await CategoriesService.getAllParentCategory();
     return c.json({
       data: categories,
       status: 200,

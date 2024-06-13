@@ -7,8 +7,8 @@ export default function Dashboard() {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="mt-4 flex w-full justify-center">
-        <div className=" w-full bg-[#f0f2f5]">
+      <div className="flex w-full justify-center">
+        <div className=" w-full bg-[#f0f2f5] ">
           <div className="mx-auto flex h-full w-[590px] flex-col items-center ">
             {/* <Stories /> */}
             <PostList />

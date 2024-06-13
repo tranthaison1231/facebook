@@ -2,8 +2,12 @@ import { db } from "@/lib/db";
 import { type Category } from "@prisma/client";
 
 export class CategoriesService {
-  static async getAll() {
-    const data = await db.category.findMany({});
+  static async getAllParentCategory() {
+    const data = await db.category.findMany({
+      where:{
+        parentCategoryId:null
+      }
+    });
     return data;
   }
 

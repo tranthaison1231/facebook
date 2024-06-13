@@ -3,6 +3,13 @@ import { CreateProductDto } from "./dto/create-products.dto";
 import { NotFoundException } from "@/lib/exceptions";
 
 export class ProductsService {
+  static getProductsById(categoryId: string) {
+    return db.product.findMany({
+      where: {
+        categoryId,
+      },
+    });
+  }
   static async getAllBy({ categoryId }: { categoryId?: string }) {
     const products = await db.product.findMany({
       where: {
