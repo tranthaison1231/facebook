@@ -3,12 +3,12 @@ import groupTest from '@/assets/images/group-test.jpg'
 import { Button } from '@/components/ui/button'
 
 export default function Joins() {
-  const groups = useOutletContext()
+  const groups: { data: any[] } = useOutletContext()
   const totalGroup = groups?.data.length
   return (
-    <div className="w-full px-32">
+    <div className="">
       <p className="my-3">Tất cả các nhóm mà bạn đã tham gia ({totalGroup})</p>
-      <div className="grid grid-cols-3 gap-5">
+      <div className="flex flex-wrap gap-3">
         {groups?.data.map(group => (
           <div key={group.id} className="flex flex-col gap-5 rounded-lg bg-white p-4">
             <div className="flex items-center gap-5">
