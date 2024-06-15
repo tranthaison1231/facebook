@@ -24,15 +24,17 @@ import {
   Search,
   Settings,
   UserRoundSearch,
-  UsersRound
+  UsersRound,
+  X
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import UserProfile from './UserProfile'
 import Notification from './Notification'
 import { removeToken } from '@/utils/token'
 import { useQuery } from '@tanstack/react-query'
 import { Page, getPages } from '@/apis/pages'
+import { cn } from '@/utils/cn'
 
 interface Props {
   user: User
@@ -78,7 +80,6 @@ export default function Header({ user }: Props) {
     queryKey: ['pages'],
     queryFn: getPages
   })
-  console.log(data)
 
   const onSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -90,13 +91,22 @@ export default function Header({ user }: Props) {
     navigate(`/login`)
   }
 
-  console.log(currentPath)
+  const pathCreateGroup = currentPath.includes('/groups/create')
+
   return (
-    <div className={clsx("fixed top-0 z-10 flex w-full flex-row justify-between border bg-white px-4 py-4 shadow-md",{
-      'hidden': currentPath.includes('/marketplace/create') 
-    })}>
-      <div>
-        <div className=" flex max-h-10 items-center justify-center space-x-3">
+    <div
+      className={cn('fixed top-0 z-10 flex w-full flex-row justify-between border bg-white px-4 py-4 shadow-md', {
+        hidden: currentPath.includes('/marketplace/create'),
+        'border-none bg-inherit shadow-none': pathCreateGroup
+      })}
+    >
+      <div className={cn({ '-ml-4 -mt-4 flex w-90 border bg-white px-4 py-4 shadow-md': pathCreateGroup })}>
+        <div className="flex max-h-10 items-center justify-center space-x-3">
+          <div className={cn('hidden', { 'flex justify-center items-center h-10 w-10': pathCreateGroup })}>
+            <div className="hover:bg-hover flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-secondaryColor text-secondary-foreground hover:text-secondaryColor active:h-9 active:w-9">
+              <X />
+            </div>
+          </div>
           <Link to={'/'}>
             <img
               src="https://1.bp.blogspot.com/-S8HTBQqmfcs/XN0ACIRD9PI/AAAAAAAAAlo/FLhccuLdMfIFLhocRjWqsr9cVGdTN_8sgCPcBGAYYCw/s1600/f_logo_RGB-Blue_1024.png"
@@ -104,20 +114,20 @@ export default function Header({ user }: Props) {
               className="h-10 w-10"
             />
           </Link>
-          <div className="flex min-w-60 items-center justify-center space-x-1 rounded-full border bg-secondary-foreground p-2 px-2">
+          <div
+            className={cn(
+              'flex min-w-60 items-center justify-center space-x-1 rounded-full border bg-secondary-foreground p-2 px-2',
+              { hidden: pathCreateGroup }
+            )}
+          >
             <Search />
 
-            <Input
-              placeholder="Search..."
-              className=" border-none bg-transparent "
-              onKeyDown={onSearch}
-              ref={inputRef}
-            />
+            <Input placeholder="Search..." className="border-none bg-transparent" onKeyDown={onSearch} ref={inputRef} />
           </div>
         </div>
       </div>
-      <div className="">
-        <ul className=" flex flex-row">
+      <div className={cn({ hidden: pathCreateGroup })}>
+        <ul className="flex flex-row">
           {ICON_FEATURES.map(item => (
             <Link to={`${item.path}`} key={item.title} className={clsx('', {})}>
               <li
@@ -132,10 +142,10 @@ export default function Header({ user }: Props) {
         </ul>
       </div>
 
-      <ul className=" flex flex-row space-x-3">
-        <li className="relative  flex h-10 w-10 cursor-pointer items-center justify-center gap-4 rounded-full bg-secondary-foreground ">
+      <ul className="flex flex-row space-x-3">
+        <li className="relative flex h-10 w-10 cursor-pointer items-center justify-center gap-4 rounded-full bg-secondary-foreground">
           <DropdownMenu>
-            <DropdownMenuTrigger className=" rounded-full">{ICON_MESSAGE[0].icon}</DropdownMenuTrigger>
+            <DropdownMenuTrigger className="rounded-full">{ICON_MESSAGE[0].icon}</DropdownMenuTrigger>
             <DropdownMenuContent className="w-90 hover:bg-white">
               <DropdownMenuLabel>FEATURES</DropdownMenuLabel>
               <DropdownMenuSeparator />
@@ -146,9 +156,9 @@ export default function Header({ user }: Props) {
           </DropdownMenu>
         </li>
 
-        <li className="relative  flex h-10 w-10 cursor-pointer items-center justify-center gap-4 rounded-full bg-secondary-foreground">
+        <li className="relative flex h-10 w-10 cursor-pointer items-center justify-center gap-4 rounded-full bg-secondary-foreground">
           <DropdownMenu>
-            <DropdownMenuTrigger className=" rounded-full">{ICON_MESSAGE[1].icon}</DropdownMenuTrigger>
+            <DropdownMenuTrigger className="rounded-full">{ICON_MESSAGE[1].icon}</DropdownMenuTrigger>
             <DropdownMenuContent className="w-90 hover:bg-white">
               <DropdownMenuLabel>THÔNG BÁO</DropdownMenuLabel>
               <DropdownMenuSeparator />
@@ -159,10 +169,10 @@ export default function Header({ user }: Props) {
           </DropdownMenu>
         </li>
 
-        <li className="relative  flex h-10 w-10 cursor-pointer items-center justify-center gap-4 rounded-full bg-secondary-foreground">
+        <li className="relative flex h-10 w-10 cursor-pointer items-center justify-center gap-4 rounded-full bg-secondary-foreground">
           <DropdownMenu>
-            <DropdownMenuTrigger className=" rounded-full">{ICON_MESSAGE[2].icon}</DropdownMenuTrigger>
-            <DropdownMenuContent className=" hover:bg-white">
+            <DropdownMenuTrigger className="rounded-full">{ICON_MESSAGE[2].icon}</DropdownMenuTrigger>
+            <DropdownMenuContent className="hover:bg-white">
               <Notification />
             </DropdownMenuContent>
           </DropdownMenu>
@@ -177,8 +187,8 @@ export default function Header({ user }: Props) {
                 <UsersRound />
               )}
             </DropdownMenuTrigger>
-            <DropdownMenuContent className=" w-96 p-4 hover:bg-white ">
-              <div className="flex flex-col items-start justify-start space-y-2 rounded-lg p-4 font-semibold text-black shadow-lg shadow-gray-300 ">
+            <DropdownMenuContent className="w-96 p-4 hover:bg-white">
+              <div className="flex flex-col items-start justify-start space-y-2 rounded-lg p-4 font-semibold text-black shadow-lg shadow-gray-300">
                 <Link
                   to={`/${user?.id}`}
                   className="flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200"
@@ -188,7 +198,7 @@ export default function Header({ user }: Props) {
                     {user?.firstName} {user?.lastName}
                   </p>
                 </Link>
-                <hr className=" h-3/4 w-full bg-secondary-foreground" />
+                <hr className="h-3/4 w-full bg-secondary-foreground" />
                 {data?.data?.map((item: Page) => (
                   <div
                     key={item.id}
@@ -198,17 +208,17 @@ export default function Header({ user }: Props) {
                     <p className="text-lg">{item.name}</p>
                   </div>
                 ))}
-                <hr className=" h-3/4 w-full bg-secondary-foreground" />
+                <hr className="h-3/4 w-full bg-secondary-foreground" />
                 <Button className="flex w-full space-x-2 rounded-sm bg-[#e4e6eb] text-black hover:bg-[#e4e6eb] hover:opacity-80">
                   <UserRoundSearch />
                   <p> Xem tất cả ở trang cá nhân</p>
                 </Button>
               </div>
-              <ul className=" mt-4 font-semibold text-black">
+              <ul className="mt-4 font-semibold text-black">
                 {FEATURES.map(item => (
                   <li
                     key={item.content}
-                    className=" flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200"
+                    className="flex w-full items-center justify-start space-x-3 rounded-md p-2 hover:bg-slate-200"
                   >
                     {item.icon}
                     <p>{item.content}</p>
