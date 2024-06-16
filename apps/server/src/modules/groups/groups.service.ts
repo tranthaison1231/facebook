@@ -5,7 +5,7 @@ import { BadRequestException } from '@/lib/exceptions';
 export const GroupsService = {
   getAll: async () => {
     const groups = await db.group.findMany({
-      include: { users: { select: { userId: true } } },
+      include: { RolesOnGroup: {select: {userId:true, role:true}} },
     });
     return groups;
   },
@@ -16,7 +16,7 @@ export const GroupsService = {
     const user = await db.user.findFirst({
       where: { id: createdGroup.userId },
     });
-    console.log(user);
+
     if (groupExist) {
       throw new BadRequestException("Group's name already exists");
     }
@@ -30,7 +30,15 @@ export const GroupsService = {
           groupId: group.id,
           userId: user.id,
         },
+      
       });
+      await db.rolesOnGroup.create({
+        data: {
+          groupId: group.id,
+          userId: user.id,
+          role: 'ADMIN',
+        },
+      })
     }
     return group;
   },
