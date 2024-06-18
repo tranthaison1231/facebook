@@ -102,11 +102,11 @@ export default function Header({ user }: Props) {
     >
       <div className={cn({ '-ml-4 -mt-4 flex w-90 border bg-white px-4 py-4 shadow-md': pathCreateGroup })}>
         <div className="flex max-h-10 items-center justify-center space-x-3">
-          <div className={cn('hidden', { 'flex justify-center items-center h-10 w-10': pathCreateGroup })}>
+          <Link to={'/groups'} className={cn('hidden', { 'flex justify-center items-center h-10 w-10': pathCreateGroup })}>
             <div className="hover:bg-hover flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-secondaryColor text-secondary-foreground hover:text-secondaryColor active:h-9 active:w-9">
               <X />
             </div>
-          </div>
+          </Link>
           <Link to={'/'}>
             <img
               src="https://1.bp.blogspot.com/-S8HTBQqmfcs/XN0ACIRD9PI/AAAAAAAAAlo/FLhccuLdMfIFLhocRjWqsr9cVGdTN_8sgCPcBGAYYCw/s1600/f_logo_RGB-Blue_1024.png"

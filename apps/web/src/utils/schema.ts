@@ -75,3 +75,10 @@ export const marketPlace = z.object({
   price: z.coerce.number().min(1, { message: 'Price is required' }),
   
 })
+
+export const createGroupSchema = z.object({
+  name: z.string().min(1, { message: 'Name is required' }),
+  type: z.string().min(1, { message: 'Type is required' }),
+})
+
+export type createGroupInputs = z.infer<typeof createGroupSchema> 
