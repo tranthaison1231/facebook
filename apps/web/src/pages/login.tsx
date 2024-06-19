@@ -1,4 +1,5 @@
 import { signIn } from '@/apis/auth'
+import Signup from '@/components/Signup'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { loginSchema } from '@/utils/schema'
@@ -10,7 +11,6 @@ import { useForm } from 'react-hook-form'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import * as z from 'zod'
-import Signup from './(auth)/_components/Signup'
 
 export type LoginInputs = z.infer<typeof loginSchema>
 
@@ -43,8 +43,8 @@ export default function Component() {
         toast.error(error.response?.data.message)
       }
     } finally {
-      console.log('LOGIN',data);
-      
+      console.log('LOGIN', data)
+
       setIsLoading(false)
     }
   }
@@ -52,14 +52,14 @@ export default function Component() {
   return (
     <div className="m-auto flex items-center justify-center space-y-3 lg:p-32">
       <div className="container flex flex-col items-center space-y-10 md:flex-row md:justify-between">
-        <div className=" flex w-1/2 flex-col space-y-3">
+        <div className="flex w-1/2 flex-col space-y-3">
           <h1 className="text-4xl text-6xl font-bold text-primary">facebook</h1>
-          <p className=" text-2xl font-medium">
+          <p className="text-2xl font-medium">
             Facebook giúp bạn kết nối và chia sẻ với mọi người trong cuộc sống của bạn.
           </p>
         </div>
         <div className="w-2/5">
-          <div className=" mb-12 rounded-xl shadow-[4px_25px_42px_17px_rgba(0,0,0,0.27)]">
+          <div className="mb-12 rounded-xl shadow-[4px_25px_42px_17px_rgba(0,0,0,0.27)]">
             <form className="space-y-3 p-4" onSubmit={handleSubmit(onSubmit)}>
               <Input className="px-3 py-4" {...register('email')} placeholder="Email" type="email" />
               {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}

@@ -1,8 +1,9 @@
-import { getMe } from '@/apis/auth'
+import { User, getMe } from '@/apis/auth'
+import { formatName } from '@/utils/name'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { Bookmark, CircleFadingPlus, MoveDown, PersonStanding, Store, Users, Video } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useOutletContext } from 'react-router-dom'
 
 const SIDE_BAR = [
   {
@@ -50,23 +51,18 @@ const SIDE_BAR2 = [
 ]
 
 export default function Sidebar() {
-  const { data: meQuery } = useQuery({
-    queryKey: ['me'],
-    queryFn: getMe
-  })
+  const { me } = useOutletContext<{ me: User }>()
 
   return (
-    <div className={`fixed  flex min-h-screen min-w-72 flex-col  border-none bg-white text-[#050505]  shadow-2xl `}>
+    <div className={`fixed flex min-h-screen min-w-72 flex-col border-none bg-white text-[#050505] shadow-2xl`}>
       <ul className={clsx('space-y-2 border-r p-4')}>
-        <Link to={`/${meQuery?.data?.id}`}>
+        <Link to={`/${me?.id}`}>
           <li className={clsx('flex cursor-pointer gap-4 rounded-sm px-6 py-2 font-bold')}>
-            <div className=" h-8 w-8 overflow-hidden rounded-full">
-              <img src={meQuery?.data?.avatar} alt="avatar" className="h-full w-full object-cover" />
+            <div className="h-8 w-8 overflow-hidden rounded-full">
+              <img src={me?.avatar} alt="avatar" className="h-full w-full object-cover" />
             </div>
 
-            <p>
-              {meQuery?.data?.firstname} {meQuery?.data?.lastname}
-            </p>
+            <p>{formatName(me)}</p>
           </li>
         </Link>
         {SIDE_BAR.map(item => (
@@ -78,11 +74,11 @@ export default function Sidebar() {
           </Link>
         ))}
 
-        <hr className=" bg-slate-600" />
+        <hr className="bg-slate-600" />
       </ul>
 
       <ul className={clsx('space-y-2 border-r p-4 font-bold text-[#050505]')}>
-        <li className="flex cursor-pointer gap-4 rounded-sm px-6 py-2 ">LỐI TẮT CỦA BẠN</li>
+        <li className="flex cursor-pointer gap-4 rounded-sm px-6 py-2">LỐI TẮT CỦA BẠN</li>
         {SIDE_BAR2.map(item => (
           <Link to={`${item.path}`} key={item.title}>
             <li className={clsx('flex cursor-pointer gap-4 rounded-sm px-6 py-2')}>

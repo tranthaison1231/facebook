@@ -19,17 +19,13 @@ export type Path =
   | `/marketplace`
   | `/marketplace/category/:id`
   | `/marketplace/create`
-  | `/marketplace/create/Status`
-  | `/marketplace/create/item`
   | `/marketplace/inbox`
   | `/marketplace/notifications`
   | `/posts`
-  | `/profile/profileHeader`
   | `/reset-password`
   | `/search/people`
   | `/search/photos`
   | `/search/posts`
-  | `/sign-up`
 
 export type Params = {
   '/:id': { id: string }

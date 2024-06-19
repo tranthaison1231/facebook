@@ -4,15 +4,14 @@ import { Earth, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ReactElement, useState } from 'react'
 import { Link } from '@/router'
-import { getMe } from '@/apis/auth'
-import { createGroupInputs, createGroupSchema } from '@/utils/schema'
+import { User } from '@/apis/auth'
+import { createGroupInputs } from '@/utils/schema'
 import { toast } from 'sonner'
 import { AxiosError } from 'axios'
 import { createGroup, Group } from '@/apis/groups'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery } from '@tanstack/react-query'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { useOutletContext } from 'react-router-dom'
+import { UseFormReturn } from 'react-hook-form'
 
 const privacyOption = [
   {
@@ -29,7 +28,19 @@ const privacyOption = [
   }
 ]
 
-export default function InputCreateGroup() {
+interface CreateGroupFormProps {
+  form: UseFormReturn<createGroupInputs, unknown, undefined>
+}
+
+export default function CreateGroupForm({ form }: CreateGroupFormProps) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = form
+
+  const { me } = useOutletContext<{ me: User }>()
+
   const [isFocusGroupName, setIsFocusGroupName] = useState(false)
   const [isFocusInvite, setIsFocusInvite] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -40,23 +51,6 @@ export default function InputCreateGroup() {
     setSelectedOption(selected ? selected.value : '')
   }
 
-  const { data: meQuery } = useQuery({
-    queryKey: ['me'],
-    queryFn: getMe
-  })
-
-  const me = meQuery?.data
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm<createGroupInputs>({
-    mode: 'onBlur',
-    resolver: zodResolver(createGroupSchema)
-  })
-
-  console.log({ ...register('type') })
   const onSubmit = async (data: createGroupInputs) => {
     try {
       setIsLoading(true)
@@ -98,9 +92,9 @@ export default function InputCreateGroup() {
           <h1 className="text-2xl font-bold">Create group</h1>
         </div>
         <div className="flex items-center gap-5">
-          <img className="h-10 w-10 rounded-full object-cover" src={me.avatar} alt="" />
+          <img className="h-10 w-10 rounded-full object-cover" src={me?.avatar} alt="" />
           <div className="my-6">
-            <p className="text-md font-medium">{me.firstName + ' ' + me.lastName}</p>
+            <p className="text-md font-medium">{me?.firstName + ' ' + me?.lastName}</p>
             <p className="text-xs">Admin</p>
           </div>
         </div>
@@ -136,7 +130,7 @@ export default function InputCreateGroup() {
                 {privacyOption.map(option => (
                   <SelectItem value={option.value} key={option.value}>
                     <div className="flex items-center justify-between gap-2">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-foreground/50 p-2 ">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-foreground/50 p-2">
                         {option.icon}
                       </div>
                       <div>

@@ -121,7 +121,7 @@ export default function Signup() {
             {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
             <div className="flex items-center">
               <p className="text-sm text-[#828697]">Ngày sinh</p>
-              <ShieldQuestion className="h-3 w-3 " />
+              <ShieldQuestion className="h-3 w-3" />
             </div>
             <div className="grid grid-flow-col gap-2">
               <InputDay className="rounded-[5px]" onChange={handleDayChange} value={day} />
@@ -130,7 +130,7 @@ export default function Signup() {
             </div>
             <div className="flex items-center">
               <p className="text-sm text-[#828697]">Giới tính</p>
-              <ShieldQuestion className="h-3 w-3 " />
+              <ShieldQuestion className="h-3 w-3" />
             </div>
             <div className="grid grid-flow-col gap-1">
               <div className="flex items-center justify-center gap-8 rounded-[5px] border border-gray-300 p-2">

@@ -1,4 +1,4 @@
-import { getMe } from '@/apis/auth'
+import { User } from '@/apis/auth'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,17 +6,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { formatName } from '@/utils/name'
 import { removeToken } from '@/utils/token'
-import { useQuery } from '@tanstack/react-query'
 import { LogOut } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 
 export default function UserProfile() {
   const navigate = useNavigate()
-  const { data: meQuery } = useQuery({
-    queryKey: ['me'],
-    queryFn: getMe
-  })
+  const { me } = useOutletContext<{ me: User }>()
 
   const logOut = () => {
     removeToken()
@@ -26,7 +23,7 @@ export default function UserProfile() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="cursor-pointer">{meQuery?.data?.fullName}</div>
+        <div className="cursor-pointer">{formatName(me)}</div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>

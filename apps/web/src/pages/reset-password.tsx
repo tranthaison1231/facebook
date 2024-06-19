@@ -1,4 +1,3 @@
-import Header from '@/components/Header'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { resetPasswordSchema } from '@/utils/schema'
@@ -39,7 +38,6 @@ export default function Component() {
 
   return (
     <div>
-      <Header className="mx-auto w-full max-w-6xl" />
       <hr />
       <div className="mx-auto max-w-6xl">
         <form className="space-y-4 p-6" onSubmit={handleSubmit(onSubmit)}>
