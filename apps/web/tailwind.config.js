@@ -18,6 +18,9 @@ module.exports = {
       minWidth: {
         '10xl': '1086px'
       },
+      margin: {
+        90: '22.5rem'
+      },
       padding: {
         18.5: '4.625rem'
       },
@@ -25,7 +28,9 @@ module.exports = {
         max: '1048px',
         intro: '488px',
         post: '677px',
-        90: '22.5rem'
+        90: '22.5rem',
+        destop: '60rem',
+        mobile: '35.25rem'
       },
       backgroundImage: {
         avt1: 'url("@assets/images/avt1")'
