@@ -15,11 +15,13 @@ export default function Component() {
     return <Navigate to="/groups/feed" />
   }
   return (
-    <div className="flex w-full">
-      <div className="h-[calc(100vh-4.6rem)] w-90 bg-white p-5 shadow-md border">
+    <div className="w-full">
+      <div className="fixed h-[calc(100vh-4.6rem)] w-90 border bg-white p-5 shadow-md">
         {location.pathname.includes('/groups/create') ? <InputCreateGroup /> : <GroupSideBar />}
       </div>
-      <Outlet context={groups} />
+      <div className="ml-90">
+        <Outlet context={groups} />
+      </div>
     </div>
   )
 }

@@ -1,11 +1,11 @@
+import PriviewGroup from './_components/PreviewGroup'
 
-export default function Create() {
-  // const queryClient = useQueryClient()
+export default function Create({ text }: { text: string }) {
 
-
+console.log(text)
   return (
-    <div>
-      Create
-    </div>
+    <>
+      <PriviewGroup />
+    </>
   )
 }
