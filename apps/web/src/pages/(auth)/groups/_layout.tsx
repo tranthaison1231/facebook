@@ -3,9 +3,9 @@ import { useQuery } from '@tanstack/react-query'
 import { Outlet, useLocation } from 'react-router-dom'
 import GroupSideBar from './_components/GroupSideBar'
 import { Navigate } from '@/router'
+import InputCreateGroup from './_components/InputCreateGroup'
 export default function Component() {
   const location = useLocation()
-  console.log('location', location)
   const { data: groups } = useQuery({
     queryKey: ['groups'],
     queryFn: () => getGroups()
@@ -15,11 +15,13 @@ export default function Component() {
     return <Navigate to="/groups/feed" />
   }
   return (
-    <div className="flex h-[calc(100vh-4rem)] w-full">
-      <div className="w-90 bg-white p-5">
-        <GroupSideBar />
+    <div className="w-full">
+      <div className="fixed h-[calc(100vh-4.6rem)] w-90 border bg-white p-5 shadow-md">
+        {location.pathname.includes('/groups/create') ? <InputCreateGroup /> : <GroupSideBar />}
       </div>
-      <Outlet context={groups} />
+      <div className="ml-90">
+        <Outlet context={groups} />
+      </div>
     </div>
   )
 }
