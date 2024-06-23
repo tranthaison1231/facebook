@@ -38,6 +38,22 @@ router
       status: 200,
     });
   })
+  .get("/:id", auth, async (c) => {
+    const id = c.req.param("id");
+    const post = await PostsService.getPostById(id);
+
+    if (!post) {
+      return c.json({
+        message: "Post not found",
+        status: 404,
+      });
+    }
+
+    return c.json({
+      data: post,
+      status: 200,
+    });
+  })
   .delete("/:id", auth, async (c) => {
     const id = c.req.param("id");
     const user = c.get("user");

@@ -18,10 +18,19 @@ module.exports = {
       minWidth: {
         '10xl': '1086px'
       },
-      width:{
-        'max':'1048px',
-        'intro':'488px',
-        'post': '677px',
+      margin: {
+        90: '22.5rem'
+      },
+      padding: {
+        18.5: '4.625rem'
+      },
+      width: {
+        max: '1048px',
+        intro: '488px',
+        post: '677px',
+        90: '22.5rem',
+        destop: '60rem',
+        mobile: '35.25rem'
       },
       backgroundImage: {
         avt1: 'url("@assets/images/avt1")'
@@ -36,9 +45,10 @@ module.exports = {
         primary: 'var(--font-primary)'
       },
       colors: {
-        buttonColor:'#e4e6eb',
+        buttonColor: '#e4e6eb',
         secondaryBg: '#eaf4fe',
         secondaryColor: '#65676b',
+        hover: '#E2E8F0B2',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

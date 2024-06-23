@@ -169,12 +169,13 @@ model Product {
 
 model Group {
   id           String         @id @default(cuid())
-  name         String
+  name         String         @unique
   userId       String
   type         TypeOfGroup
   users        GroupsOnUser[]
   User         User           @relation(fields: [userId], references: [id])
   RolesOnGroup RolesOnGroup[]
+  background   String?
 
   @@index([userId])
   @@map("groups")

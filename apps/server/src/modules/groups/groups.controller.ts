@@ -19,4 +19,11 @@ router
     const group = await GroupsService.create(createGroup);
 
     return c.json({ data: group, status: 201 });
+  })
+  .delete('/:groupId', async (c) => { 
+    const id = c.req.param("groupId");
+
+    await GroupsService.delete(id);
+
+    return c.json({ message: 'Delete group successfully', status: 200 });
   });

@@ -8,7 +8,10 @@ export type Path =
   | `/:id`
   | `/:id/about`
   | `/:id/friends`
+  | `/:id/posts/:postId`
   | `/friends`
+  | `/groups`
+  | `/groups/create`
   | `/groups/discover`
   | `/groups/feed`
   | `/groups/joins`
@@ -17,23 +20,20 @@ export type Path =
   | `/marketplace`
   | `/marketplace/category/:id`
   | `/marketplace/create`
-  | `/marketplace/create/Status`
-  | `/marketplace/create/item`
   | `/marketplace/inbox`
   | `/marketplace/notifications`
   | `/posts`
-  | `/profile/profileHeader`
   | `/reset-password`
   | `/search/people`
   | `/search/photos`
   | `/search/posts`
-  | `/sign-up`
 
 export type Params = {
   '/:id': { id: string }
   '/:id': { id: string }
   '/:id/about': { id: string }
   '/:id/friends': { id: string }
+  '/:id/posts/:postId': { id: string; postId: string }
   '/marketplace/category/:id': { id: string }
 }
 

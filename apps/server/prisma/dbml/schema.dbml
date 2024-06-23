@@ -111,12 +111,13 @@ Table products {
 
 Table groups {
   id String [pk]
-  name String [not null]
+  name String [unique, not null]
   userId String [not null]
   type TypeOfGroup [not null]
   users group_members [not null]
   User users [not null]
   RolesOnGroup group_roles [not null]
+  background String
 }
 
 Table group_roles {
