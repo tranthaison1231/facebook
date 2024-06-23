@@ -24,31 +24,33 @@ model Category {
 }
 
 model User {
-  id          String         @id @default(cuid())
-  firstName   String?
-  lastName    String?
-  email       String         @unique
-  age         Int?
-  avatar      String?
-  phone       String?
-  password    String
-  dob         DateTime?
-  gender      String?
-  school      String?
-  background  String?
-  workAt      String?
-  address     String?
-  posts       Post[]
-  userGroups  GroupsOnUser[]
-  groupsRoles RolesOnGroup[]
-  groups      Group[]
-  page        Page?          @relation(fields: [pageId], references: [id])
-  pageId      String?
-  stories     Story[]
-  likes       Like[]
-  comments    Comment[]
-  friends     UserFriend[]   @relation("friends")
-  friendOf    UserFriend[]   @relation("friendsOf")
+  id                    String          @id @default(cuid())
+  firstName             String?
+  lastName              String?
+  email                 String          @unique
+  age                   Int?
+  avatar                String?
+  phone                 String?
+  password              String
+  dob                   DateTime?
+  gender                String?
+  school                String?
+  background            String?
+  workAt                String?
+  address               String?
+  posts                 Post[]
+  userGroups            GroupsOnUser[]
+  groupsRoles           RolesOnGroup[]
+  groups                Group[]
+  page                  Page?           @relation(fields: [pageId], references: [id])
+  pageId                String?
+  stories               Story[]
+  likes                 Like[]
+  comments              Comment[]
+  senderFriendRequest   FriendRequest[] @relation("senderFriendRequest")
+  receiverFriendRequest FriendRequest[] @relation("receiverFriendRequest")
+  user                  FriendShip[]    @relation("userFriendShip")
+  friends               FriendShip[]    @relation("userOfFriendShip")
 
   @@map("users")
 }
@@ -59,15 +61,32 @@ enum FriendStatus {
   REJECTED
 }
 
-model UserFriend {
-  id       String @id @default(cuid())
-  friendId String
-  friend   User   @relation("friends", fields: [friendId], references: [id])
+model FriendRequest {
+  id String @id @default(cuid())
 
-  friendOfId String
-  friendOf   User   @relation("friendsOf", fields: [friendOfId], references: [id])
+  senderId String
+  sender   User   @relation("senderFriendRequest", fields: [senderId], references: [id])
 
-  status FriendStatus
+  receiverId String
+  receiver   User   @relation("receiverFriendRequest", fields: [receiverId], references: [id])
+
+  status    FriendStatus
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@map("friend_requests")
+}
+
+model FriendShip {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation("userFriendShip", fields: [userId], references: [id])
+
+  userOfId String
+  userOf   User   @relation("userOfFriendShip", fields: [userOfId], references: [id])
+
+  friendSince DateTime @default(now())
 
   @@map("user_friends")
 }
