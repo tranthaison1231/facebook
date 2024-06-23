@@ -163,7 +163,6 @@ model Product {
   description String?
   location    String?
   images      Json?
-
   @@index([categoryId])
   @@map("products")
 }
