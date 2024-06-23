@@ -2,22 +2,26 @@ import { getMe } from '@/apis/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { Bitcoin, ChevronDown, ChevronUp, Divide, DoorOpen, Earth, Rocket, SmartphoneCharging, X } from 'lucide-react'
-import { Image, Lock } from 'lucide-react'
+import { Bitcoin, ChevronDown, ChevronUp, DoorOpen, Earth, Rocket, SmartphoneCharging, X } from 'lucide-react'
+
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
+
 import { z } from 'zod'
+import { Link, useNavigate } from 'react-router-dom'
+import React from 'react'
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
+import { fetchCategories } from '@/apis/categories'
+import { useForm } from 'react-hook-form'
+import { marketPlace } from '@/utils/schema'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 function item() {
   const { data: me } = useQuery({
     queryKey: ['me'],
     queryFn: () => getMe()
   })
-  console.log(me)
 
   const [images, setImages] = useState<string[]>([]) // Use array of strings to store image URLs
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,32 +39,54 @@ function item() {
   if (images.length > 0) console.log(images.length)
 
   // FORM
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-  }
-  const formSchema = z.object({
-    name: z.string().min(2, {
-      message: 'Username must be at least 2 characters.'
-    }),
-    price: z.coerce.number().min(1, { message: 'Price is required' })
-  })
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-      price: 0
-    }
-  })
 
   const [open, setOpen] = useState(false)
-  const [checked1, setChecked] = useState(false)
-
-  const handleToggle = () => {
-    setChecked(!checked1)
+  const { data: categories } = useQuery({
+    queryKey: ['category'],
+    queryFn: () => fetchCategories()
+  })
+  console.log('CATEGORY: ', categories)
+  // const [formData, setFormData] = useState({
+  //   title: '',
+  //   price: '',
+  //   categoryId: '',
+  //   description: '',
+  //   location: '',
+  //   image: ''
+  // })
+  // const handleInputChange = (
+  //   e: React.ChangeEventHandler<HTMLInputElement> |
+  //     React.ChangeEventHandler<HTMLTextAreaElement>
+  // ) => {
+  //   const { name, value } = e.target
+  //   setFormData({
+  //     ...formData,
+  //     [name]: value
+  //   })
+  // }
+  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault() // Ngăn chặn hành động mặc định
+  //   console.log('DATA', formData) // Log dữ liệu từ biểu mẫu
+  // }
+  type FormValues = {
+    //images: JSON
+    price: string
+    //description: string
+    categoryId: number
+    //location: string
+    title: string
   }
-  console.log('KICH THUOC',images.length);
-  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<FormValues>({
+    mode: 'onBlur',
+    resolver: zodResolver(marketPlace)
+  })
+
+  const onSubmit = (data: FormValues) => console.log('DATA', data)
+
   return (
     <div className=" -mt-20 flex">
       <section className="sticky left-0 top-0 w-[360px] shrink-0 bg-white p-4 pt-0 shadow-md">
@@ -119,17 +145,16 @@ function item() {
                   <img key={index} src={src} alt={`Uploaded ${index}`} className=" size-24 rounded-sm object-cover" />
                 ))}
                 <div>
-                  <form className="  flex size-24 items-center justify-center rounded-sm border-[#e4e6eb] bg-[#e4e6eb]">
+                  <div className="  flex size-24 items-center justify-center rounded-sm border-[#e4e6eb] bg-[#e4e6eb]">
                     <label htmlFor="image" className="flex w-full items-center justify-center rounded-sm border-2">
                       <input type="file" id="image" className="hidden" onChange={handleUpload} />
                       <p className=" size-full text-sm font-medium">Thêm ảnh +</p>
                     </label>
-                  </form>
+                  </div>
                 </div>
               </div>
             )}
-            <form
-              action=""
+            <div
               className={clsx('', {
                 hidden: images.length > 0
               })}
@@ -142,19 +167,19 @@ function item() {
                 <div className="flex flex-col items-center justify-center">
                   <div className="flex size-9 items-center justify-center rounded-full bg-[#ced0d4]">
                     {/* Assuming `Image` is an imported component or icon */}
-                    <Image className="block object-cover text-center text-[20px]" />
+                    <img className="block object-cover text-center text-[20px]" />
                   </div>
                   <p className="text-[17px] font-medium">Thêm ảnh</p>
                 </div>
               </label>
-            </form>
+            </div>
           </div>
           <div className=" my-2 flex items-center justify-around bg-[#f0f2f5] p-1">
             <div>
               <SmartphoneCharging />
             </div>
             <div>
-              <p className=" text-sm font-normal">
+              <p className=" text-xs font-normal">
                 Tải trực tiếp ảnh lên từ điện thoại của bạn. <a href="#"> Tìm hiểu thêm</a>
               </p>
             </div>
@@ -162,32 +187,47 @@ function item() {
               Dùng thử
             </Button>
           </div>
-          <div className=" ">
+          <form className="" onSubmit={handleSubmit(onSubmit)}>
             <p className="text-md font-bold">Bắt buộc</p>
-            <p className=" mb-2 text-sm font-normal">Hãy mô tả rõ nhất có thể.</p>
-            <form action="" className=" flex flex-col items-center justify-center gap-2">
+            <p className="mb-2 text-sm font-normal">Hãy mô tả rõ nhất có thể.</p>
+            <div className="flex flex-col items-center justify-center gap-2">
               <Input
                 className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 type="text"
                 placeholder="Tiêu đề"
+                {...register('title', { required: 'Please enter your title.' })}
               />
               <Input
                 className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                type="text"
+                type="number"
                 placeholder="Giá"
+                {...register('price', { required: 'Please enter your price.' })}
               />
-              <Input
+              <select
                 className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                type="text"
-                placeholder="Hạng mục"
-              />
+                {...register('categoryId', { required: 'Please select a category.' })}
+              >
+                <option value="">Hạng mục</option>
+                {categories?.map(category => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
               <Input
                 className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 type="text"
                 placeholder="Tình trạng"
+                // Not registered for react-hook-form
               />
-            </form>
-          </div>
+              <button
+                className="font-mormal bg-white p-1 text-start text-sm text-black hover:bg-slate-300"
+                type="submit"
+              >
+                Bắt buộc
+              </button>
+            </div>
+          </form>
           <div>
             <p className="text-md font-bold">Chi tiết khác</p>
 
@@ -199,10 +239,11 @@ function item() {
             </Button>
             {/* FIELDS */}
             <div className={clsx(' mt-2', { hidden: !open })}>
-              <form action="" className=" flex flex-col items-center justify-center gap-2">
+              <div className=" flex flex-col items-center justify-center gap-2">
                 <textarea
                   className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Mô tả"
+                  name="description"
                 ></textarea>
                 <Select>
                   <SelectTrigger className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -223,7 +264,7 @@ function item() {
                   type="text"
                   placeholder="Vị trí"
                 />
-              </form>
+              </div>
               {/* TUY CHON VIEC GAP MAT */}
               <div className=" m-2 p-2">
                 <p className="text-md font-bold">Tuy chọn vị trí</p>
@@ -282,7 +323,6 @@ function item() {
                 </div>
               </div>
               <div className="flex justify-between gap-2 rounded-sm p-2 hover:bg-[#e4e6eb]">
-                <Lock className=" shrink-0" />
                 <div className="">
                   <p className=" text-md font-semibold">Ẩn với bạn bè</p>
                   <p className=" text-sm font-light">
@@ -306,6 +346,7 @@ function item() {
             khác vi phạm quyền sở hữu trí tuệ xuất hiện trên Marketplace. Hãy xem Chính sách thương mại của chúng tôi.
           </p>
         </div>
+
         {/* FOOTER */}
         <div className={clsx(' mt-3 w-full', {})}>
           <div className=" flex items-center justify-between gap-1">
@@ -316,25 +357,49 @@ function item() {
           <Button className=" w-full rounded-sm bg-primary text-white">Tiếp</Button>
         </div>
       </section>
-      <section className=" w-full flex items-center justify-center bg-[#f0f2f5]">
-        <div className=' min-h-[650px] mx-auto p-3 rounded-lg bg-white mt-10'>
-              <h1 className=' font-bold mb-3'>Xem trước</h1>
-              <div className=' h-full flex items-center justify-between'>
-                {/* BACKGROUND */}
-                <div className=' w-2/3 bg-[#f0f2f5] flex items-center justify-center'>
-                  {images.length >= 0 ? <div className=' min-h-[600px] flex flex-col items-center justify-center'>
-                    <div className=' w-2/3 text-center'>
-                      <h1 className=' font-bold text-lg'>Bản xem trước bài niêm yết</h1>
-                      <p className=' text-lg'>Trong khi tạo, bạn có thể xem trước để biết bài niêm yết sẽ hiển thị thế nào với mọi người trên Marketplace.</p>
-                    </div>
-                  </div>: <div className=' w-2/3 bg-slate-400 '></div>}
+
+      <section className=" flex w-full items-center justify-center bg-[#f0f2f5]">
+        <div className=" mx-auto mt-10 min-h-[650px] overflow-hidden rounded-lg bg-white p-3">
+          <h1 className=" mb-3 font-bold">Xem trước</h1>
+          <div className=" flex h-[600px] items-center justify-between overflow-hidden">
+            {/* BACKGROUND */}
+            <div className=" flex h-full w-2/3 items-center justify-center overflow-hidden bg-[#f0f2f5]">
+              {images.length <= 0 ? (
+                <div className=" flex h-full flex-col items-center justify-center">
+                  <div className=" w-2/3 text-center">
+                    <h1 className=" text-lg font-bold">Bản xem trước bài niêm yết</h1>
+                    <p className=" text-lg">
+                      Trong khi tạo, bạn có thể xem trước để biết bài niêm yết sẽ hiển thị thế nào với mọi người trên
+                      Marketplace.
+                    </p>
+                  </div>
                 </div>
-                {/* CONTENT */}
-                <div>
-                  <h1 className=' font-bold text-2xl'>{}</h1>
+              ) : (
+                <div className="flex h-full items-center justify-between overflow-hidden">
+                  <Carousel className="h-full w-full">
+                    <CarouselContent className="">
+                      {images.map((image, index) => (
+                        <CarouselItem key={index} className="pl-2 md:pl-4">
+                          <div className="p-1">
+                            <Card>
+                              <CardContent className="flex aspect-square items-center justify-center p-6">
+                                <img src={image} className="block h-[600px] w-[571px] object-contain" />
+                              </CardContent>
+                            </Card>
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                  </Carousel>
                 </div>
-              </div>
-        </div>  
+              )}
+            </div>
+            {/* CONTENT */}
+            <div>
+              <h1 className=" text-2xl font-bold">{}</h1>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   )

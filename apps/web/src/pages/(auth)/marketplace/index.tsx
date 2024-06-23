@@ -51,7 +51,7 @@ function Marketplace() {
     queryKey: ['products'],
     queryFn: () => fetchProducts()
   })
-  console.log(products);
+  console.log("CATEGORIES",categorys);
   
   function formatNumber(num: number) {
     // Check if the input is a number

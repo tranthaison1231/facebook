@@ -31,6 +31,7 @@ export type Path =
 
 export type Params = {
   '/:id': { id: string }
+  '/:id': { id: string }
   '/:id/about': { id: string }
   '/:id/friends': { id: string }
   '/marketplace/category/:id': { id: string }
