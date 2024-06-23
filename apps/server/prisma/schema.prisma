@@ -88,7 +88,7 @@ model FriendShip {
 
   friendSince DateTime @default(now())
 
-  @@map("user_friends")
+  @@map("friend_ship")
 }
 
 model Story {
