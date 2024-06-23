@@ -19,6 +19,7 @@ model Category {
   subCategories    Category[] @relation("SubCategories")
   parentCategory   Category?  @relation("SubCategories", fields: [parentCategoryId], references: [id])
   parentCategoryId String?
+
   @@map("categories")
 }
 
@@ -46,8 +47,29 @@ model User {
   stories     Story[]
   likes       Like[]
   comments    Comment[]
+  friends     UserFriend[]   @relation("friends")
+  friendOf    UserFriend[]   @relation("friendsOf")
 
   @@map("users")
+}
+
+enum FriendStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model UserFriend {
+  id       String @id @default(cuid())
+  friendId String
+  friend   User   @relation("friends", fields: [friendId], references: [id])
+
+  friendOfId String
+  friendOf   User   @relation("friendsOf", fields: [friendOfId], references: [id])
+
+  status FriendStatus
+
+  @@map("user_friends")
 }
 
 model Story {
