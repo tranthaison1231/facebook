@@ -49,8 +49,8 @@ model User {
   comments              Comment[]
   senderFriendRequest   FriendRequest[] @relation("senderFriendRequest")
   receiverFriendRequest FriendRequest[] @relation("receiverFriendRequest")
-  user                  FriendShip[]    @relation("userFriendShip")
-  friends               FriendShip[]    @relation("userOfFriendShip")
+  users                 FriendShip[]    @relation("userFriendShip")
+  userOfs               FriendShip[]    @relation("userOfFriendShip")
 
   @@map("users")
 }
