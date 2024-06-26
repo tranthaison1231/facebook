@@ -19,7 +19,8 @@ export type Path =
   | `/login`
   | `/marketplace`
   | `/marketplace/category/:id`
-  | `/marketplace/create`
+  | `/marketplace/create/item`
+  | `/marketplace/create1`
   | `/marketplace/inbox`
   | `/marketplace/notifications`
   | `/posts`
@@ -29,7 +30,6 @@ export type Path =
   | `/search/posts`
 
 export type Params = {
-  '/:id': { id: string }
   '/:id': { id: string }
   '/:id/about': { id: string }
   '/:id/friends': { id: string }

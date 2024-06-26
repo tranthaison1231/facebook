@@ -6,18 +6,38 @@ import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { Bitcoin, ChevronDown, ChevronUp, DoorOpen, Earth, Rocket, SmartphoneCharging, X } from 'lucide-react'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { z } from 'zod'
 import { Link, useNavigate } from 'react-router-dom'
 import React from 'react'
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import { fetchCategories } from '@/apis/categories'
 import { useForm } from 'react-hook-form'
 import { marketPlace } from '@/utils/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
-
-function item() {
+import Carousel from 'react-multi-carousel'
+import 'react-multi-carousel/lib/styles.css'
+import { Products, postProduct } from '@/apis/products'
+const responsive = {
+  superLargeDesktop: {
+    // the naming can be any, depends on you.
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 1
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1
+  }
+}
+export default function item() {
   const { data: me } = useQuery({
     queryKey: ['me'],
     queryFn: () => getMe()
@@ -37,6 +57,22 @@ function item() {
   }
   const navigate = useNavigate()
   if (images.length > 0) console.log(images.length)
+  const [name, setName] = useState('')
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value)
+  }
+  const [price, setPrice] = useState('')
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPrice(e.target.value)
+  }
+  const [description, setDescription] = useState('')
+
+  const [category, setCategory] = useState('')
+
+  const [location, setLocation] = useState('')
+  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLocation(e.target.value)
+  }
 
   // FORM
 
@@ -45,47 +81,38 @@ function item() {
     queryKey: ['category'],
     queryFn: () => fetchCategories()
   })
-  console.log('CATEGORY: ', categories)
-  // const [formData, setFormData] = useState({
-  //   title: '',
-  //   price: '',
-  //   categoryId: '',
-  //   description: '',
-  //   location: '',
-  //   image: ''
-  // })
-  // const handleInputChange = (
-  //   e: React.ChangeEventHandler<HTMLInputElement> |
-  //     React.ChangeEventHandler<HTMLTextAreaElement>
-  // ) => {
-  //   const { name, value } = e.target
-  //   setFormData({
-  //     ...formData,
-  //     [name]: value
-  //   })
-  // }
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault() // Ngăn chặn hành động mặc định
-  //   console.log('DATA', formData) // Log dữ liệu từ biểu mẫu
-  // }
-  type FormValues = {
-    //images: JSON
-    price: string
-    //description: string
-    categoryId: number
-    //location: string
-    title: string
-  }
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm<FormValues>({
+
+  const { register, handleSubmit, watch } = useForm<Products>({
     mode: 'onBlur',
     resolver: zodResolver(marketPlace)
   })
+  const watchedValues = watch()
+  const onSubmit = async (data: Products) => {
+    data.img = images
+    await postProduct(data)
+    console.table(data)
+    navigate('/marketplace')
+  }
+  const [isContinue, setIsContinue] = useState(false)
+  const [allFilled, setAllFilled] = useState(false)
+  useEffect(() => {
+    const checkIfAllFilled = () => {
+      const values = watchedValues
+      console.log(values)
+      const allInputsFilled = Object.values(values).every(value => value !== '')
+      setAllFilled(allInputsFilled)
+    }
+    checkIfAllFilled()
+    if (allFilled) setIsContinue(true)
+    else setIsContinue(false)
+  }, [watchedValues, images])
 
-  const onSubmit = (data: FormValues) => console.log('DATA', data)
+  const formRef = useRef<HTMLFormElement>(null)
+  const submit = () => {
+    if (formRef.current) {
+      formRef.current.submit()
+    }
+  }
 
   return (
     <div className=" -mt-20 flex">
@@ -119,7 +146,15 @@ function item() {
           </Button>
         </div>
         {/* BODY */}
-        <div className=" custom-scrollbar h-[500px] w-full overflow-y-auto ">
+        <form
+          //ref={formRef}
+          id="formValue"
+          onSubmit={e => {
+            e.preventDefault()
+            handleSubmit(onSubmit)
+          }}
+          className=" custom-scrollbar h-[500px] w-full overflow-y-auto "
+        >
           <div className="mb-3 flex gap-x-2">
             <div>
               <img src={me?.data.avatar} alt="" className="h-10 w-10 rounded-full object-cover" />
@@ -187,7 +222,7 @@ function item() {
               Dùng thử
             </Button>
           </div>
-          <form className="" onSubmit={handleSubmit(onSubmit)}>
+          <div className="">
             <p className="text-md font-bold">Bắt buộc</p>
             <p className="mb-2 text-sm font-normal">Hãy mô tả rõ nhất có thể.</p>
             <div className="flex flex-col items-center justify-center gap-2">
@@ -195,17 +230,20 @@ function item() {
                 className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 type="text"
                 placeholder="Tiêu đề"
-                {...register('title', { required: 'Please enter your title.' })}
+                {...register('name', { required: 'Please enter your title.' })}
+                onChange={handleTitleChange}
               />
               <Input
                 className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 type="number"
                 placeholder="Giá"
                 {...register('price', { required: 'Please enter your price.' })}
+                onChange={handlePriceChange}
               />
               <select
                 className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 {...register('categoryId', { required: 'Please select a category.' })}
+                onChange={e => setCategory(e.target.value)}
               >
                 <option value="">Hạng mục</option>
                 {categories?.map(category => (
@@ -220,30 +258,26 @@ function item() {
                 placeholder="Tình trạng"
                 // Not registered for react-hook-form
               />
-              <button
-                className="font-mormal bg-white p-1 text-start text-sm text-black hover:bg-slate-300"
-                type="submit"
-              >
-                Bắt buộc
-              </button>
             </div>
-          </form>
+          </div>
           <div>
-            <p className="text-md font-bold">Chi tiết khác</p>
-
-            <Button
-              className=" font-mormal bg-white p-1 text-start text-sm text-black hover:bg-slate-300"
+            <div
+              className=" font-mormal flex flex-col bg-white p-1 text-start text-sm text-black hover:bg-slate-200"
               onClick={() => setOpen(!open)}
             >
-              Bổ sung chi tiết để thu hút thêm sự quan tâm. {open ? <ChevronUp /> : <ChevronDown />}
-            </Button>
+              <p className="text-md font-bold">Chi tiết khác</p>
+              <div className=" flex justify-between">
+                Bổ sung chi tiết để thu hút thêm sự quan tâm. {open ? <ChevronUp /> : <ChevronDown />}
+              </div>
+            </div>
             {/* FIELDS */}
             <div className={clsx(' mt-2', { hidden: !open })}>
               <div className=" flex flex-col items-center justify-center gap-2">
                 <textarea
                   className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Mô tả"
-                  name="description"
+                  {...register('description', { required: 'Please enter your description.' })}
+                  onChange={e => setDescription(e.target.value)}
                 ></textarea>
                 <Select>
                   <SelectTrigger className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -263,6 +297,8 @@ function item() {
                   className="w-full rounded-[4px] border border-gray-300 bg-white px-4 pb-3 pt-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   type="text"
                   placeholder="Vị trí"
+                  {...register('location', { required: 'Please enter your title.' })}
+                  onChange={handleLocationChange}
                 />
               </div>
               {/* TUY CHON VIEC GAP MAT */}
@@ -345,23 +381,34 @@ function item() {
             tôi không cho phép các mặt hàng về động vật, chất cấm, chất gây nghiện, vũ khí, hàng giả và các sản phẩm
             khác vi phạm quyền sở hữu trí tuệ xuất hiện trên Marketplace. Hãy xem Chính sách thương mại của chúng tôi.
           </p>
-        </div>
+        </form>
 
         {/* FOOTER */}
         <div className={clsx(' mt-3 w-full', {})}>
           <div className=" flex items-center justify-between gap-1">
-            <div className=" h-2 w-1/2 rounded-full bg-slate-300"></div>
+            <div className=" h-2 w-1/2 rounded-full bg-primary"></div>
             <div className=" h-2 w-1/2 rounded-full bg-slate-300"></div>
           </div>
           <hr className=" m-2" />
-          <Button className=" w-full rounded-sm bg-primary text-white">Tiếp</Button>
+          <Button
+          form='formValue'
+            onClick={submit}
+            type="submit"
+            disabled={!isContinue}
+            className={clsx('w-full rounded-sm bg-primary text-white', {
+              'bg-primary': isContinue,
+              'bg-slate-300': !isContinue
+            })}
+          >
+            Đăng
+          </Button>
         </div>
       </section>
 
       <section className=" flex w-full items-center justify-center bg-[#f0f2f5]">
-        <div className=" mx-auto mt-10 min-h-[650px] overflow-hidden rounded-lg bg-white p-3">
+        <div className=" mx-auto mt-14 min-h-[650px] max-w-[972px] overflow-hidden rounded-lg bg-white p-3">
           <h1 className=" mb-3 font-bold">Xem trước</h1>
-          <div className=" flex h-[600px] items-center justify-between overflow-hidden">
+          <div className=" flex  h-[600px] justify-between overflow-hidden border">
             {/* BACKGROUND */}
             <div className=" flex h-full w-2/3 items-center justify-center overflow-hidden bg-[#f0f2f5]">
               {images.length <= 0 ? (
@@ -375,28 +422,54 @@ function item() {
                   </div>
                 </div>
               ) : (
-                <div className="flex h-full items-center justify-between overflow-hidden">
-                  <Carousel className="h-full w-full">
-                    <CarouselContent className="">
-                      {images.map((image, index) => (
-                        <CarouselItem key={index} className="pl-2 md:pl-4">
-                          <div className="p-1">
-                            <Card>
-                              <CardContent className="flex aspect-square items-center justify-center p-6">
-                                <img src={image} className="block h-[600px] w-[571px] object-contain" />
-                              </CardContent>
-                            </Card>
-                          </div>
-                        </CarouselItem>
-                      ))}
-                    </CarouselContent>
+                <div className="flex h-full min-w-full items-center justify-between ">
+                  <Carousel
+                    showDots={true}
+                    responsive={responsive}
+                    infinite={true}
+                    autoPlaySpeed={1000}
+                    className="size-full"
+                  >
+                    {images.map((image, index) => (
+                      <div key={index} className="">
+                        <div className="flex aspect-square w-full items-center justify-center">
+                          <img src={image} className="block h-[600px] w-[630px] object-cover" />
+                        </div>
+                      </div>
+                    ))}
                   </Carousel>
                 </div>
               )}
             </div>
             {/* CONTENT */}
-            <div>
-              <h1 className=" text-2xl font-bold">{}</h1>
+            <div className=" w-1/3 px-4">
+              <h1 className=" text-2xl font-bold">{name ? name : 'Tiêu đề'}</h1>
+              <div className=" flex flex-col gap-y-3">
+                <p
+                  className={clsx(' font-medium text-gray-300', {
+                    'text-black': price
+                  })}
+                >
+                  {price ? price : 'Giá'}
+                </p>
+                <p className=" text-sm text-gray-300">
+                  {location ? `Đã niêm yết vài giây trước tại ${location}` : 'Địa chi'}
+                </p>
+
+                <p className=" mt-5 font-semibold  text-gray-300">Chi tiết</p>
+                <p className={clsx('text-gray-300', {})}>
+                  {description ? description : 'Phần mô tả sẽ hiển thị tại đây'}
+                </p>
+              </div>
+              <hr className=" my-5 w-full border" />
+              <div className=" flex justify-between text-gray-300">
+                <p className="  font-semibold">Thông tin người bán</p>
+                <p className=" text-sm font-normal">Chi tiết người bán</p>
+              </div>
+              <div className=" mt-3 flex items-center gap-x-3">
+                <img src={me?.data.avatar} alt="" className="h-10 w-10 rounded-full object-cover" />
+                <p className="text-sm font-semibold text-gray-300">{me?.data.firstName}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -404,5 +477,3 @@ function item() {
     </div>
   )
 }
-
-export default item

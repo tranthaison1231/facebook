@@ -49,6 +49,7 @@
     "react-dom": "^18.3.1",
     "react-flip-numbers": "^3.0.8",
     "react-hook-form": "^7.51.5",
+    "react-multi-carousel": "^2.8.5",
     "react-router-dom": "^6.22.3",
     "sonner": "^1.4.41",
     "tailwind-merge": "^2.3.0",
