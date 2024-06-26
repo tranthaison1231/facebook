@@ -1,12 +1,13 @@
 import { request } from '@/utils/request'
 
 export interface Products {
+  images: string[]
   id: string
   categoryId: string
   name: string
   price: number
   description: string
-  img: string
+  img: string[]
   location: string
 }
 
@@ -23,4 +24,7 @@ export const fetchProductById = async (productId: string) => {
   const res = await request.get(`/products/${productId}`)
   return res.data.data
 }
-
+export const postProduct = async (data: Products) => {
+  const res = await request.post(`/products`, data)
+  return res.data
+}

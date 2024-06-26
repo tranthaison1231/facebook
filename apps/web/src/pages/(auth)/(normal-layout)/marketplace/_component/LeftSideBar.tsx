@@ -98,7 +98,7 @@ function LeftSideBar() {
           </Link>
         ))}
         <Button className=" rounded-[6px] bg-[#ebf5ff] text-[#0866FF]">
-          <Link to="/marketplace/create">
+          <Link to="/marketplace/create1">
             <span>+</span>Tạo bài viết mới
           </Link>
         </Button>

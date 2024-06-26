@@ -17,8 +17,9 @@ export default function Component() {
   if (!accessToken) return <Navigate to="/login" />
 
   return (
-    <div className="w-full">
-      <div className=' w-full '>
+    <div className="w-full flex">
+      <LeftSideBar/>
+      <div className=' w-full'>
         <Outlet context={{ me: meQuery?.data }} />
       </div>
     </div>
