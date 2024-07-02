@@ -40,6 +40,15 @@ Table users {
   receiverFriendRequest friend_requests [not null]
   users friend_ship [not null]
   userOfs friend_ship [not null]
+  shortCuts short_cuts [not null]
+}
+
+Table short_cuts {
+  id String [pk]
+  groupId String [not null]
+  group groups [not null]
+  userId String [not null]
+  user users [not null]
 }
 
 Table friend_requests {
@@ -139,9 +148,11 @@ Table groups {
   userId String [not null]
   type TypeOfGroup [not null]
   users group_members [not null]
-  User users [not null]
-  RolesOnGroup group_roles [not null]
+  user users [not null]
+  rolesOnGroups group_roles [not null]
   background String
+  shortCuts short_cuts [not null]
+  avatar String
 }
 
 Table group_roles {
@@ -206,6 +217,10 @@ Enum TypeOfLike {
 Ref: categories.parentCategoryId > categories.id
 
 Ref: users.pageId > pages.id
+
+Ref: short_cuts.groupId > groups.id
+
+Ref: short_cuts.userId > users.id
 
 Ref: friend_requests.senderId > users.id
 

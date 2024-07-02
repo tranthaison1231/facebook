@@ -1,17 +1,9 @@
-import { PrismaClient, PublishType } from "@prisma/client";
-import { faker } from "@faker-js/faker";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.user.createMany({
-    data: {
-      email: faker.internet.email(),
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      password: faker.internet.password(),
-    },
-  });
+  console.log("Start seeding ...");
 }
 main()
   .then(async () => {
