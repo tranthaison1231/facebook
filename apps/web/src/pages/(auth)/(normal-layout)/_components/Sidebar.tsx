@@ -1,9 +1,9 @@
-import { User, getMe } from '@/apis/auth'
+import { User } from '@/apis/auth'
 import { formatName } from '@/utils/name'
-import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { Bookmark, CircleFadingPlus, MoveDown, PersonStanding, Store, Users, Video } from 'lucide-react'
+import { Bookmark, MoveDown, PersonStanding, Store, Users, Video } from 'lucide-react'
 import { Link, useOutletContext } from 'react-router-dom'
+import ShortCut from './ShortCut'
 
 const SIDE_BAR = [
   {
@@ -37,18 +37,6 @@ const SIDE_BAR = [
     icon: <Store className="text-primary" />
   }
 ]
-const SIDE_BAR2 = [
-  {
-    title: 'Ban quyền lực E21CQC',
-    path: '/',
-    icon: <CircleFadingPlus className="text-primary" />
-  },
-  {
-    title: 'Facebook',
-    path: '/',
-    icon: <CircleFadingPlus className="text-primary" />
-  }
-]
 
 export default function Sidebar() {
   const { me } = useOutletContext<{ me: User }>()
@@ -76,18 +64,7 @@ export default function Sidebar() {
 
         <hr className="bg-slate-600" />
       </ul>
-
-      <ul className={clsx('space-y-2 border-r p-4 font-bold text-[#050505]')}>
-        <li className="flex cursor-pointer gap-4 rounded-sm px-6 py-2">LỐI TẮT CỦA BẠN</li>
-        {SIDE_BAR2.map(item => (
-          <Link to={`${item.path}`} key={item.title}>
-            <li className={clsx('flex cursor-pointer gap-4 rounded-sm px-6 py-2')}>
-              {item.icon}
-              <span>{item.title}</span>
-            </li>
-          </Link>
-        ))}
-      </ul>
+      <ShortCut />
     </div>
   )
 }

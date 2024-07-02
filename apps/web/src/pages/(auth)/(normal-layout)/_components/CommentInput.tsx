@@ -29,7 +29,7 @@ export const CommentInput = ({ post }: CommentBoxProps) => {
 
   return (
     <div className="p mt-4 flex gap-3">
-      <Avatar src={me.avatar} size="small" />
+      <Avatar src={me?.avatar} size="small" />
       <Input
         className="bg-gray-100"
         value={comment}

@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 import { MemoryRouter, Outlet, Route, Routes } from 'react-router-dom'
 
 interface RenderRouteWithOutletContextProps<T> {
-  context: T
+  context?: T
   children: ReactNode
 }
 

@@ -1,11 +1,12 @@
 import { request } from '@/utils/request'
+import { z } from 'zod'
 
 enum roles {
   ADIMN,
   MOD,
   MEMBER
 }
-export interface rolesOnGroup {
+export interface RolesOnGroup {
   groupId: string
   userId: string
   role: roles
@@ -15,6 +16,13 @@ export interface Group {
   name: string
   type: string
 }
+
+export const groupSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  avatar: z.string(),
+  userId: z.string()
+})
 
 export const getGroups = async () => {
   const res = await request.get(`/groups`)
