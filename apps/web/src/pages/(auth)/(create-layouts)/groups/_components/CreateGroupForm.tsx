@@ -12,6 +12,7 @@ import { useOutletContext } from 'react-router-dom'
 import { UseFormReturn } from 'react-hook-form'
 import PrivacySelector from './PrivacySelector'
 import { FormField } from '@/components/ui/form'
+import InviteFriendsInput from './InviteFriendsInput'
 
 interface CreateGroupFormProps {
   form: UseFormReturn<createGroupInputs, unknown, undefined>
@@ -94,10 +95,7 @@ export default function CreateGroupForm({ form }: CreateGroupFormProps) {
           />
           {errors.type && <p className="text-sm text-red-500">{errors.type.message}</p>}
 
-          <Input
-            className={cn('px-4 pb-4 pt-6 text-base placeholder:absolute placeholder:top-5 focus:ring-2')}
-            placeholder="Enter names or email addresses"
-          />
+          <InviteFriendsInput />
         </div>
         <Button disabled={!isEnableSubmit} className="mt-6 w-full" type="submit" loading={isLoading}>
           Create

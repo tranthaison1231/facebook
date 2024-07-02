@@ -9,6 +9,7 @@ import { router as uploadRouter } from "./modules/upload/upload.controller";
 import { router as postsRouter } from "./modules/posts/posts.controller";
 import { router as productsRouter } from "./modules/products/products.controller";
 import { router as groupsRouter } from "./modules/groups/groups.controller";
+import { router as friendsRouter } from "./modules/friends/friends.controller";
 import { errorFilter } from "./lib/error-filter";
 import { auth } from "./middlewares/auth";
 
@@ -32,6 +33,7 @@ app.route("/users", usersRouter);
 app.route("/posts", postsRouter);
 app.route("/products", productsRouter);
 app.route("/groups", groupsRouter);
+app.route("/friends", friendsRouter);
 app.all("*", auth).route("/upload", uploadRouter);
 
 app.notFound((c) => {
