@@ -13,7 +13,9 @@ module.exports = {
     },
     extend: {
       maxWidth: {
-        '9xl': '96rem'
+        '9xl': '96rem',
+        'desktop': '60rem',
+        'mobile': '35.25rem'
       },
       minWidth: {
         '10xl': '1086px'
@@ -28,9 +30,7 @@ module.exports = {
         max: '1048px',
         intro: '488px',
         post: '677px',
-        90: '22.5rem',
-        destop: '60rem',
-        mobile: '35.25rem'
+        90: '22.5rem'
       },
       backgroundImage: {
         avt1: 'url("@assets/images/avt1")'

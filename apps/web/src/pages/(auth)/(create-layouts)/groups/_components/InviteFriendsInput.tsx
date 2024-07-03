@@ -1,5 +1,5 @@
 import { Input } from '@/components/ui/input'
-import React from 'react'
+import { cn } from '@/utils/cn'
 
 export default function InviteFriendsInput() {
   return (

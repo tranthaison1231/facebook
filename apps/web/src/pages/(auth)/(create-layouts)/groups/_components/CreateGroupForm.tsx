@@ -2,7 +2,7 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/utils/cn'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
-import { Link } from '@/router'
+import { Link, useNavigate } from '@/router'
 import { User } from '@/apis/auth'
 import { createGroupInputs } from '@/utils/schema'
 import { toast } from 'sonner'
@@ -29,6 +29,8 @@ export default function CreateGroupForm({ form }: CreateGroupFormProps) {
   const [isFocusGroupName, setIsFocusGroupName] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
+  const navigate = useNavigate()
+
   const isEnableSubmit = form.watch('name') && form.watch('type')
 
   const onSubmit = async (data: createGroupInputs) => {
@@ -41,6 +43,7 @@ export default function CreateGroupForm({ form }: CreateGroupFormProps) {
       }
       await createGroup(res)
       toast.success('Group created successfully!')
+      navigate('/groups/feed') //Navigate to group detail page & remember fix route
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.response?.data.message)

@@ -18,7 +18,7 @@ export default function Create() {
       <div className="fixed h-[calc(100vh-4.6rem)] w-90 border bg-white p-5 shadow-md">
         <CreateGroupForm form={form} />
       </div>
-      <div className="ml-90">
+      <div className="px-4 ml-90">
         <PreviewGroup name={name} type={type} />
       </div>
     </div>

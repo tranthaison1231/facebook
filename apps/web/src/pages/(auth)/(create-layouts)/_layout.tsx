@@ -7,8 +7,12 @@ export default function Component() {
 
   return (
     <>
-      <Header user={me} />
-      <Outlet context={{ me: me }} />
+      <div className="fixed w-full">
+        <Header user={me} />
+      </div>
+      <div className="pt-18.5">
+        <Outlet context={{ me: me }} />
+      </div>
     </>
   )
 }
