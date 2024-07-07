@@ -43,7 +43,7 @@ interface PostProps {
   post: IPost
 }
 
-export default function Post({ post = {} }: PostProps) {
+export default function Post({ post }: PostProps) {
   const { me } = useOutletContext<{ me: User }>()
 
   const { data: commentsQuery } = useQuery({

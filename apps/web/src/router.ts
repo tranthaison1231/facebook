@@ -10,6 +10,11 @@ export type Path =
   | `/:id/friends`
   | `/:id/posts/:postId`
   | `/friends`
+  | `/friends/birthdays`
+  | `/friends/friendlist`
+  | `/friends/list`
+  | `/friends/requests`
+  | `/friends/suggestions`
   | `/groups`
   | `/groups/:id`
   | `/groups/create`
