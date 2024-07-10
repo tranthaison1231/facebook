@@ -6,4 +6,6 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 
 dayjs.extend(relativeTime)
 
-createRoot(document.getElementById('root')!).render(<Routes />)
+const root = createRoot(document.getElementById('root')!)
+
+root.render(<Routes />)

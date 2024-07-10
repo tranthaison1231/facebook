@@ -16,7 +16,6 @@ export type Room = z.infer<typeof roomSchema>
 
 export const fetchMyRooms = async () => {
   const res = await request.get('/rooms')
-  console.log(res.data.data)
   return roomSchema.array().parse(res.data.data)
 }
 
@@ -31,8 +30,6 @@ export const fetchRoom = async (roomId: string) => {
 }
 
 export type CreateRoomInputs = z.infer<typeof createRoomSchema>
-
-
 
 export const deleteRoom = async (roomId: string) => {
   return request.delete(`/rooms/${roomId}`)

@@ -10,7 +10,13 @@ export type Path =
   | `/:id/friends`
   | `/:id/posts/:postId`
   | `/friends`
+  | `/friends/birthdays`
+  | `/friends/friendlist`
+  | `/friends/list`
+  | `/friends/requests`
+  | `/friends/suggestions`
   | `/groups`
+  | `/groups/:id`
   | `/groups/create`
   | `/groups/discover`
   | `/groups/feed`
@@ -34,6 +40,7 @@ export type Params = {
   '/:id/about': { id: string }
   '/:id/friends': { id: string }
   '/:id/posts/:postId': { id: string; postId: string }
+  '/groups/:id': { id: string }
   '/marketplace/category/:id': { id: string }
 }
 

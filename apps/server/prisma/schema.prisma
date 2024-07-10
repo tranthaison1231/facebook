@@ -51,8 +51,21 @@ model User {
   receiverFriendRequest FriendRequest[] @relation("receiverFriendRequest")
   users                 FriendShip[]    @relation("userFriendShip")
   userOfs               FriendShip[]    @relation("userOfFriendShip")
+  shortCuts             ShortCut[]
 
   @@map("users")
+}
+
+model ShortCut {
+  id String @id @default(cuid())
+
+  groupId String
+  group   Group  @relation(fields: [groupId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("short_cuts")
 }
 
 enum FriendStatus {
@@ -209,14 +222,16 @@ model Product {
 }
 
 model Group {
-  id           String         @id @default(cuid())
-  name         String         @unique
-  userId       String
-  type         TypeOfGroup
-  users        GroupsOnUser[]
-  User         User           @relation(fields: [userId], references: [id])
-  RolesOnGroup RolesOnGroup[]
-  background   String?
+  id            String         @id @default(cuid())
+  name          String         @unique
+  userId        String
+  type          TypeOfGroup
+  users         GroupsOnUser[]
+  user          User           @relation(fields: [userId], references: [id])
+  rolesOnGroups RolesOnGroup[]
+  background    String?
+  shortCuts     ShortCut[]
+  avatar        String?
 
   @@index([userId])
   @@map("groups")
