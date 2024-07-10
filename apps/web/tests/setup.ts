@@ -2,7 +2,7 @@ import { expect, afterEach, beforeAll, afterAll } from 'vitest'
 import { cleanup } from '@testing-library/react'
 import * as matchers from '@testing-library/jest-dom/matchers'
 import '@testing-library/jest-dom/vitest'
-import { serviceWorker } from '@/msw/worker'
+import { serviceWorker } from '../src/msw/worker'
 
 expect.extend(matchers)
 
