@@ -1,7 +1,7 @@
 import { getGroups } from '@/apis/groups'
 import { useQuery } from '@tanstack/react-query'
 import { Outlet } from 'react-router-dom'
-import GroupSideBar from './_components/GroupSideBar'
+import GroupSideBar from '../_components/GroupSideBar'
 
 export default function Component() {
   const { data: groups } = useQuery({

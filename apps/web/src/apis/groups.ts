@@ -29,6 +29,11 @@ export const getGroups = async () => {
   return res.data
 }
 
+export const getGroup = async (groupId: string) => {
+  const res = await request.get(`/groups/${groupId}`)
+  return res.data
+}
+
 export const createGroup = async (data: Group) => {
   await request.post(`/groups`, data)
 }

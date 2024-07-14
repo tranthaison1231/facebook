@@ -121,7 +121,7 @@ CREATE TABLE "products" (
 CREATE TABLE "groups" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "ownerId" TEXT NOT NULL,
     "type" "TypeOfGroup" NOT NULL,
 
     CONSTRAINT "groups_pkey" PRIMARY KEY ("id")
@@ -138,10 +138,10 @@ CREATE TABLE "group_roles" (
 
 -- CreateTable
 CREATE TABLE "group_members" (
-    "userId" TEXT NOT NULL,
+    "memberId" TEXT NOT NULL,
     "groupId" TEXT NOT NULL,
 
-    CONSTRAINT "group_members_pkey" PRIMARY KEY ("userId","groupId")
+    CONSTRAINT "group_members_pkey" PRIMARY KEY ("memberId","groupId")
 );
 
 -- CreateIndex
@@ -166,10 +166,10 @@ CREATE INDEX "likes_userId_postId_idx" ON "likes"("userId", "postId");
 CREATE INDEX "products_categoryId_idx" ON "products"("categoryId");
 
 -- CreateIndex
-CREATE INDEX "groups_userId_idx" ON "groups"("userId");
+CREATE INDEX "groups_ownerId_idx" ON "groups"("ownerId");
 
 -- CreateIndex
-CREATE INDEX "group_members_groupId_userId_idx" ON "group_members"("groupId", "userId");
+CREATE INDEX "group_members_groupId_memberId_idx" ON "group_members"("groupId", "memberId");
 
 -- AddForeignKey
 ALTER TABLE "categories" ADD CONSTRAINT "categories_parentCategoryId_fkey" FOREIGN KEY ("parentCategoryId") REFERENCES "categories"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -202,7 +202,7 @@ ALTER TABLE "likes" ADD CONSTRAINT "likes_postId_fkey" FOREIGN KEY ("postId") RE
 ALTER TABLE "products" ADD CONSTRAINT "products_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "groups" ADD CONSTRAINT "groups_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "groups" ADD CONSTRAINT "groups_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "group_roles" ADD CONSTRAINT "group_roles_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -211,7 +211,7 @@ ALTER TABLE "group_roles" ADD CONSTRAINT "group_roles_userId_fkey" FOREIGN KEY (
 ALTER TABLE "group_roles" ADD CONSTRAINT "group_roles_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "groups"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "group_members" ADD CONSTRAINT "group_members_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "group_members" ADD CONSTRAINT "group_members_memberId_fkey" FOREIGN KEY ("memberId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "group_members" ADD CONSTRAINT "group_members_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "groups"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

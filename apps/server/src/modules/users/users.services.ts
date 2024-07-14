@@ -15,6 +15,13 @@ export class UsersService {
     return user;
   }
 
+  static async getBy(userId: string) {
+    const user = await db.user.findUnique({
+      where: { id: userId },
+    });
+    return user;
+  }
+
   static async updateBy(userId: string, data: Prisma.UserUpdateInput) {
     const user = await db.user.update({
       where: {
@@ -24,12 +31,7 @@ export class UsersService {
     });
     return user;
   }
-  static async getBy(userId: string) {
-    const user = await db.user.findUnique({
-      where: { id: userId },
-    });
-    return user;
-  }
+
   static async getAll(q: string) {
     const users = await db.user.findMany({
       where: {
@@ -41,4 +43,3 @@ export class UsersService {
     return users;
   }
 }
-

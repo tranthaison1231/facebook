@@ -28,9 +28,9 @@ Table users {
   workAt String
   address String
   posts posts [not null]
-  userGroups group_members [not null]
   groupsRoles group_roles [not null]
-  groups groups [not null]
+  ownedGroups groups [not null]
+  joinedGroups group_members [not null]
   page pages
   pageId String
   stories stories [not null]
@@ -145,14 +145,15 @@ Table products {
 Table groups {
   id String [pk]
   name String [unique, not null]
-  userId String [not null]
+  ownerId String [not null]
   type TypeOfGroup [not null]
-  users group_members [not null]
-  user users [not null]
+  members group_members [not null]
+  owner users
   rolesOnGroups group_roles [not null]
   background String
   shortCuts short_cuts [not null]
   avatar String
+  createdAt DateTime [default: `now()`, not null]
 }
 
 Table group_roles {
@@ -168,13 +169,13 @@ Table group_roles {
 }
 
 Table group_members {
-  user users [not null]
-  userId String [not null]
+  member users [not null]
+  memberId String [not null]
   group groups [not null]
   groupId String [not null]
 
   indexes {
-    (userId, groupId) [pk]
+    (memberId, groupId) [pk]
   }
 }
 
@@ -246,12 +247,12 @@ Ref: likes.postId > posts.id
 
 Ref: products.categoryId > categories.id [delete: Cascade]
 
-Ref: groups.userId > users.id
+Ref: groups.ownerId > users.id
 
 Ref: group_roles.userId > users.id
 
 Ref: group_roles.groupId > groups.id
 
-Ref: group_members.userId > users.id
+Ref: group_members.memberId > users.id
 
 Ref: group_members.groupId > groups.id

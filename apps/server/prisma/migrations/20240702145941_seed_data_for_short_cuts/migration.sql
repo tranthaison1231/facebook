@@ -1,5 +1,5 @@
 -- INSERT data for group
-INSERT INTO "groups" ("id","name","userId","type", "avatar")
+INSERT INTO "groups" ("id","name","ownerId","type", "avatar")
 VALUES
   ('cly4j9nmr000108l72bh2bi2y','NestJS Viet Nam','clx1tm86b0000zwmwhumpz3a8','PUBLIC','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWlM5NYH9egY-VXphzd985NXDn-iuNEoHObA&s'),
   ('cly4ja617000208l757vzbkqv','Devscript','clx1tm86b0000zwmwhumpz3a8','PRIVATE','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrdUoIjZppJIYq7InQ5w52tPFzaiMs4TXxLA&s'),
@@ -13,3 +13,11 @@ VALUES
   ('clx2tm5mg000018qaamya0bij','cly4ja617000208l757vzbkqv','clx1tm86b0000zwmwhumpz3a8'),
   ('clx2tm86b0000zwmwhumpz3a7','cly4jaayh000308l77btpgxla','clx1tm86b0000zwmwhumpz3a8');
 
+
+-- INSERT data for group_members table
+INSERT INTO "group_members" ("groupId","memberId")
+VALUES
+  ('cly4j9nmr000108l72bh2bi2y','clx1tm86b0000zwmwhumpz3a8'),
+  ('cly4ja617000208l757vzbkqv','clx1tm86b0000zwmwhumpz3a8'),
+  ('cly4jaayh000308l77btpgxla','clx1tm86b0000zwmwhumpz3a8'),
+  ('cly4jaell000408l715g9gctg','clx1tm86b0000zwmwhumpz3a8')
