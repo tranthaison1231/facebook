@@ -23,7 +23,7 @@ router
     const data = await AuthService.signIn(email, password);
 
     setCookie(c, "refreshToken", data.refreshToken, {
-      maxAge: REFRESH_TOKEN_EXPIRE_IN * 1000,
+      maxAge: REFRESH_TOKEN_EXPIRE_IN * 12,
       sameSite: "None",
       httpOnly: true,
       secure: true,

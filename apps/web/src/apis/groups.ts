@@ -21,7 +21,15 @@ export const groupSchema = z.object({
   id: z.string(),
   name: z.string(),
   avatar: z.string(),
-  userId: z.string()
+  ownerId: z.string(),
+  createdAt: z.string(),
+  type: z.string(),
+  background: z.string()
+})
+
+export const groupExtentSchema = groupSchema.extend({
+  totalMember: z.number(),
+  isJoined: z.boolean()
 })
 
 export const getGroups = async () => {
@@ -31,7 +39,7 @@ export const getGroups = async () => {
 
 export const getGroup = async (groupId: string) => {
   const res = await request.get(`/groups/${groupId}`)
-  return res.data
+  return groupExtentSchema.parse(res.data.data)
 }
 
 export const createGroup = async (data: Group) => {

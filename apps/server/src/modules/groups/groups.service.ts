@@ -1,7 +1,6 @@
-import { Group, Prisma, RoleOnGroup, TypeOfGroup, User } from "@prisma/client";
+import { Prisma, RoleOnGroup, TypeOfGroup, User } from "@prisma/client";
 import { db } from "@/lib/db";
-import { BadRequestException } from "@/lib/exceptions";
-import { CreateGroupDto } from "./dto/create-group.dto";
+import { BadRequestException, UnauthorizedException } from "@/lib/exceptions";
 
 export const GroupsService = {
   getAll: async () => {
@@ -93,6 +92,27 @@ export const GroupsService = {
     });
   },
   delete: async (groupId: string, userId: string) => {
-    await db.group.delete({ where: { id: groupId, ownerId: userId } });
+    const groupOfUser = await db.group.findFirst({
+      where: {
+        id: groupId,
+        ownerId: userId,
+      },
+    });
+
+    if (!groupOfUser) {
+      throw new UnauthorizedException("You are not owner of this group");
+    }
+
+    return await db.group.delete({ where: { id: groupId, ownerId: userId } });
+  },
+  isJoinedGroup: async (groupId: string, userId: string) => {
+    const groupMember = await db.groupsMembers.findFirst({
+      where: {
+        groupId,
+        memberId: userId,
+      },
+    });
+
+    return groupMember ? true : false;
   },
 };

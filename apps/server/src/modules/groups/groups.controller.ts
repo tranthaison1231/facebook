@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { GroupsService } from "./groups.service";
 import { zValidator } from "@hono/zod-validator";
 import { createGroupDto } from "./dto/create-group.dto";
-import { BadRequestException } from "@/lib/exceptions";
+import { BadRequestException, UnauthorizedException } from "@/lib/exceptions";
 import { auth } from "@/middlewares/auth";
 
 export const router = new Hono();
@@ -23,28 +23,41 @@ router
 
     return c.json({ data: group, status: 201 });
   })
-
-  .get("/:groupId", async (c) => {
+  .get("/:groupId", auth, async (c) => {
     try {
-      const id = c.req.param("groupId");
-      const group = await GroupsService.getById(id);
+      const groupId = c.req.param("groupId");
+      const user = c.get("user");
 
-      return c.json({ data: group, status: 200 });
+      const group = await GroupsService.getById(groupId);
+      const isJoined = await GroupsService.isJoinedGroup(groupId, user.id);
+
+      return c.json({
+        data: {
+          ...group,
+          isJoined,
+        },
+        status: 200,
+      });
     } catch (error) {
-      console.log(error);
       if (error instanceof BadRequestException) {
         return c.json({ message: error.message, status: 404 }, 404);
       }
     }
   })
   .delete("/:groupId", auth, async (c) => {
-    const user = c.get("user");
+    try {
+      const user = c.get("user");
 
-    const groupId = c.req.param("groupId");
+      const groupId = c.req.param("groupId");
 
-    await GroupsService.delete(groupId, user.id);
+      await GroupsService.delete(groupId, user.id);
 
-    return c.json({ message: "Delete group successfully", status: 200 });
+      return c.json({ message: "Delete group successfully", status: 200 });
+    } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        return c.json({ message: error.message, status: 401 }, 401);
+      }
+    }
   })
   .put("/:groupId/join", auth, async (c) => {
     const user = c.get("user");

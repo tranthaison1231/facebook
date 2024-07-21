@@ -29,7 +29,7 @@ module.exports = {
         intro: '488px',
         post: '677px',
         90: '22.5rem',
-        destop: '60rem',
+        desktop: '60rem',
         mobile: '35.25rem'
       },
       backgroundImage: {
@@ -39,7 +39,8 @@ module.exports = {
         '4xl': '2.5rem'
       },
       height: {
-        160: '40rem'
+        160: '40rem',
+        112: '28rem'
       },
       fontFamily: {
         primary: 'var(--font-primary)'
