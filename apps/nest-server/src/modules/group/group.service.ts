@@ -12,7 +12,11 @@ export class GroupService {
   }
 
   async getById(groupId: string) {
-    const group = await this.prismaService.group.findFirst({
+    if (!groupId) {
+      throw new Error('ID is required');
+    }
+
+    const group = await this.prismaService.group.findUnique({
       where: { id: groupId },
       include: {
         members: {

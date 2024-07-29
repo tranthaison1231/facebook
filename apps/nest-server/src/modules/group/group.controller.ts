@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { GroupService } from './group.service';
 
 @Controller('groups')
@@ -11,7 +11,7 @@ export class GroupController {
   }
 
   @Get('/:id')
-  async getById(@Query('id') groupId: string) {
+  async getById(@Param('id') groupId: string) {
     return this.groupService.getById(groupId);
   }
 }

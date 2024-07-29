@@ -42,10 +42,13 @@ export class PostService {
 
     return posts;
   }
-  async getPostsById(id: string) {
-    const post = await this.prismaService.post.findFirst({
+  async getPostsById(postId: string) {
+    if (!postId) {
+      throw new Error('ID is required');
+    }
+    const post = await this.prismaService.post.findUnique({
       where: {
-        id: id,
+        id: postId,
       },
       include: {
         user: true,

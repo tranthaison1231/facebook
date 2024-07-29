@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { PostService } from './post.service';
 import { GetPostsDto } from './post.dto';
 
@@ -15,7 +15,7 @@ export class PostController {
     });
   }
   @Get('/:id')
-  async getPostsById(@Query('id') postId: string) {
+  async getPostsById(@Param('id') postId: string) {
     try {
       return this.postService.getPostsById(postId);
     } catch (error) {
