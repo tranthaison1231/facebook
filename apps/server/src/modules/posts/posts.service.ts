@@ -40,7 +40,6 @@ export class PostsService {
       },
     });
     return post;
-    +
   }
 
   static async getPosts({ limit = 10, page = 1, startingId }: GetAllPostsArgs) {
