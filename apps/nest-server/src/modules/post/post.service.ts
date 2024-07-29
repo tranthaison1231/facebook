@@ -42,4 +42,21 @@ export class PostService {
 
     return posts;
   }
+  async getPostsById(postId: string) {
+    const post = await this.prismaService.post.findUnique({
+      where: {
+        id: postId,
+      },
+      include: {
+        user: true,
+        likes: true,
+        comments: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+    return post;
+  }
 }
