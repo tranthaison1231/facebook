@@ -7,4 +7,4 @@ import { GroupController } from './group.controller';
   controllers: [GroupController],
   exports: [GroupService],
 })
-export class PrismaModule {}
+export class GroupModule {}

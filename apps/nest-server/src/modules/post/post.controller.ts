@@ -15,7 +15,7 @@ export class PostController {
     });
   }
   @Get('/:id')
-  async getPostsById(@Query('postId') postId: string) {
+  async getPostsById(@Query('id') postId: string) {
     return this.postService.getPostsById(postId);
   }
 }

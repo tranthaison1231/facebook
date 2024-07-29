@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { TypeOfGroup } from '@prisma/client';
 
 @Injectable()
 export class GroupService {
@@ -8,5 +9,54 @@ export class GroupService {
   async getAll() {
     const groups = await this.prismaService.group.findMany();
     return groups;
+  }
+
+  async getById(groupId: string) {
+    const group = await this.prismaService.group.findFirst({
+      where: { id: groupId },
+      include: {
+        members: {
+          include: {
+            member: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                avatar: true,
+              },
+            },
+          },
+        },
+        owner: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            avatar: true,
+          },
+        },
+      },
+    });
+
+    if (!group) {
+      throw new BadRequestException('Group not found');
+    }
+
+    const { members, ...restGroup } = group;
+
+    const totalMember = group.members.length;
+
+    if (group.type === TypeOfGroup.PRIVATE) {
+      return {
+        ...restGroup,
+        totalMember,
+      };
+    }
+
+    return {
+      ...restGroup,
+      members,
+      totalMember,
+    };
   }
 }
