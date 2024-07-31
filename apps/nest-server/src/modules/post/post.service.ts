@@ -1,30 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { GetPostsDto } from './post.dto';
+import { PostRepository } from './post.repository';
+import { GetPostsDto } from './dto/get-post.dto';
 
 @Injectable()
 export class PostService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly postRepository: PostRepository) {}
 
   async findAll({ limit = 10, page = 1, startingId }: GetPostsDto) {
-    const posts = await this.prismaService.post.findMany({
-      skip: (page - 1) * limit,
-      take: limit,
-      cursor: startingId ? { id: startingId } : undefined,
-      include: {
-        user: true,
-        likes: true,
-        comments: {
-          include: {
-            user: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
+    const posts = await this.postRepository.findAll({
+      limit,
+      page,
+      startingId,
     });
-    const total = await this.prismaService.post.count({});
+    const total = await this.postRepository.findTotal();
 
     return {
       items: posts,
@@ -34,32 +22,9 @@ export class PostService {
   }
 
   async getPostsByUserId(userId: string) {
-    const posts = await this.prismaService.post.findMany({
-      where: {
-        userId,
-      },
-    });
-
-    return posts;
+    return this.postRepository.getPostsByUserId(userId);
   }
   async getPostsById(postId: string) {
-    if (!postId) {
-      throw new Error('ID is required');
-    }
-    const post = await this.prismaService.post.findUnique({
-      where: {
-        id: postId,
-      },
-      include: {
-        user: true,
-        likes: true,
-        comments: {
-          include: {
-            user: true,
-          },
-        },
-      },
-    });
-    return post;
+    return this.postRepository.getPostsById(postId);
   }
 }

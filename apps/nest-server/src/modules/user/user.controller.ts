@@ -15,13 +15,14 @@ export class UserController {
   }
 
   @Get('/me')
-  me(): string {
-    return this.userService.getMe();
+  async me() {
+    const userId = '1';
+    return this.userService.findById(userId);
   }
 
   @Get('/:id')
   getById(@Param('id') userId: string) {
-    return this.userService.getById(userId);
+    return this.userService.findById(userId);
   }
 
   @Get('/:id/posts')
