@@ -40,7 +40,7 @@ export class AuthController {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    const accessToken = await this.authService.createToken({ userId: user.id });
+    const accessToken = this.authService.createToken({ userId: user.id });
     const refreshToken = await this.authService.createRefreshToken({
       userId: user.id,
     });

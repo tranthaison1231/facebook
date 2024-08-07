@@ -1,6 +1,10 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { PostService } from '../post/post.service';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { User } from '@prisma/client';
+import { CurrentUser } from './user.decorator';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 
 @Controller('users')
 export class UserController {
@@ -15,9 +19,10 @@ export class UserController {
   }
 
   @Get('/me')
-  async me() {
-    const userId = '1';
-    return this.userService.findById(userId);
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  async me(@CurrentUser() user: User) {
+    return user;
   }
 
   @Get('/:id')

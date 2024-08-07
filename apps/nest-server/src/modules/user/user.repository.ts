@@ -13,6 +13,9 @@ export class UserRepository {
           contains: q,
         },
       },
+      omit: {
+        password: true,
+      },
     });
     return users;
   }
@@ -20,6 +23,9 @@ export class UserRepository {
   async findById(userId: string) {
     const user = await this.prismaRepository.user.findUnique({
       where: { id: userId },
+      omit: {
+        password: true,
+      },
     });
     return user;
   }

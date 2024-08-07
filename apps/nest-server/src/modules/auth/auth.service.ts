@@ -1,23 +1,20 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import {
-  ACCESS_TOKEN_EXPIRE_IN,
-  JWT_SECRET,
-  REFRESH_TOKEN_EXPIRE_IN,
-} from 'src/configs/constants';
-import * as jwt from 'jsonwebtoken';
+import { REFRESH_TOKEN_EXPIRE_IN } from 'src/configs/constants';
 import { generateOpaqueToken } from 'src/common/helpers/token.helper';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
+  constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private jwtService: JwtService,
+  ) {}
 
   createToken({ userId }: { userId: string }) {
-    return jwt.sign({ userId: userId }, JWT_SECRET, {
-      expiresIn: ACCESS_TOKEN_EXPIRE_IN,
-    });
+    return this.jwtService.sign({ userId: userId });
   }
 
   async createRefreshToken({ userId }: { userId: string }) {
