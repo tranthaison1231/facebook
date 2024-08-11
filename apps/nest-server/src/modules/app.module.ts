@@ -9,6 +9,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import redisStore from 'cache-manager-redis-store';
 import { RedisClientOptions } from 'redis';
 import { StoreConfig } from 'cache-manager';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { StoreConfig } from 'cache-manager';
     GroupModule,
     PostModule,
     AuthModule,
+    UploadModule,
   ],
 })
 export class AppModule {}

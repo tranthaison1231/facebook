@@ -11,6 +11,11 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe(validationOptions));
 
+  app.enableCors({
+    credentials: true,
+    origin: true,
+  });
+
   app.use(cookieParser());
 
   const config = new DocumentBuilder()

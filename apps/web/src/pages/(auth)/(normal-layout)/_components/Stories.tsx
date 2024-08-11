@@ -10,17 +10,17 @@ const IMAGES = [
     bg: Background
   },
   {
-    name: 'Huynh Chi Trung',
+    name: 'Huynh Chi Trung 2',
     avt: Avatar,
     bg: Background
   },
   {
-    name: 'Huynh Chi Trung',
+    name: 'Huynh Chi Trung 3',
     avt: Avatar,
     bg: Background
   },
   {
-    name: 'Huynh Chi Trung',
+    name: 'Huynh Chi Trung 4',
     avt: Avatar,
     bg: Background
   }

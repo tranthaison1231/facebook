@@ -9,7 +9,6 @@ export default function ShortCut() {
     queryKey: ['short-cuts'],
     queryFn: () => fetchShortCuts()
   })
-  console.log('data', data)
 
   return (
     <ul className={clsx('space-y-2 border-r p-4 font-bold text-[#050505]')}>
