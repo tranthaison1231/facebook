@@ -1,7 +1,9 @@
 import { BadRequestException, Controller, Get, Param } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { TypeOfGroup } from '@prisma/client';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('groups')
 @Controller('groups')
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}

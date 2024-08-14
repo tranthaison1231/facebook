@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { CreateUser } from './interfaces/create-user.interface';
 import * as bcrypt from 'bcrypt';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -13,6 +14,10 @@ export class UserService {
 
   async findById(userId: string) {
     return this.userRepository.findById(userId);
+  }
+
+  async update(userId: string, updateUserDto: UpdateUserDto) {
+    return this.userRepository.update(userId, updateUserDto);
   }
 
   async findByEmail(email: string) {

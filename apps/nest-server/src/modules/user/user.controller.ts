@@ -1,11 +1,21 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { PostService } from '../post/post.service';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { CurrentUser } from './user.decorator';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { UpdateUserDto } from './dto/update-user.dto';
 
+@ApiTags('users')
 @Controller('users')
 export class UserController {
   constructor(
@@ -23,6 +33,16 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   async me(@CurrentUser() user: User) {
     return user;
+  }
+
+  @Put('/me')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  async updateMe(
+    @CurrentUser() user: User,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.userService.update(user.id, updateUserDto);
   }
 
   @Get('/:id')

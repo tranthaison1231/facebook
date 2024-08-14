@@ -6,10 +6,10 @@ Table categories {
   id String [pk]
   name String [unique, not null]
   icon String
-  products products [not null]
-  subCategories categories [not null]
-  parentCategory categories
   parentCategoryId String
+  parentCategory categories
+  subCategories categories [not null]
+  products products [not null]
 }
 
 Table users {
@@ -27,58 +27,94 @@ Table users {
   background String
   workAt String
   address String
-  posts posts [not null]
-  groupsRoles group_roles [not null]
-  ownedGroups groups [not null]
-  joinedGroups group_members [not null]
-  page pages
   pageId String
-  stories stories [not null]
-  likes likes [not null]
   comments comments [not null]
-  senderFriendRequest friend_requests [not null]
   receiverFriendRequest friend_requests [not null]
+  senderFriendRequest friend_requests [not null]
   users friend_ship [not null]
   userOfs friend_ship [not null]
+  joinedGroups group_members [not null]
+  groupsRoles group_roles [not null]
+  ownedGroups groups [not null]
+  likes likes [not null]
+  posts posts [not null]
   shortCuts short_cuts [not null]
+  stories stories [not null]
+  page pages
+  userRoles user_roles [not null]
+}
+
+Table permissions {
+  id String [pk]
+  name String [unique, not null]
+  rolePermissions role_permissions [not null]
+}
+
+Table roles {
+  id String [pk]
+  name String [unique, not null]
+  rolePermissions role_permissions [not null]
+  userRoles user_roles [not null]
+}
+
+Table role_permissions {
+  roleId String [not null]
+  permissionId String [not null]
+  role roles [not null]
+  permission permissions [not null]
+
+  indexes {
+    (roleId, permissionId) [pk]
+  }
+}
+
+Table user_roles {
+  userId String [not null]
+  roleId String [not null]
+  user users [not null]
+  role roles [not null]
+
+  indexes {
+    (userId, roleId) [pk]
+  }
 }
 
 Table short_cuts {
   id String [pk]
   groupId String [not null]
-  group groups [not null]
   userId String [not null]
+  group groups [not null]
   user users [not null]
 }
 
 Table friend_requests {
   id String [pk]
   senderId String [not null]
-  sender users [not null]
   receiverId String [not null]
-  receiver users [not null]
   status FriendStatus [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  receiver users [not null]
+  sender users [not null]
 }
 
 Table friend_ship {
   id String [pk]
   userId String [not null]
-  user users [not null]
   userOfId String [not null]
-  userOf users [not null]
   friendSince DateTime [default: `now()`, not null]
+  user users [not null]
+  userOf users [not null]
 }
 
 Table stories {
   id String [pk]
-  user users
   userId String
   content String
   media String[] [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  user users
 }
 
 Table pages {
@@ -87,15 +123,14 @@ Table pages {
   description String
   avatar String
   cover String
-  followers users [not null]
-  posts posts [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  posts posts [not null]
+  followers users [not null]
 }
 
 Table posts {
   id String [pk]
-  user users
   userId String
   content String
   location String
@@ -104,42 +139,43 @@ Table posts {
   updatedAt DateTime [not null]
   publishType PublishType [not null, default: 'PUBLIC']
   isDeleted Boolean [not null, default: false]
-  page pages
   pageId String
-  likes likes [not null]
   comments comments [not null]
+  likes likes [not null]
+  page pages
+  user users
 }
 
 Table comments {
   id String [pk]
-  user users [not null]
   userId String [not null]
-  post posts [not null]
   postId String [not null]
   content String [not null]
-  media Json
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  media Json
+  post posts [not null]
+  user users [not null]
 }
 
 Table likes {
   id String [pk]
-  user users [not null]
   userId String [not null]
-  post posts [not null]
   postId String [not null]
   type TypeOfLike [not null]
+  post posts [not null]
+  user users [not null]
 }
 
 Table products {
   id String [pk]
   categoryId String [not null]
-  category categories [not null]
   name String
   price Int
   description String
   location String
   images Json
+  category categories [not null]
 }
 
 Table groups {
@@ -147,21 +183,22 @@ Table groups {
   name String [unique, not null]
   ownerId String [not null]
   type TypeOfGroup [not null]
-  members group_members [not null]
-  owner users
-  rolesOnGroups group_roles [not null]
   background String
-  shortCuts short_cuts [not null]
   avatar String
   createdAt DateTime [default: `now()`, not null]
+  userId String
+  members group_members [not null]
+  rolesOnGroups group_roles [not null]
+  owner users [not null]
+  shortCuts short_cuts [not null]
 }
 
 Table group_roles {
-  user users [not null]
   userId String [not null]
-  group groups [not null]
   groupId String [not null]
   role RoleOnGroup [not null]
+  group groups [not null]
+  user users [not null]
 
   indexes {
     (userId, groupId) [pk]
@@ -169,10 +206,10 @@ Table group_roles {
 }
 
 Table group_members {
-  member users [not null]
   memberId String [not null]
-  group groups [not null]
   groupId String [not null]
+  group groups [not null]
+  member users [not null]
 
   indexes {
     (memberId, groupId) [pk]
@@ -215,17 +252,25 @@ Enum TypeOfLike {
   ANGRY
 }
 
-Ref: categories.parentCategoryId > categories.id
+Ref: categories.parentCategoryId - categories.id
 
 Ref: users.pageId > pages.id
+
+Ref: role_permissions.roleId > roles.id
+
+Ref: role_permissions.permissionId > permissions.id
+
+Ref: user_roles.userId > users.id
+
+Ref: user_roles.roleId > roles.id
 
 Ref: short_cuts.groupId > groups.id
 
 Ref: short_cuts.userId > users.id
 
-Ref: friend_requests.senderId > users.id
-
 Ref: friend_requests.receiverId > users.id
+
+Ref: friend_requests.senderId > users.id
 
 Ref: friend_ship.userId > users.id
 
@@ -233,26 +278,26 @@ Ref: friend_ship.userOfId > users.id
 
 Ref: stories.userId > users.id
 
-Ref: posts.userId > users.id
-
 Ref: posts.pageId > pages.id
 
-Ref: comments.userId > users.id
+Ref: posts.userId > users.id
 
 Ref: comments.postId > posts.id
 
-Ref: likes.userId > users.id
+Ref: comments.userId > users.id
 
 Ref: likes.postId > posts.id
+
+Ref: likes.userId > users.id
 
 Ref: products.categoryId > categories.id [delete: Cascade]
 
 Ref: groups.ownerId > users.id
 
-Ref: group_roles.userId > users.id
-
 Ref: group_roles.groupId > groups.id
 
-Ref: group_members.memberId > users.id
+Ref: group_roles.userId > users.id
 
 Ref: group_members.groupId > groups.id
+
+Ref: group_members.memberId > users.id

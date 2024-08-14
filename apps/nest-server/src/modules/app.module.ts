@@ -10,6 +10,8 @@ import redisStore from 'cache-manager-redis-store';
 import { RedisClientOptions } from 'redis';
 import { StoreConfig } from 'cache-manager';
 import { UploadModule } from './upload/upload.module';
+import { PermissionModule } from './permission/permission.module';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { UploadModule } from './upload/upload.module';
     PostModule,
     AuthModule,
     UploadModule,
+    RoleModule,
+    PermissionModule,
   ],
 })
 export class AppModule {}

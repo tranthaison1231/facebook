@@ -1,9 +1,10 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { GetPresignedUrlDto } from './dto/get-presign-url.dto';
 import { UploadService } from './upload.service';
 
+@ApiTags('upload')
 @Controller('upload')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
