@@ -39,6 +39,11 @@ export class RoleRepository {
       data: {
         name,
         rolePermissions: {
+          deleteMany: {
+            permissionId: {
+              notIn: permissionIds,
+            },
+          },
           upsert: permissionIds.map((permissionId) => ({
             where: { roleId_permissionId: { roleId: id, permissionId } },
             update: {

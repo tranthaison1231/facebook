@@ -26,10 +26,22 @@ export class UserRepository {
       where: { id: userId },
       data: {
         userRoles: {
-          deleteMany: {},
-          create: roleIds.map((roleId) => ({
-            role: {
-              connect: { id: roleId },
+          deleteMany: {
+            roleId: {
+              notIn: roleIds,
+            },
+          },
+          upsert: roleIds.map((roleId) => ({
+            where: { userId_roleId: { userId: userId, roleId } },
+            update: {
+              role: {
+                connect: { id: roleId },
+              },
+            },
+            create: {
+              role: {
+                connect: { id: roleId },
+              },
             },
           })),
         },
